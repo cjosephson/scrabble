@@ -87,6 +87,29 @@ Brinstorm ideas:
 \end{itemize}
 
 \subsection{Troll detector}
+\begin{itemize} 
+\item  \emph{Define the input-output behavior of the system and the scope of the project}
+	Input: Posts on internet forums, emails, etc \\ 
+	Output: Is the author trolling (binary) 
+  
+\item  \emph{Define the evaluation metric for success}
+	Metric for success: Correct detection of the intended mood of the post. 
+
+  \item  \emph{Collect some preliminary data, and give concrete examples of inputs and outputs.}
+	Find some threads on reddit/ec-discuss (get back on EC-discuss?
+
+  \item  \emph{Implement a baseline and an oracle and discuss the gap. What are the challenges?}
+	Oracle: Human \\
+	Baseline: Simple linear classifier
+
+	Challenges: Data might be time-consuming to gather, 
+
+  \item \emph{Which topics (e.g., search, MDPs, etc.) might be able to address those challenges (at a high-level, since we haven't covered any techniques in detail at this point)?}
+
+	More complicated classifiers? Not sure there's a better answer to this. 
+  \item  \emph{Search the Internet for similar projects and mention the related work.}
+	https://arxiv.org/pdf/1504.00680v1.pdf
+\end{itemize}
 \subsection{Music genre classifier}
 \begin{itemize}
   \item  \emph{Define the input-output behavior of the system and the scope of the project.}
@@ -110,8 +133,8 @@ Brinstorm ideas:
     
   \item \emph{Implement a baseline and an oracle and discuss the gap. What are the challenges?}
 
-    Baseline: \\
-    Oracle: 
+    Baseline: Simple classifier based on onyl a couple elements?\\
+    Oracle: Sites like last.fm list genre information associated with a song. We'd probably need a scripts to scrape the information. 
     
   \item \emph{Which topics (e.g., search, MDPs, etc.) might be able to address those challenges (at a high-level, since we haven't covered any techniques in detail at this point)?}
 
