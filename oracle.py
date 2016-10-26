@@ -17,24 +17,36 @@ class Oracle:
 	# currently assumes no multiplier tiles for discarding
 	# keys
 	#####################################################		
-	def OracleMove(self, board):
-		
+	def OracleMove(self):
+		board=self.board
 		#find possible moves to get the highest score
-		maxScore = 0
 		possibleMoves = [] 
-		for word in dictionary.keys():
-			if score(word) > maxScore:
-					possibleMoves = []
-					for vector in self.board.getColumns():
-						tempResults = convolve(word, vector)
-						for r in tempResults: possibleMoves.append(r)
-					for vector in self.board.getRows():
-						tempResults = convolve(word, vector)
-						for r in tempResults: possibleMoves.append(r)
-		
-		#find result with highest score
-		(word, startIndex, vecetorID) = possibleMoves[0]
+		for word in board.dictionary.keys():
+			for i in xrange(15):
+                                col = self.board.getCol(i)
+                                #(word, startIndex, vectorID)
+                                results = convolve(word, col)
+                                if results != None:
+				        for r in results:
+                                                (word, startIndex) = r
+                                                score = self.board.score(word, (i, startIndex), 'v')
+                                                if score  > -1:
+                                                        possibleMoves.append((word, score, (i, startIndex), 'v'))
+			for i in xrange(15):
+                                row = self.board.getRow(i)
+                                results = convolve(word, row)
+                                if results != None:
+				        for r in results:
+                                                (word, startIndex) = r
+                                                score = self.board.score(word, (startIndex, i ), 'h')
+                                                if score > -1:
+                                                        possibleMoves.append((word, score, (startIndex, i ), 'h'))
 
+                #print possibleMoves
+		#find result with highest score
+		(word, score, startIndex, vecetorID) = max(possibleMoves, key=itemgetter(1))
+                
+                print "Max word is %s with score %i"%(word, score) 
 		#add it to the board
 
 		return None
@@ -54,9 +66,9 @@ def score(word):
 # Convolves: 
 # returns options for fitting a word into a 
 # row/column vector
-# list of (word, startIndex, vectorID, orientation)
+# list of (word, startIndex)
 #####################################################
-def convolve(word, vector, vecetorID): 
+def convolve(word, vector): 
 	#vector should be string length 15
 	
 	results = []
@@ -66,18 +78,18 @@ def convolve(word, vector, vecetorID):
 	for c in vector:
 		vectorString += c
 
-	print "|"+vectorString+"|"
+	#print "|"+vectorString+"|"
 	
 	#if column blank, can't build on anything
 	if (vectorString == "               "):
-			return False	
+			return None
 
 	l = len(word)
 	for i in range(len(vectorString)-len(word)):
-		print word, vectorString[i:i+l]
+		#print word, vectorString[i:i+l]
 		if isSubstring(word, vectorString[i:i+l]):
-			print "TRUE"
-			results.append((word, i, vecetorID))
+			#print "TRUE"
+			results.append((word, i))
 	return results
 
 
@@ -96,4 +108,6 @@ def isSubstring(word, sub):
 
 
 if __name__ == '__main__':
-	print convolve("but", [" ", " "," ", " ", " ", " ", " ", " ", " ", "b", " ", "t", " ", " ", " "])
+        pass
+	#print convolve("but", [" ", " "," ", " ", " ", " ", " ", " ", " ", "b", " ", "t", " ", " ", " "])
+        
