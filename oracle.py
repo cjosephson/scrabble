@@ -1,4 +1,4 @@
-
+from operator import itemgetter
 ##CS221 final project oracle
 
 
@@ -44,9 +44,9 @@ class Oracle:
 
                 #print possibleMoves
 		#find result with highest score
-		(word, score, startIndex, vecetorID) = max(possibleMoves, key=itemgetter(1))
+		(word, score, startPoint, orientation) = max(possibleMoves, key=itemgetter(1))
                 
-                print "Max word is %s with score %i"%(word, score) 
+                print "Max word is %s with score %i at %s,%s"%(word, score,startPoint,orientation) 
 		#add it to the board
 
 		return None

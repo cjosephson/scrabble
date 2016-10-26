@@ -1,6 +1,7 @@
 #import numpy as np
 import copy
 import oracle
+import baseline
 
 class Board:
     def __init__(self):
@@ -47,17 +48,24 @@ class Board:
             #check that the word satisfies column constraints
             row = [i for i in self.board[ri]]
             wi = 0
+            l = len(word)
+            #print "range",range(ri, ri+len(word))
             for i in xrange(ci, ci+len(word)):
-                if row[i] != ' ' and row[i] != word[wi]:
+                #print "r[%i], word[%i] = %s, %s"%(i, wi, row[i], word[wi])
+                if row[i] == word[wi]:
+                    l -= 1
+                elif row[i] != ' ' and row[i] != word[wi]:
                     #print "row constraints not satisfied"
                     return False
-                else:
-                    row[i] = word[wi]
-                    wi += 1
+                row[i] = word[wi]
+                wi += 1
+            #print "l",l 
+            if l > 7:
+                return False
             #make sure we don't have any adjacent letters that create
             #a word not in the dictionary
             if not self.validWords(row):
-                #print "row validity failed!"
+                #print "row validity failed!",row
                 return False
             
             #check that we didn't make non-words in the other
@@ -83,22 +91,30 @@ class Board:
             #check that the word satisfies column constraints
             col = [i for i in self.getCol(ci)]
             wi = 0
+            l = len(word)
+            #print "range",range(ri, ri+len(word))
             for i in xrange(ri, ri+len(word)):
-                if col[i] != ' ' and col[i] != word[wi]:
+                if col[i] == word[wi]:
+                    l -= 1 
+                elif col[i] != ' ' and col[i] != word[wi]:
                     #print "col constraints false"
                     return False
-                else:
-                    col[i] = word[wi]
-                    wi += 1
+                #print "i, wi = %s,%s"%(i, wi)
+                col[i] = word[wi]
+                wi += 1
+            #print "l",l
+            if l > 7:
+                return False
 
             #a word not in the dictionary
             if not self.validWords(col):
-                #print "not in dict"
+                #print "not in dict",col
                 return False
 
             #check that we didn't make non-words in the other
             #dimension
             oldBoard = copy.deepcopy((self.board)) #copy/deep copy might be needed?
+            #print "range",range(ri, ri+len(word))
             for i in xrange(ri, ri+len(word)):
                 row = self.board[i]
                 row[ci] = col[i] #add our new char
@@ -154,6 +170,11 @@ print "score('ACTION',(4,6), 'h')"
 print b.score('ACTION',(4,6), 'h')
 print "score('INTEGER',(5,7), 'v')"
 print b.score('INTEGER',(5,7), 'v')
+print "score('RAZZMATAZZES',(4,10), 'h')"
+print b.score('RAZZMATAZZES',(4,10), 'h')
 
-o = oracle.Oracle(b)
-o.OracleMove()
+b = baseline.Baseline(b)
+b.baselineMove()
+
+#o = oracle.Oracle(b)
+#o.OracleMove()

@@ -11,42 +11,60 @@ import random, itertools
 class Baseline:
 	def __init__(self, board):
 		self.board = board
+                self.sortedDict = {}
+                for k in board.dictionary:
+                        s = ''.join(sorted(k))
+                        if s not in self.sortedDict:
+                                self.sortedDict[s] = [k]
+                        else:
+                                self.sortedDict[s] += k
 		self.bag = LetterBag() #later we should move this
 		self.tiles = [] # list of tiles current in posession 
 
 		# get first 7 tiles
-		self.tiles.append(bag.getLetter())
-		self.tiles.append(bag.getLetter())
-		self.tiles.append(bag.getLetter())
-		self.tiles.append(bag.getLetter())
-		self.tiles.append(bag.getLetter())
-		self.tiles.append(bag.getLetter())
-		self.tiles.append(bag.getLetter())
+                for i in xrange(7):
+                        self.tiles.append(self.bag.getLetter())
+
 	#####################################################
 	# Score: 
 	# Returns the base score of a word (no multipliers)
 	# currently assumes no multiplier tiles for discarding
 	# keys
 	#####################################################		
-	def baselineMove(self, board):
-		
+	def baselineMove(self):
+		#make a new dict of sortedWords->realWords, sort our
+		#letters plus tiles, then remove a subset until a
+		#valid match is found
+                
 		#find any possible move and do it
-		for col in range(15):
-			vector = board.getCols(col)
+		for c in xrange(15):
+                        print "-----------------------------------------"
+			col = self.board.getCol(c)
+                        print col
+                        colStr = ''.join(''.join(col).split())
+                        print colStr
+                        if colStr == '':
+                                continue
+                        
+                        #search loop
+                        for  i in xrange(2):#xrange(222):
+                                # choose a random subset from our bag
+                                num = random.randint(1, len(self.tiles))
+                                subset = []
+                                #choose num random tiles
+                                for j in random.sample(xrange(7), num):
+                                        subset.append(self.tiles[j])
+                                print "tiles",self.tiles
+                                print "subset",subset
+                                #sortedLetters = ''.join(sorted(''.join(self.tiles) + colStr))
+                                
+                                #TODO: for each letter already on the board,
+                                #try and form a word around it from
+                                #our subset
 
-			#vector to string
-			vectorString = ""
-			for c in vector:
-				vectorString += c
-
-			strList =- vectorString.split() 
-
-			#make sure vector not empty
-			if strList != []:
-				for i in range(len(self.letters)):
-					fexes = itertools.permutations()
-
-
+                                #if we failed, try again
+                                
+                                
 
 		return None
 
