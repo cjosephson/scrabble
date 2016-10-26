@@ -1,0 +1,22 @@
+
+
+Current status: 
+	DONE
+		Board:
+			score
+			isValid*
+		Oracle (class)
+			convolve
+			isSubstring
+			score (need to move)
+			OracleMove* 
+* untested
+
+	Need to do: 
+		-test oracle w/ board
+		-baseline
+		
+		
+		-make more sample boards, test
+
+		-Writeup 
