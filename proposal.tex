@@ -4,7 +4,7 @@
 \begin{document}
 
 \begin{center}
-{\Large CS221 Fall 2016 Project Proposal}
+{\Large CS221 Fall 2016 Project Proposal: Scrabble AI}
 
 \begin{tabular}{rl}
   Authors: & Colleen Josephson and Rebecca Greene\\
@@ -12,10 +12,44 @@
 \end{tabular}
 \end{center}
 
-By turning in this assignment, I agree by the Stanford honor code and
-declare that all of this is my own work.
+\section*{Introduction}
+Scrabble is a turn-based zero-sum game where players spell valid English words on a 15x15 game board. Like a crossword puzzle, besides the initial move, all words must intersect with one or more words already on the board.
 
-\section*{Requirements}
+Each turn consists of the player putting a word onto the board and
+then tallying up the letters socres against any multipliers to get a
+positive integer score for that move. In general, long words and words
+with uncommon letters score highly. Once a player has run out of tiles
+or cannot make a move, the game ends. Whichever player has the highest
+cumulative score wins.
+
+We propose a Scrabble AI to play against human or alternate AI agents. For each turn, a set of game state will be input, and a valid move will be output. Below is a tentative example:\\
+
+\textbf{Input:} (gameBoard, letterSet, specialCases, opponentState)
+
+\textbf{Output:} (word, score, locationOnBoard, orientation)\\
+
+
+The gameBoard is a 15x15 board with the current board state, letterSet is the set of 7 letters that the AI has avavailable to form a word with, the specialCases will be indicators for special game state (skipped turns or going twice) and the opponentState will contain the AI's estimate of the opponent state so it can potentially place words adversarially and undercut the opponent's ability to score.
+
+\section{Metrics}
+Since this is a zero-sum game, the utility is formally $+\infty$ if the AI wins, $-\infty$ if the AI loses. The value function $V_{agent}{opp}(S)$, the expected utility for the game at state s.
+
+We will first explore using a minimax value function where we assume the opponent is trying to minimize our score.
+
+As a first-pass, the AI will try to output the highest scoring word possible for that board during a turn.  Eventually we would like to incorporate estimates of the opponents state and techniques to play adversarially that will minimize the opponent's score while maximizing our own. For example, if there are two potential locations for high-scoring words, we place the word in the location that will maximially impede the opponent in creating future high-scoring words. In summary:\\
+
+\textbf{Local metric:} score for a single move
+
+\section{Baseline and Oracle}
+
+\section{Examples and Preliminary Data}
+
+\section{Approach}
+
+\section{Prior Work and Conclusion}
+
+
+\textbf{Global metric:} end-game score
 \begin{enumerate}[label=(\roman*)]
   \item  Define the input-output behavior of the system and the scope of the project.
   \item  Define the evaluation metric for success

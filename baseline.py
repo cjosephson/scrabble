@@ -41,7 +41,7 @@ class Baseline:
 		for c in xrange(15):
                         #print "-----------------------------------------"
 			col = self.board.getCol(c)
-                        print col
+                        #print col
                         colStr = ''.join(''.join(col).split())
                         #print colStr
                         if colStr == '':
@@ -123,7 +123,7 @@ class LetterBag:
 				self.letters.append('Q')
 				self.letters.append('Z')
 			
-		print len(self.letters), count
+		#print len(self.letters), count
 	def getLetter(self):
 		#grab a random number out of the bag
 		i = random.randint(0, len(self.letters))

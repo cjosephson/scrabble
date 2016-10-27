@@ -1,5 +1,5 @@
-from operator import itemgetter
 ##CS221 final project oracle
+from operator import itemgetter
 
 
 
