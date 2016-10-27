@@ -9,7 +9,7 @@ import random, itertools
 #####################################################
 
 class Baseline:
-	def __init__(self, board):
+        def __init__(self, board):
 		self.board = board
                 self.sortedDict = {}
                 for k in board.dictionary:
@@ -35,37 +35,51 @@ class Baseline:
 		#make a new dict of sortedWords->realWords, sort our
 		#letters plus tiles, then remove a subset until a
 		#valid match is found
-                
+                score = -1
+                word = ''
 		#find any possible move and do it
 		for c in xrange(15):
-                        print "-----------------------------------------"
+                        #print "-----------------------------------------"
 			col = self.board.getCol(c)
                         print col
                         colStr = ''.join(''.join(col).split())
-                        print colStr
+                        #print colStr
                         if colStr == '':
                                 continue
                         
                         #search loop
-                        for  i in xrange(2):#xrange(222):
+                        for  i in xrange(222):
                                 # choose a random subset from our bag
                                 num = random.randint(1, len(self.tiles))
                                 subset = []
                                 #choose num random tiles
                                 for j in random.sample(xrange(7), num):
                                         subset.append(self.tiles[j])
-                                print "tiles",self.tiles
-                                print "subset",subset
+                                #print "tiles",self.tiles
+                                #print "subset",subset
                                 #sortedLetters = ''.join(sorted(''.join(self.tiles) + colStr))
                                 
                                 #TODO: for each letter already on the board,
                                 #try and form a word around it from
                                 #our subset
-
+                                for j in colStr:
+                                        k = ''.join(sorted(''.join(subset)+colStr))
+                                        if k not in self.sortedDict:
+                                                continue
+                                        #print "it's a word!",k
+                                        #test for validity
+                                        for y in xrange(15): #try all positions
+                                                #(word, startPoint, orientation):
+                                                #score = self.board.score(k, (c,y), 'v')
+                                                #print "(%i, %i) score = % i"%(c,y,score)
+                                                if score > 0:
+                                                        word = k
+                                                        print "BASELN: max word is %s with score %i at %s,%s"%(word,
+                                                                                                               score,
+                                                                                                               (c,y),
+                                                                                                               'v') 
+                                                        return word
                                 #if we failed, try again
-                                
-                                
-
 		return None
 
 class LetterBag:

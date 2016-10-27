@@ -173,8 +173,9 @@ print b.score('INTEGER',(5,7), 'v')
 print "score('RAZZMATAZZES',(4,10), 'h')"
 print b.score('RAZZMATAZZES',(4,10), 'h')
 
-b = baseline.Baseline(b)
-b.baselineMove()
+ba = baseline.Baseline(b)
+ba.baselineMove()
 
-#o = oracle.Oracle(b)
-#o.OracleMove()
+print "Calculating oracle (takes a while...)"
+o = oracle.Oracle(b)
+o.OracleMove()

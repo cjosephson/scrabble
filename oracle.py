@@ -46,7 +46,7 @@ class Oracle:
 		#find result with highest score
 		(word, score, startPoint, orientation) = max(possibleMoves, key=itemgetter(1))
                 
-                print "Max word is %s with score %i at %s,%s"%(word, score,startPoint,orientation) 
+                print "ORACLE: max word is %s with score %i at %s,%s"%(word, score,startPoint,orientation) 
 		#add it to the board
 
 		return None
