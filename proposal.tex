@@ -25,57 +25,6 @@ declare that all of this is my own work.
   \item  Search the Internet for similar projects and mention the related work.
 \end{enumerate}
 
-\section*{Brainstorm}
-
-Brinstorm ideas:
-\begin{itemize}
-  \item automatic scientific paper review generator
-  \item 6.141-style having a robot that navigates a grid (we'd have to make a simulated robots)
-  \item  motorcycle navigation (between bike and car, can cut thru certain car barriers, need better ETA (lane-splitting)  weight highly scenic roads higher
-  \item how long a recipe will actually take based on skill level etc
-  \item (Colleen TODO) \textbf{predict how many likes/interactions a facebook post will get depending on content ( engagement, photo present, marriage, baby, etc).}
-  \item  (Becca TODO) \textbf{online troll detector}
-  \item (Colleen TODO) \textbf{scrabble AI}
-  \item snake.io player
-  \item SET card game player (can a bot learn to play set based off example games?)
-  \item (Becca TODO) \textbf{classify song genre based off mp3 (whole or partial), use aubio library}
-\end{itemize}
-
-\section{Evaluation of Feasiblity}
-\subsection{Facebook like predictor}
-\begin{itemize}
-\item  \emph{Define the input-output behavior of the system and the scope of the project.}
-  
-  Input: a status update\\
-  Output: a predicted number of likes
-  
-  \item \emph{ Define the evaluation metric for success}
-
-    Distance between predicted likes and actual likes
-    
-  \item  \emph{Collect some preliminary data, and give concrete examples of inputs and outputs.}
-
-    Data collection would use a web crawler like here:
-    https://www.norconex.com/how-to-crawl-facebook/. This has
-    potential issues as it violates the Facebook EULA and people have
-    gotten into actual legal trouble before (see
-    https://www.quora.com/Is-it-legal-to-use-a-crawler-in-order-to-collect-Facebook-public-data).
-
-    For easy preliminary data, the authors can download their own Facebook status updates easily and with no legal issues (see https://www.facebook.com/notes/terabug/download-all-facebook-photos-status-wall-posts-together-in-zip-file/10150118571353989/).
-    
-    image of status update $\rightarrow$ \# predicted of likes
-    
-  \item  \emph{Implement a baseline and an oracle and discuss the gap. What are the challenges?}
-
-    Baseline:\\
-    Oracle:
-    
-  \item Which topics (e.g., search, MDPs, etc.) might be able to address those challenges (at a high-level, since we haven't covered any techniques in detail at this point)?
-  \item  Search the Internet for similar projects and mention the related work.
-    \begin{enumerate}
-      \item http://kbbz.github.io/
-    \end{enumerate}
-\end{itemize}
 \subsection{Scrabble AI}
 \begin{itemize}
   \item  \emph{Define the input-output behavior of the system and the scope of the project}.
@@ -86,67 +35,23 @@ Brinstorm ideas:
   \item  \emph{Search the Internet for similar projects and mention the related work.}
 \end{itemize}
 
-\subsection{Troll detector}
-\begin{itemize} 
-\item  \emph{Define the input-output behavior of the system and the scope of the project}
-	Input: Posts on internet forums, emails, etc \\ 
-	Output: Is the author trolling (binary) 
-  
-\item  \emph{Define the evaluation metric for success}
-	Metric for success: Correct detection of the intended mood of the post. 
 
-  \item  \emph{Collect some preliminary data, and give concrete examples of inputs and outputs.}
-	Find some threads on reddit/ec-discuss (get back on EC-discuss?
+\section{First Paragraph}
+- a what player? What is this scrabble of which you speak? 
 
-  \item  \emph{Implement a baseline and an oracle and discuss the gap. What are the challenges?}
-	Oracle: Human \\
-	Baseline: Simple linear classifier
-
-	Challenges: Data might be time-consuming to gather, 
-
-  \item \emph{Which topics (e.g., search, MDPs, etc.) might be able to address those challenges (at a high-level, since we haven't covered any techniques in detail at this point)?}
-
-	More complicated classifiers? Not sure there's a better answer to this. 
-  \item  \emph{Search the Internet for similar projects and mention the related work.}
-	https://arxiv.org/pdf/1504.00680v1.pdf
-\end{itemize}
-\subsection{Music genre classifier}
-\begin{itemize}
-  \item  \emph{Define the input-output behavior of the system and the scope of the project.}
-
-    Input: A music song in mp3 format\\
-    Output: An English-language genre tag
-
-  \item  \emph{Define the evaluation metric for success}
-    
-    Binary: does the classifier guess a genre in the correct set of
-    genres or not. There is a set of genres because some genres are
-    umbrellas of others, e.g. Trance is a sub-genre of electronic.
-
-  \item  \emph{Collect some preliminary data, and give concrete examples of inputs and outputs.}
-
-    One of the authors has an extensive media collection, so using
-    that and the Aubio feature extraction library we have a feature
-    extractor and training/dev/test sets already.
-
-    Example: Never Gonna Give You Up $\rightarrow$ R\&B
-    
-  \item \emph{Implement a baseline and an oracle and discuss the gap. What are the challenges?}
-
-    Baseline: Simple classifier based on onyl a couple elements?\\
-    Oracle: Sites like last.fm list genre information associated with a song. We'd probably need a scripts to scrape the information. 
-    
-  \item \emph{Which topics (e.g., search, MDPs, etc.) might be able to address those challenges (at a high-level, since we haven't covered any techniques in detail at this point)?}
-
-    Search? IDK.
-    
-  \item  Search the Internet for similar projects and mention the related work.
-    \begin{enumerate}
-      \item http://ismir2001.ismir.net/pdf/tzanetakis.pdf
-      \item http://newatlas.com/automatic-music-genre-classification-system/38240/
-    \end{enumerate}
-    
-\end{itemize}
+\section{Define the Problem}
+  also evaluation metric, etc. 
+\section{Talk About Previous Implimentations}
+Maven, the open source one
+http://www.sciencedirect.com/science/article/pii/S0004370201001667
+https://www.scotthyoung.com/blog/2013/02/21/wordsmith/
+http://ceur-ws.org/Vol-860/paper16.pdf
+\section{Talk About Oracle/Baseline}
+What are we planning on using for them? Why? Why are they necessary? 
+\section{Talk about code built, data collected, gap, what this signifies}
+because omfg we did some stuff. 
+\section{Talk about high level methods to use to solve this}
+A*, probably we should skim through what other people did to copy their general methods. 
 \section*{Conclusion}
 
 Finally, blah.
