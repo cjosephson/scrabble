@@ -13,7 +13,10 @@
 \end{center}
 
 \section*{Introduction}
-Scrabble is a turn-based zero-sum game where players spell valid English words on a 15x15 game board. Like a crossword puzzle, besides the initial move, all words must intersect with one or more words already on the board.
+Scrabble is a turn-based zero-sum game where players spell valid
+English words on a 15x15 game board. Like a crossword puzzle, besides
+the initial move, all words must intersect with one or more words
+already on the board.
 
 Each turn consists of the player putting a word onto the board and
 then tallying up the letters socres against any multipliers to get a
@@ -22,34 +25,79 @@ with uncommon letters score highly. Once a player has run out of tiles
 or cannot make a move, the game ends. Whichever player has the highest
 cumulative score wins.
 
-We propose a Scrabble AI to play against human or alternate AI agents. For each turn, a set of game state will be input, and a valid move will be output. Below is a tentative example:\\
+We propose a Scrabble AI to play against human or alternate AI
+agents. For each turn, a set of game state will be input, and a valid
+move will be output. Below is a tentative example:\\
 
 \textbf{Input:} (gameBoard, letterSet, specialCases, opponentState)
 
 \textbf{Output:} (word, score, locationOnBoard, orientation)\\
 
 
-The gameBoard is a 15x15 board with the current board state, letterSet is the set of 7 letters that the AI has avavailable to form a word with, the specialCases will be indicators for special game state (skipped turns or going twice) and the opponentState will contain the AI's estimate of the opponent state so it can potentially place words adversarially and undercut the opponent's ability to score.
+The gameBoard is a 15x15 board with the current board state, letterSet
+is the set of 7 letters that the AI has avavailable to form a word
+with, the specialCases will be indicators for special game state
+(skipped turns or going twice) and the opponentState will contain the
+AI's estimate of the opponent state so it can potentially place words
+adversarially and undercut the opponent's ability to score.
 
-\section{Metrics}
-Since this is a zero-sum game, the utility is formally $+\infty$ if the AI wins, $-\infty$ if the AI loses. The value function $V_{agent}{opp}(S)$, the expected utility for the game at state s.
+\section*{Metrics}
+Since this is a zero-sum game, the utility is formally $+\infty$ if
+the AI wins, $-\infty$ if the AI loses. The value function
+$V_{agent,opp}(s)$, the expected utility for the game at state s.
 
-We will first explore using a minimax value function where we assume the opponent is trying to minimize our score.
+We will first explore using a minimax value function where we assume
+the opponent is trying to minimize our score.
 
-As a first-pass, the AI will try to output the highest scoring word possible for that board during a turn.  Eventually we would like to incorporate estimates of the opponents state and techniques to play adversarially that will minimize the opponent's score while maximizing our own. For example, if there are two potential locations for high-scoring words, we place the word in the location that will maximially impede the opponent in creating future high-scoring words. In summary:\\
+As a first-pass, the AI will try to output the highest scoring word
+possible for that board during a turn.  Eventually we would like to
+incorporate estimates of the opponents state and techniques to play
+adversarially that will minimize the opponent's score while maximizing
+our own. For example, if there are two potential locations for
+high-scoring words, we place the word in the location that will
+maximially impede the opponent in creating future high-scoring
+words. In summary:\\
 
 \textbf{Local metric:} score for a single move
 
-\section{Baseline and Oracle}
-
-\section{Examples and Preliminary Data}
-
-\section{Approach}
-
-\section{Prior Work and Conclusion}
-
-
 \textbf{Global metric:} end-game score
+
+\section*{Baseline and Oracle}
+What are we planning on using for them? Why? Why are they necessary?
+
+\section*{Examples and Preliminary Data}
+because omfg we did some stuff.
+
+BASELN: max word is ER with score 2 at (7, 0),v
+ORACLE: max word is PIZZAZZY with score 49 at (10, 6),v
+BASELN: max word is HOT with score 6 at (6, 0),v
+ORACLE: max word is PAZAZZES with score 37 at (7, 0),v
+BASELN: max word is ENORS with score 5 at (6, 7),v
+ORACLE: max word is PAZAZZES with score 37 at (7, 6),v
+BASELN: max word is ART with score 3 at (5, 1),v
+ORACLE: max word is JAZZBO with score 33 at (10, 0),v
+BASELN: max word is IS with score 2 at (5, 0),v
+ORACLE: max word is PIZZAZZY with score 49 at (10, 6),v
+BASELN: max word is MU with score 4 at (3, 0),v
+ORACLE: max word is PIZZAZZY with score 49 at (10, 6),v
+BASELN: max word is AW with score 3 at (7, 0),v
+ORACLE: max word is PAZAZZES with score 37 at (7, 5),v
+BASELN: max word is BO with score 4 at (3, 0),v
+ORACLE: max word is BEZAZZ with score 35 at (3, 8),v
+BASELN: max word is ET with score 2 at (3, 0),v
+ORACLE: max word is PIZZAZZY with score 49 at (4, 3),v
+BASELN: max word is LO with score 2 at (14, 0),v
+ORACLE: max word is QUIZZING with score 37 at (13, 0),v
+
+\section*{Approach}
+A*, probably we should skim through what other people did to copy their general methods.
+
+\section*{Prior Work and Conclusion}
+Maven, the open source one
+http://www.sciencedirect.com/science/article/pii/S0004370201001667
+https://www.scotthyoung.com/blog/2013/02/21/wordsmith/
+http://ceur-ws.org/Vol-860/paper16.pdf
+
 \begin{enumerate}[label=(\roman*)]
   \item  Define the input-output behavior of the system and the scope of the project.
   \item  Define the evaluation metric for success
@@ -58,36 +106,5 @@ As a first-pass, the AI will try to output the highest scoring word possible for
   \item Which topics (e.g., search, MDPs, etc.) might be able to address those challenges (at a high-level, since we haven't covered any techniques in detail at this point)?
   \item  Search the Internet for similar projects and mention the related work.
 \end{enumerate}
-
-\subsection{Scrabble AI}
-\begin{itemize}
-  \item  \emph{Define the input-output behavior of the system and the scope of the project}.
-  \item  \emph{Define the evaluation metric for success}
-  \item  \emph{Collect some preliminary data, and give concrete examples of inputs and outputs.}
-  \item  \emph{Implement a baseline and an oracle and discuss the gap. What are the challenges?}
-  \item \emph{Which topics (e.g., search, MDPs, etc.) might be able to address those challenges (at a high-level, since we haven't covered any techniques in detail at this point)?}
-  \item  \emph{Search the Internet for similar projects and mention the related work.}
-\end{itemize}
-
-
-\section{First Paragraph}
-- a what player? What is this scrabble of which you speak? 
-
-\section{Define the Problem}
-  also evaluation metric, etc. 
-\section{Talk About Previous Implimentations}
-Maven, the open source one
-http://www.sciencedirect.com/science/article/pii/S0004370201001667
-https://www.scotthyoung.com/blog/2013/02/21/wordsmith/
-http://ceur-ws.org/Vol-860/paper16.pdf
-\section{Talk About Oracle/Baseline}
-What are we planning on using for them? Why? Why are they necessary? 
-\section{Talk about code built, data collected, gap, what this signifies}
-because omfg we did some stuff. 
-\section{Talk about high level methods to use to solve this}
-A*, probably we should skim through what other people did to copy their general methods. 
-\section*{Conclusion}
-
-Finally, blah.
 
 \end{document}

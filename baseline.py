@@ -59,7 +59,7 @@ class Baseline:
                                 #print "subset",subset
                                 #sortedLetters = ''.join(sorted(''.join(self.tiles) + colStr))
                                 
-                                #TODO: for each letter already on the board,
+                                #for each letter already on the board,
                                 #try and form a word around it from
                                 #our subset
                                 for j in colStr:
@@ -70,7 +70,7 @@ class Baseline:
                                         #test for validity
                                         for y in xrange(15): #try all positions
                                                 #(word, startPoint, orientation):
-                                                #score = self.board.score(k, (c,y), 'v')
+                                                score = self.board.score(k, (c,y), 'v')
                                                 #print "(%i, %i) score = % i"%(c,y,score)
                                                 if score > 0:
                                                         word = k
@@ -80,6 +80,7 @@ class Baseline:
                                                                                                                'v') 
                                                         return word
                                 #if we failed, try again
+                print "BASELINE found no word"
 		return None
 
 class LetterBag:
@@ -126,7 +127,7 @@ class LetterBag:
 		#print len(self.letters), count
 	def getLetter(self):
 		#grab a random number out of the bag
-		i = random.randint(0, len(self.letters))
+		i = random.randint(0, len(self.letters)-1)
 		result = self.letters.pop(i)
 		return result
 
