@@ -63,10 +63,11 @@ words. In summary:\\
 \textbf{Global metric:} end-game score
 
 \section*{Baseline and Oracle}
-What are we planning on using for them? Why? Why are they necessary?
+	Before getting too involved with the implimentation of the project, we created an oracle and a baseline to get a better sense of the upper and lower bounds of possible performance on the project. When presented with a given board, the oracle searches through the scrabble dictionary to make a list of moves that are possible with any seven tiles. Of these moves, it then selects the move that returns the highest score for that turn. This is the upper bound of any move possible for any scrabble player, human or otherwise, becasue the lilihood that a player would posesses the correct tiles for that move is quite low. Our baseline is given 7 random tiles and and makes the first possible move that it finds. Occasionally this method might product an optimal move, but that would be highly unlikely.  
 
 \section*{Examples and Preliminary Data}
-because omfg we did some stuff.
+
+To get a sense of these bounds, we created 10 test scenarios for a simplified version of the game-- there were no multiplier tiles, and each move could only consist of a single word, which simplified the coding, and put some restrictions on the performance of our oracle. As shown below, the oracle outperformed the baseline by at least an order of magnitude on every sample board. 
 
 BASELN: max word is ER with score 2 at (7, 0),v
 ORACLE: max word is PIZZAZZY with score 49 at (10, 6),v
