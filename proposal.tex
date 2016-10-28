@@ -1,5 +1,6 @@
 \documentclass[12pt]{article}
 \usepackage{fullpage,enumitem,amsmath,amssymb,graphicx,hyperref}
+\usepackage[margin=1in]{geometry} 
 
 \begin{document}
 
@@ -12,7 +13,8 @@
 \end{center}
 
 \subsubsection*{Introduction}
-Scrabble is a turn-based zero-sum game where players spell valid
+We propose a Scrabble AI to play against human or alternate AI
+agents. Scrabble is a turn-based zero-sum game where players spell valid
 English words on a 15x15 game board. Like a crossword puzzle, besides
 the initial move, all words must intersect with one or more words
 already on the board.
@@ -24,8 +26,7 @@ with uncommon letters score highly. Once a player has run out of tiles
 or cannot make a move, the game ends. Whichever player has the highest
 cumulative score wins.
 
-We propose a Scrabble AI to play against human or alternate AI
-agents. For each turn, a set of game state will be input, and a valid
+ For each turn, a set of game state will be input, and a valid
 move will be output. See next page for a concrete example. 
 
 %% \textbf{Input:} (gameBoard, letterSet, specialCases, opponentState)
@@ -54,7 +55,6 @@ incorporate estimates of the opponents state and techniques to play
 adversarially that will minimize the opponent's score while maximizing
 our own. For example, if there are two potential locations for
 high-scoring words, we place the word in the location that will
-<<<<<<< HEAD
 maximally impede the opponent in creating future high-scoring
 words. In summary:
 
@@ -75,11 +75,13 @@ Our baseline is given 7 random tiles and and makes the
 first possible move that it finds. Occasionally this method might
 produce an optimal move, but that would be highly unlikely.
 
+\newpage
 \subsubsection*{Examples and Preliminary Data}
 
-\textbf{Example Input:}\\
-\newenvironment{mono}{\ttfamily}{\par}
+\begin{footnotesize}\textbf{Example Input:}\\
+\end{foornotesize}
 \begin{scriptsize}
+\newenvironment{mono}{\ttfamily}{\par}
 \begin{mono}
   \noindent
 00:[' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']\\
@@ -100,9 +102,10 @@ produce an optimal move, but that would be highly unlikely.
 ----|00| |01| |02| |03| |04| |05| |06| |07| |08| |09| |10| |11| |12| |13| |14|
 \end{mono}
 \end{scriptsize}
-
+\begin{footnotesize}
 \noindent
-\textbf{Example output:} $\{$word:'PIZZAZZY', score: 49, startPoint: (10, 6), orientation: 'v'$\}$\\
+\textbf{Example output:} $\{$word:'PIZZAZZY', score: 49, startPoint: (10, 6), orientation: 'v'$\}$
+\end{footnotesize}
 
 We created 10 test scenarios for a simplified version of the game with no multiplier tiles, and asked the oracle and baseline to place a word. The oracle performed about 10x better than the baseline\footnote{Note: the oracle is slow, it takes about 90 seconds to find a move. Because crafting example boards by hand and running the algorithm are time consuming, we kept the test set limited to 10.}: \textbf{Average oracle score:} 36.3, \textbf{Average baseline score:} 3.3
 
@@ -129,24 +132,39 @@ We created 10 test scenarios for a simplified version of the game with no multip
 %% ORACLE: max word is QUIZZING with score 37 at (13, 0),v
 
 \subsubsection*{Approach}
--some sort of heuristic approach, coupled with simulation, saving tiles for later 
-A*, probably we should skim through what other people did to copy their general methods.
+Next we plan to implement the turn-based framework of the game and add
+score multipliers. This should be straightforward.
+
+Our approach at a brute-force search Oracle was relatively successful
+at optimizing for a local move. However, it was quite slow, and didn't
+have constraints on the letters available like a real player. To speed
+things up we will investigate using alpha-beta pruning and search
+heuristics like A*. We'd like to see the average move take 10s or
+less.
+
+Additionally, as mentioned earlier, we'd like to incorporate
+strategizing against the opponent into our AI. This is a bit vague, we
+expect we'll have a better idea of what to do after completing the
+PacMan assignment.
+
 
 \subsubsection*{Prior Work and Conclusion}
-By this point, the vast majoriy of popular board games have had some
-sort of AI player rise, and scrabble is no exception. In 2002, Brian
-Sheppard created the scrabble-played AI 'Maven', which has won games
-agaisnt several world champions.  The Appel-Jacobsen scrabble AI is
-less famous, optimized for speed rather than performance.  A number of
-other scrabble-playing AIs have been created, wordswordswordswords.
+By this point, most popular board games have AIs, and
+Scrabble is no exception. In 2002, Brian Sheppard created 'Maven',
+which has won games against several world champions. Another is the 1988 
+Appel-Jacobsen Scrabble AI, optimized for speed rather than score.
+
+We realize that a Scrabble AI is not groundbreaking, but this project
+should satisfy our goal of creating a substantial body of code that
+demonstrates our understanding of introductory AI.
 
 \begin{footnotesize}
 \begin{itemize}
 \item Maven: \url{http://www.sciencedirect.com/science/article/pii/S0004370201001667}
-\item An open-source amateur AI: \url{https://www.scotthyoung.com/blog/2013/02/21/wordsmith/}
-\item 2012 Scrabble AI: \url{http://ceur-ws.org/Vol-860/paper16.pdf}
 \item Appel-Jacobsen \url{http://repository.cmu.edu/cgi/viewcontent.cgi?article=2580&context=compsci}
 %\item Appel-Jacobsen:\url{https://www.cs.cmu.edu/afs/cs/academic/class/15451-s06/www/lectures/scrabble.pdf}
+\item A Recent (2012) Scrabble AI: \url{http://ceur-ws.org/Vol-860/paper16.pdf}
+\item An open-source amateur AI: \url{https://www.scotthyoung.com/blog/2013/02/21/wordsmith/}
 \end{itemize}
 \end{footnotesize}
 

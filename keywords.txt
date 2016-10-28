@@ -1,2 +1,5 @@
-predictor
-music
+game
+scrabble
+search
+pruning
+heuristic
