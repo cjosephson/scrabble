@@ -1,5 +1,5 @@
 \documentclass[12pt]{article}
-\usepackage{fullpage,enumitem,amsmath,amssymb,graphicx}
+\usepackage{fullpage,enumitem,amsmath,amssymb,graphicx,hyperref}
 
 \begin{document}
 
@@ -7,19 +7,18 @@
 {\Large CS221 Fall 2016 Project Proposal: Scrabble AI}
 
 \begin{tabular}{rl}
-  Authors: & Colleen Josephson and Rebecca Greene\\
-  Email: & cajoseph, greenest
+  Authors: & Colleen Josephson $\{$cajoseph$\}$ and Rebecca Greene $\{$greenest$\}$\\
 \end{tabular}
 \end{center}
 
-\section*{Introduction}
+\subsubsection*{Introduction}
 Scrabble is a turn-based zero-sum game where players spell valid
 English words on a 15x15 game board. Like a crossword puzzle, besides
 the initial move, all words must intersect with one or more words
 already on the board.
 
 Each turn consists of the player putting a word onto the board and
-then tallying up the letters socres against any multipliers to get a
+then tallying up the letters scores against any multipliers to get a
 positive integer score for that move. In general, long words and words
 with uncommon letters score highly. Once a player has run out of tiles
 or cannot make a move, the game ends. Whichever player has the highest
@@ -27,21 +26,21 @@ cumulative score wins.
 
 We propose a Scrabble AI to play against human or alternate AI
 agents. For each turn, a set of game state will be input, and a valid
-move will be output. Below is a tentative example:\\
+move will be output. See next page for a concrete example. 
 
-\textbf{Input:} (gameBoard, letterSet, specialCases, opponentState)
+%% \textbf{Input:} (gameBoard, letterSet, specialCases, opponentState)
 
-\textbf{Output:} (word, score, locationOnBoard, orientation)\\
+%% \textbf{Output:} (word, score, locationOnBoard, orientation)\\
 
 
-The gameBoard is a 15x15 board with the current board state, letterSet
-is the set of 7 letters that the AI has avavailable to form a word
-with, the specialCases will be indicators for special game state
-(skipped turns or going twice) and the opponentState will contain the
-AI's estimate of the opponent state so it can potentially place words
-adversarially and undercut the opponent's ability to score.
+%% The gameBoard is a 15x15 board with the current board state, letterSet
+%% is the set of 7 letters that the AI has avavailable to form a word
+%% with, the specialCases will be indicators for special game state
+%% (skipped turns or going twice) and the opponentState will contain the
+%% AI's estimate of the opponent state so it can potentially place words
+%% adversarially and undercut the opponent's ability to score.
 
-\section*{Metrics}
+\subsubsection*{Metrics}
 Since this is a zero-sum game, the utility is formally $+\infty$ if
 the AI wins, $-\infty$ if the AI loses. The value function
 $V_{agent,opp}(s)$, the expected utility for the game at state s.
@@ -55,57 +54,88 @@ incorporate estimates of the opponents state and techniques to play
 adversarially that will minimize the opponent's score while maximizing
 our own. For example, if there are two potential locations for
 high-scoring words, we place the word in the location that will
-maximially impede the opponent in creating future high-scoring
-words. In summary:\\
+maximally impede the opponent in creating future high-scoring
+words. In summary:
 
-\textbf{Local metric:} score for a single move
+\textbf{Local metric:} score for a single move; \textbf{Global metric:} end-game score
 
-\textbf{Global metric:} end-game score
+\subsubsection*{Baseline and Oracle}
 
-\section*{Baseline and Oracle}
-	Before getting too involved with the implimentation of the project, we created an oracle and a baseline to get a better sense of the upper and lower bounds of possible performance on the project. When presented with a given board, the oracle searches through the scrabble dictionary to make a list of moves that are possible with any seven tiles. Of these moves, it then selects the move that returns the highest score for that turn. This is the upper bound of any move possible for any scrabble player, human or otherwise, becasue the lilihood that a player would posesses the correct tiles for that move is quite low. Our baseline is given 7 random tiles and and makes the first possible move that it finds. Occasionally this method might product an optimal move, but that would be highly unlikely.  
+We created an oracle and a baseline to get a better sense of the upper
+and lower bounds of possible performance on the project.
 
-\section*{Examples and Preliminary Data}
+The oracle searches through the scrabble dictionary to make a list of
+moves that are possible with any seven letters. This is the upper bound of
+any move possible for any scrabble player, human or otherwise, because
+the likelihood that a player would possesses the correct tiles for that
+move is quite low (and sometimes impossible).
 
-To get a sense of these bounds, we created 10 test scenarios for a simplified version of the game-- there were no multiplier tiles, and each move could only consist of a single word, which simplified the coding, and put some restrictions on the performance of our oracle. As shown below, the oracle outperformed the baseline by at least an order of magnitude on every sample board. 
+Our baseline is given 7 random tiles and and makes the
+first possible move that it finds. Occasionally this method might
+produce an optimal move, but that would be highly unlikely.
 
-BASELN: max word is ER with score 2 at (7, 0),v
-ORACLE: max word is PIZZAZZY with score 49 at (10, 6),v
-BASELN: max word is HOT with score 6 at (6, 0),v
-ORACLE: max word is PAZAZZES with score 37 at (7, 0),v
-BASELN: max word is ENORS with score 5 at (6, 7),v
-ORACLE: max word is PAZAZZES with score 37 at (7, 6),v
-BASELN: max word is ART with score 3 at (5, 1),v
-ORACLE: max word is JAZZBO with score 33 at (10, 0),v
-BASELN: max word is IS with score 2 at (5, 0),v
-ORACLE: max word is PIZZAZZY with score 49 at (10, 6),v
-BASELN: max word is MU with score 4 at (3, 0),v
-ORACLE: max word is PIZZAZZY with score 49 at (10, 6),v
-BASELN: max word is AW with score 3 at (7, 0),v
-ORACLE: max word is PAZAZZES with score 37 at (7, 5),v
-BASELN: max word is BO with score 4 at (3, 0),v
-ORACLE: max word is BEZAZZ with score 35 at (3, 8),v
-BASELN: max word is ET with score 2 at (3, 0),v
-ORACLE: max word is PIZZAZZY with score 49 at (4, 3),v
-BASELN: max word is LO with score 2 at (14, 0),v
-ORACLE: max word is QUIZZING with score 37 at (13, 0),v
+\subsubsection*{Examples and Preliminary Data}
 
-\section*{Approach}
+\textbf{Example Input:}\\
+\newenvironment{mono}{\ttfamily}{\par}
+\begin{scriptsize}
+\begin{mono}
+  \noindent
+00:[' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']\\
+01:[' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']\\
+02:[' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']\\
+03:[' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']\\
+04:[' ', ' ', ' ', ' ', 'S', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']\\
+05:[' ', ' ', ' ', ' ', 'T', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']\\
+06:[' ', ' ', ' ', ' ', 'A', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']\\
+07:[' ', ' ', ' ', 'U', 'N', 'I', 'V', 'E', 'R', 'S', 'I', 'T', 'Y', ' ', ' ']\\
+08:[' ', ' ', ' ', ' ', 'F', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']\\
+09:[' ', ' ', ' ', ' ', 'O', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']\\
+10:[' ', ' ', ' ', ' ', 'R', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']\\
+11:[' ', ' ', ' ', ' ', 'D', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']\\
+12:[' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']\\
+13:[' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']\\
+14:[' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']\\
+----|00| |01| |02| |03| |04| |05| |06| |07| |08| |09| |10| |11| |12| |13| |14|
+\end{mono}
+\end{scriptsize}
+
+\noindent
+\textbf{Example output:} $\{$word:'PIZZAZZY', score: 49, startPoint: (10, 6), orientation: 'v'$\}$\\
+
+We created 10 test scenarios for a simplified version of the game with no multiplier tiles, and asked the oracle and baseline to place a word. The oracle performed about 10x better than the baseline\footnote{Note: the oracle is slow, it takes about 90 seconds to find a move. Because crafting example boards by hand and running the algorithm are time consuming, we kept the test set limited to 10.}: \textbf{Average oracle score:} 36.3, \textbf{Average baseline score:} 3.3
+
+
+%% BASELN: max word is ER with score 2 at (7, 0),v
+%% word:'PIZZAZZY', score: 49, startPoint: (10, 6), orientation: 'v'$\}$
+%% BASELN: max word is HOT with score 6 at (6, 0),v
+%% ORACLE: max word is PAZAZZES with score 37 at (7, 0),v
+%% BASELN: max word is ENORS with score 5 at (6, 7),v
+%% ORACLE: max word is PAZAZZES with score 37 at (7, 6),v
+%% BASELN: max word is ART with score 3 at (5, 1),v
+%% ORACLE: max word is JAZZBO with score 33 at (10, 0),v
+%% BASELN: max word is IS with score 2 at (5, 0),v
+%% ORACLE: max word is PIZZAZZY with score 49 at (10, 6),v
+%% BASELN: max word is MU with score 4 at (3, 0),v
+%% ORACLE: max word is PIZZAZZY with score 49 at (10, 6),v
+%% BASELN: max word is AW with score 3 at (7, 0),v
+%% ORACLE: max word is PAZAZZES with score 37 at (7, 5),v
+%% BASELN: max word is BO with score 4 at (3, 0),v
+%% ORACLE: max word is BEZAZZ with score 35 at (3, 8),v
+%% BASELN: max word is ET with score 2 at (3, 0),v
+%% ORACLE: max word is PIZZAZZY with score 49 at (4, 3),v
+%% BASELN: max word is LO with score 2 at (14, 0),v
+%% ORACLE: max word is QUIZZING with score 37 at (13, 0),v
+
+\subsubsection*{Approach}
 A*, probably we should skim through what other people did to copy their general methods.
 
-\section*{Prior Work and Conclusion}
-Maven, the open source one
-http://www.sciencedirect.com/science/article/pii/S0004370201001667
-https://www.scotthyoung.com/blog/2013/02/21/wordsmith/
-http://ceur-ws.org/Vol-860/paper16.pdf
-
-\begin{enumerate}[label=(\roman*)]
-  \item  Define the input-output behavior of the system and the scope of the project.
-  \item  Define the evaluation metric for success
-  \item  Collect some preliminary data, and give concrete examples of inputs and outputs.
-  \item  Implement a baseline and an oracle and discuss the gap. What are the challenges?
-  \item Which topics (e.g., search, MDPs, etc.) might be able to address those challenges (at a high-level, since we haven't covered any techniques in detail at this point)?
-  \item  Search the Internet for similar projects and mention the related work.
-\end{enumerate}
-
+\subsubsection*{Prior Work and Conclusion}
+\begin{footnotesize}
+\begin{itemize}
+\item Maven: \url{http://www.sciencedirect.com/science/article/pii/S0004370201001667}
+\item An open-source amateur AI: \url{https://www.scotthyoung.com/blog/2013/02/21/wordsmith/}
+\item \url{http://ceur-ws.org/Vol-860/paper16.pdf}
+\end{itemize}
+\end{footnotesize}
 \end{document}
