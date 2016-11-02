@@ -67,35 +67,16 @@ class Board:
         letterToPoints = {'W':2, 'D':2, 'B':3, 'C':3, 'M':3, 'P':3, 'F':4, 'H':4, 'V':4, 'Y':4,
 			  'K':5, 'J':8, 'X':8, 'Q':10, 'Z':10,'A':1, 'E':1, 'I':1, 'O':1, 'N':1, 
 			  'R':1, 'T':1, 'L':1, 'S':1, 'U':1, 'G':3}
-        mults = {Board.NORMAL:1, Board.DOUBLELETTER:2, Board.DOUBLEWORD:3,
-                 Board.TRIPLELETTER:3, Board.TRIPLEWORD:3}
-        
 	s = 0
-        wordMult = 1
-        x,y = startPoint
-	for c in word:
-            tile = self.board[y][x]
-            #print "tile (%i,%i) = %s"%(x,y,tile)
-            if tile[0] == ' ':
-                if tile[1] in [Board.TRIPLEWORD, Board.DOUBLEWORD]:
-                    wordMult = mult[tile[1]]
-                    s+=letterToPoints[c]
-                else: #it's just a letter multiplier
-                    s+=letterToPoints[c]*mults[tile[1]]
-            else:
-                    s+=letterToPoints[c]
-            if orientation == 'h':
-                x += 1
-            else:
-                y += 1
-	return s*wordMult	
+	for c in word: s+=letterToPoints[c]
+	return s	
 
     def valid(self, word, startPoint, orientation):
         (ci, ri) = startPoint
         if orientation == 'h':
             #check bounds
             if ci + len(word) >= 15:
-                print "fails fit check horizontally"
+                #print "fails fit check horizontally"
                 return False
             
             #check that the word satisfies column constraints
@@ -105,12 +86,12 @@ class Board:
             #print "range",range(ri, ri+len(word))
             for i in xrange(ci, ci+len(word)):
                 #print "r[%i], word[%i] = %s, %s"%(i, wi, row[i], word[wi])
-                if row[i][0] == word[wi]:
+                if row[i] == word[wi]:
                     l -= 1
-                elif row[i][0] != ' ' and row[i][0] != word[wi]:
-                    print "row constraints not satisfied"
+                elif row[i] != ' ' and row[i] != word[wi]:
+                    #print "row constraints not satisfied"
                     return False
-                row[i] = (word[wi], row[i][1])
+                row[i] = word[wi]
                 wi += 1
             #print "l",l 
             if l > 7:
@@ -118,7 +99,7 @@ class Board:
             #make sure we don't have any adjacent letters that create
             #a word not in the dictionary
             if not self.validWords(row):
-                print "row validity failed!",row
+                #print "row validity failed!",row
                 return False
             
             #check that we didn't make non-words in the other
@@ -128,7 +109,7 @@ class Board:
             for i in xrange(15):
                 col = self.getCol(i)
                 if not self.validWords(col):
-                    print "cross check fails col %i: %s"%(i,col) 
+                    #print "cross check fails col %i: %s"%(i,col) 
                     self.board[ri] = oldrow
                     return False
             #add row back because we're just doing a validity check
@@ -139,7 +120,7 @@ class Board:
             #check bounds
             #print "ri, ri+len = %s, %s"%(ri, ri+len(word))
             if ri + len(word) >= 15:
-                print "fails fit check vertically"
+                #print "fails fit check vertically"
                 return False
             #check that the word satisfies column constraints
             col = [i for i in self.getCol(ci)]
@@ -147,13 +128,13 @@ class Board:
             l = len(word)
             #print "range",range(ri, ri+len(word))
             for i in xrange(ri, ri+len(word)):
-                if col[i][0] == word[wi]:
+                if col[i] == word[wi]:
                     l -= 1 
-                elif col[i][0] != ' ' and col[i][0] != word[wi]:
-                    print "col constraints false"
+                elif col[i] != ' ' and col[i] != word[wi]:
+                    #print "col constraints false"
                     return False
                 #print "i, wi = %s,%s"%(i, wi)
-                col[i] = (word[wi], col[i][1])
+                col[i] = word[wi]
                 wi += 1
             #print "l",l
             if l > 7:
@@ -184,7 +165,7 @@ class Board:
         return True
     
     def validWords(self, l):
-        for w in ''.join([s[0] for s in l]).split():
+        for w in ''.join(l).split():
             if w not in self.dictionary and len(w)>1:
                 return False
         return True
