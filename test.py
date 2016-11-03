@@ -6,42 +6,26 @@ b = board.Board()
 boards.append(b)
 
 #TODO: use addWord function
-b.insert('S', (4,4))
-b.insert('T', (5,4))
-b.insert('A', (6,4))
 
-b.insert('U',(7, 3))
-b.insert('N',(7, 4))
-b.insert('I',(7, 5))
-b.insert('V',(7, 6))
-b.insert('E',(7, 7))
-b.insert('R',(7, 8))
-b.insert('S',(7, 9))
-b.insert('I',(7, 10))
-b.insert('T',(7, 11))
-b.insert('Y',(7, 12))
-
-b.insert('F', (8,4))
-b.insert('O', (9,4))
-b.insert('R', (10,4))
-b.insert('D', (11,4))
+b.insertWord('STANFORD', (4,4), 'v')
+b.insertWord('UNIVERSITY', (3,7), 'h')
 
 print b
 print "Testing board verification function..."
-print "score('TREE',(11,7), 'v') = 4"
+print "score('TREE',(11,7), 'v') =? 4"
 assert b.score('TREE',(11,7), 'v') == 4
 print "score('TREEHOUSES',(11,7), 'v') =? -1"
 assert b.score('TREEHOUSES',(11,7), 'v') == -1
-print "score('TREE',(4,5), 'h')", b.score('TREE',(4,5), 'h')
+print "score('TREE',(4,5), 'h') =? 6"
 assert b.score('TREE',(4,5), 'h') == 6
-print "score('TREEHOUSES',(4,5), 'h')"
-assert b.score('TREEHOUSES',(4,5), 'h') == -1
-#print "score('ACTION',(4,6), 'h')"
-#assert b.score('ACTION',(4,6), 'h') == -1
-# print "score('INTEGER',(5,7), 'v')"
-# assert b.score('INTEGER',(5,7), 'v') == -1
-# print "score('RAZZMATAZZES',(4,10), 'h')"
-# assert b.score('RAZZMATAZZES',(4,10), 'h') == -1
+print "score('TREEHOUSES',(4,5), 'h') =? 19"
+assert b.score('TREEHOUSES',(4,5), 'h') == 19
+print "score('ACTION',(4,6), 'h') =? -1"
+assert b.score('ACTION',(4,6), 'h') == -1
+print "score('INTEGER',(5,7), 'v') =? -1"
+assert b.score('INTEGER',(5,7), 'v') == -1
+print "score('RAZZMATAZZES',(4,10), 'h') =? -1"
+assert b.score('RAZZMATAZZES',(4,10), 'h') == -1
 
 # #####################################################
 # # Test Board #2
