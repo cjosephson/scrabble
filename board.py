@@ -78,7 +78,7 @@ class Board:
             #print "tile (%i,%i) = %s"%(x,y,tile)
             if tile[0] == ' ':
                 if tile[1] in [Board.TRIPLEWORD, Board.DOUBLEWORD]:
-                    wordMult = mult[tile[1]]
+                    wordMult = mults[tile[1]]
                     s+=letterToPoints[c]
                 else: #it's just a letter multiplier
                     s+=letterToPoints[c]*mults[tile[1]]
@@ -126,7 +126,7 @@ class Board:
             oldrow = self.board[ri]
             self.board[ri] = row
             for i in xrange(15):
-                col = self.getCol(i)
+                col = [t[0] for t in self.getCol(i)]
                 if not self.validWords(col):
                     print "cross check fails col %i: %s"%(i,col) 
                     self.board[ri] = oldrow
@@ -203,3 +203,25 @@ class Board:
     def insert(self, c, pos):
         x,y = pos
         self.board[x][y] = (c, self.board[x][y][1])
+
+    def insertWord(self, word, startPoint, orientation, debug = False):
+        (ci, ri) = startPoint
+        score =  self.score(word, startPoint, orientation)
+        wi = 0
+        if not debug and score < 0:
+            return score
+        
+        if orientation == 'h':
+             #print "range",range(ri, ri+len(word))
+            for i in xrange(ri, ri+len(word)):
+                print "inserting %s at (%s,%s)"%(word[wi], ri, i)
+                self.insert(word[wi], (ci, i))
+                wi += 1
+        elif orientation == 'v':
+            for i in xrange(ci, ci+len(word)):
+                print "inserting %s at (%s,%s)"%(word[wi], ri, i)
+                self.insert(word[wi], (i, ri))
+                wi += 1
+        else:
+            raise Exception("Invalid orientation:",orientation)
+        return score

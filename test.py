@@ -6,25 +6,8 @@ b = board.Board()
 boards.append(b)
 
 #TODO: use addWord function
-b.insert('S', (4,4))
-b.insert('T', (5,4))
-b.insert('A', (6,4))
-
-b.insert('U',(7, 3))
-b.insert('N',(7, 4))
-b.insert('I',(7, 5))
-b.insert('V',(7, 6))
-b.insert('E',(7, 7))
-b.insert('R',(7, 8))
-b.insert('S',(7, 9))
-b.insert('I',(7, 10))
-b.insert('T',(7, 11))
-b.insert('Y',(7, 12))
-
-b.insert('F', (8,4))
-b.insert('O', (9,4))
-b.insert('R', (10,4))
-b.insert('D', (11,4))
+b.insertWord("UNIVERSITY", (7,3), 'h', debug=True) 
+b.insertWord("STANFORD", (4,4), 'v', debug=True)
 
 print b
 print "Testing board verification function..."
@@ -36,8 +19,8 @@ print "score('TREE',(4,5), 'h')", b.score('TREE',(4,5), 'h')
 assert b.score('TREE',(4,5), 'h') == 6
 print "score('TREEHOUSES',(4,5), 'h')"
 assert b.score('TREEHOUSES',(4,5), 'h') == -1
-#print "score('ACTION',(4,6), 'h')"
-#assert b.score('ACTION',(4,6), 'h') == -1
+print "score('ACTION',(4,6), 'h')"
+assert b.score('ACTION',(4,6), 'h') == -1
 # print "score('INTEGER',(5,7), 'v')"
 # assert b.score('INTEGER',(5,7), 'v') == -1
 # print "score('RAZZMATAZZES',(4,10), 'h')"
@@ -47,26 +30,21 @@ assert b.score('TREEHOUSES',(4,5), 'h') == -1
 # # Test Board #2
 # #####################################################
 
-# b2 = board.Board()
-# boards.append(b2)
-
-# b2.board[7] = [(' '),(' '),(' '),(' '),(' '),(' '),(' '),(' '),(' '),(' '),('W'),(' '),(' '),(' '),(' ')]
-# b2.board[6] = [(' '),(' '),(' '),(' '),(' '),(' '),('H'),('E'),('L'),('L'),('O'),(' '),(' '),(' '),(' ')]
-# b2.board[5] = [(' '),(' '),(' '),(' '),(' '),(' '),(' '),(' '),(' '),(' '),('R'),(' '),(' '),(' '),(' ')]
-# b2.board[4] = [(' '),(' '),(' '),(' '),(' '),(' '),(' '),(' '),(' '),(' '),('L'),(' '),(' '),(' '),(' ')]
-# b2.board[3] = [(' '),(' '),(' '),(' '),(' '),(' '),(' '),(' '),(' '),(' '),('D'),(' '),(' '),(' '),(' ')]
+b2 = board.Board()
+boards.append(b2)
+b2.insertWord("HELLO", (7,4), 'h', debug=True)
+b2.insertWord("WORLD", (6,8), 'v', debug=True) 
+print b2
 
 # #################################################
 # # Test Board #3
 # #################################################
-# b3 = board.Board()
-# boards.append(b3)
+b3 = board.Board()
+boards.append(b3)
 
-# b3.board[7] = [(' '),(' '),(' '),(' '),(' '),(' '),(' '),(' '),('R'),(' '),(' '),(' '),(' '),(' '),(' ')]
-# b3.board[6] = [(' '),(' '),(' '),(' '),(' '),(' '),('S'),('P'),('A'),('R'),('R'),('O'),('W'),(' '),(' ')]
-# b3.board[5] = [(' '),(' '),(' '),(' '),(' '),(' '),(' '),(' '),('V'),(' '),(' '),(' '),('I'),(' '),(' ')]
-# b3.board[4] = [(' '),(' '),(' '),(' '),(' '),(' '),(' '),(' '),('E'),(' '),(' '),(' '),('N'),(' '),(' ')]
-# b3.board[3] = [(' '),(' '),(' '),(' '),(' '),(' '),(' '),(' '),(' '),(' '),(' '),(' '),('G'),(' '),(' ')]
+b3.insertWord("RAVE", (5,7), 'v')
+b3.insertWord("SPARROW", (6,5), 'h', debug=True) 
+print b3
 
 # ################################################
 # # Test Board #4
