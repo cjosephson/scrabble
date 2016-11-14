@@ -8,8 +8,10 @@ import random, itertools
 # metric. Very lower. Slow AF 
 #####################################################
 
+	
+
 class Baseline:
-        def __init__(self, board):
+	def __init__(self, board):
 		self.board = board
                 self.sortedDict = {}
                 for k in board.dictionary:
@@ -41,8 +43,7 @@ class Baseline:
 		for c in xrange(15):
                         #print "-----------------------------------------"
 			col = self.board.getCol(c)
-                        #print col
-                        colStr = ''.join(''.join(col).split())
+                        colStr = ''.join(''.join([i[0] for i in col]).split())
                         #print colStr
                         if colStr == '':
                                 continue
@@ -71,7 +72,7 @@ class Baseline:
                                         for y in xrange(15): #try all positions
                                                 #(word, startPoint, orientation):
                                                 score = self.board.score(k, (c,y), 'v')
-                                                #print "(%i, %i) score = % i"%(c,y,score)
+					        #print "(%i, %i) score = % i"%(c,y,score)
                                                 if score > 0:
                                                         word = k
                                                         print "BASELN: max word is %s with score %i at %s,%s"%(word,
