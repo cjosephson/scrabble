@@ -94,8 +94,9 @@ class Board:
         (ci, ri) = startPoint
         if orientation == 'h':
             #check bounds
+            #print "ci, ci+len = %s, %s"%(ci, ci+len(word))
             if ci + len(word) >= 15:
-                print "fails fit check horizontally"
+                #print "fails fit check horizontally"
                 return False
             
             #check that the word satisfies column constraints
@@ -108,17 +109,17 @@ class Board:
                 if row[i][0] == word[wi]:
                     l -= 1
                 elif row[i][0] != ' ' and row[i][0] != word[wi]:
-                    print "row constraints not satisfied"
+                    #print "row constraints not satisfied"
                     return False
                 row[i] = (word[wi], row[i][1])
                 wi += 1
             #print "l",l 
-            if l > 7:
-                return False
+            #if l > 7:
+            #    return False
             #make sure we don't have any adjacent letters that create
             #a word not in the dictionary
             if not self.validWords(row):
-                print "row validity failed!",row
+                #print "row validity failed!",row
                 return False
             
             #check that we didn't make non-words in the other
@@ -126,9 +127,10 @@ class Board:
             oldrow = self.board[ri]
             self.board[ri] = row
             for i in xrange(15):
-                col = [t[0] for t in self.getCol(i)]
-                if not self.validWords(col):
-                    print "cross check fails col %i: %s"%(i,col) 
+                col =  self.getCol(i)
+                letters = [t[0] for t in col]
+                if not self.validWords(letters):
+                    #print "cross check fails col %i: %s"%(i,letters) 
                     self.board[ri] = oldrow
                     return False
             #add row back because we're just doing a validity check
@@ -139,7 +141,7 @@ class Board:
             #check bounds
             #print "ri, ri+len = %s, %s"%(ri, ri+len(word))
             if ri + len(word) >= 15:
-                print "fails fit check vertically"
+                #print "fails fit check vertically"
                 return False
             #check that the word satisfies column constraints
             col = [i for i in self.getCol(ci)]
@@ -150,14 +152,14 @@ class Board:
                 if col[i][0] == word[wi]:
                     l -= 1 
                 elif col[i][0] != ' ' and col[i][0] != word[wi]:
-                    print "col constraints false"
+                    #print "col constraints false"
                     return False
                 #print "i, wi = %s,%s"%(i, wi)
                 col[i] = (word[wi], col[i][1])
                 wi += 1
             #print "l",l
-            if l > 7:
-                return False
+            #if l > 7:
+            #   return False
 
             #a word not in the dictionary
             if not self.validWords(col):
@@ -169,10 +171,11 @@ class Board:
             oldBoard = copy.deepcopy((self.board)) #copy/deep copy might be needed?
             #print "range",range(ri, ri+len(word))
             for i in xrange(ri, ri+len(word)):
-                row = self.board[i]
+                row =  self.board[i]
                 row[ci] = col[i] #add our new char
-                if not self.validWords(row):
-                    #print "cross check fails row %i: %s"%(i,row)
+                letters = [t[0] for t in row]
+                if not self.validWords(letters):
+                    #print "cross check fails row %i: %s"%(i,letters)
                     self.board = oldBoard
                     #print self.__str__()
                     return False
@@ -200,7 +203,7 @@ class Board:
             col = [self.board[i][ci] for i in xrange(15)]
         return col
 
-    def insert(self, c, pos):
+    def insertChar(self, c, pos):
         x,y = pos
         self.board[x][y] = (c, self.board[x][y][1])
 
@@ -215,12 +218,12 @@ class Board:
              #print "range",range(ri, ri+len(word))
             for i in xrange(ri, ri+len(word)):
                 print "inserting %s at (%s,%s)"%(word[wi], ri, i)
-                self.insert(word[wi], (ci, i))
+                self.insertChar(word[wi], (ci, i))
                 wi += 1
         elif orientation == 'v':
             for i in xrange(ci, ci+len(word)):
                 print "inserting %s at (%s,%s)"%(word[wi], ri, i)
-                self.insert(word[wi], (i, ri))
+                self.insertChar(word[wi], (i, ri))
                 wi += 1
         else:
             raise Exception("Invalid orientation:",orientation)

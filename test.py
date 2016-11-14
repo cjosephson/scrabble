@@ -5,26 +5,25 @@ boards = []
 b = board.Board()
 boards.append(b)
 
-#TODO: use addWord function
 b.insertWord("UNIVERSITY", (7,3), 'h', debug=True) 
 b.insertWord("STANFORD", (4,4), 'v', debug=True)
 
 print b
 print "Testing board verification function..."
-print "score('TREE',(11,7), 'v') = 4"
+print "score('TREE',(11,7), 'v') =? 4"
 assert b.score('TREE',(11,7), 'v') == 4
 print "score('TREEHOUSES',(11,7), 'v') =? -1"
 assert b.score('TREEHOUSES',(11,7), 'v') == -1
-print "score('TREE',(4,5), 'h')", b.score('TREE',(4,5), 'h')
+print "score('TREE',(4,5), 'h') =? 6"
 assert b.score('TREE',(4,5), 'h') == 6
-print "score('TREEHOUSES',(4,5), 'h')"
-assert b.score('TREEHOUSES',(4,5), 'h') == -1
-print "score('ACTION',(4,6), 'h')"
+print "score('TREEHOUSES',(4,5), 'h') =? 19"
+assert b.score('TREEHOUSES',(4,5), 'h') == 19
+print "score('ACTION',(4,6), 'h') =? -1"
 assert b.score('ACTION',(4,6), 'h') == -1
-# print "score('INTEGER',(5,7), 'v')"
-# assert b.score('INTEGER',(5,7), 'v') == -1
-# print "score('RAZZMATAZZES',(4,10), 'h')"
-# assert b.score('RAZZMATAZZES',(4,10), 'h') == -1
+print "score('INTEGER',(5,7), 'v') =? -1"
+assert b.score('INTEGER',(5,7), 'v') == -1
+print "score('RAZZMATAZZES',(4,10), 'h') =? -1"
+assert b.score('RAZZMATAZZES',(4,10), 'h') == -1
 
 # #####################################################
 # # Test Board #2
