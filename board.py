@@ -144,6 +144,7 @@ class Board:
                 #print "fails fit check vertically"
                 return False
             #check that the word satisfies column constraints
+            #print "ci: %s, col: %s"%(ci, self.getCol(ci))
             col = [i for i in self.getCol(ci)]
             wi = 0
             l = len(word)

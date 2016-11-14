@@ -23,7 +23,8 @@ class Oracle:
 		possibleMoves = [] 
 		for word in board.dictionary.keys():
 			for i in xrange(15):
-                                col = self.board.getCol(i)
+                                col = [c[0] for c in self.board.getCol(i)]
+				#print "col",col
                                 #(word, startIndex, vectorID)
                                 results = convolve(word, col)
                                 if results != None:
@@ -33,13 +34,14 @@ class Oracle:
                                                 if score  > -1:
                                                         possibleMoves.append((word, score, (i, startIndex), 'v'))
 			for i in xrange(15):
-                                row = self.board.getRow(i)
+                                row = [r[0] for r in self.board.getRow(i)]
                                 results = convolve(word, row)
                                 if results != None:
 				        for r in results:
                                                 (word, startIndex) = r
                                                 score = self.board.score(word, (startIndex, i ), 'h')
                                                 if score > -1:
+							print len(possibleMoves)
                                                         possibleMoves.append((word, score, (startIndex, i ), 'h'))
 
                 #print possibleMoves
