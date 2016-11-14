@@ -8,8 +8,10 @@ import random, itertools
 # metric. Very lower. Slow AF 
 #####################################################
 
+	
+
 class Baseline:
-        def __init__(self, board):
+	def __init__(self, board):
 		self.board = board
                 self.sortedDict = {}
                 for k in board.dictionary:
