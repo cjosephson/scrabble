@@ -217,12 +217,12 @@ class Board:
         if orientation == 'h':
              #print "range",range(ri, ri+len(word))
             for i in xrange(ri, ri+len(word)):
-                print "inserting %s at (%s,%s)"%(word[wi], ri, i)
+                #print "inserting %s at (%s,%s)"%(word[wi], ri, i)
                 self.insertChar(word[wi], (ci, i))
                 wi += 1
         elif orientation == 'v':
             for i in xrange(ci, ci+len(word)):
-                print "inserting %s at (%s,%s)"%(word[wi], ri, i)
+                #print "inserting %s at (%s,%s)"%(word[wi], ri, i)
                 self.insertChar(word[wi], (i, ri))
                 wi += 1
         else:
