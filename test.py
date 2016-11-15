@@ -153,8 +153,8 @@ print bN
 for i in boards:
     print "Calculating baseline..."
     ba = baseline.Baseline(i)
-    ba.baselineMove()
+    ba.move()
 
     print "Calculating oracle (takes a while...)"
     o = oracle.Oracle(i)
-    o.OracleMove()
+    o.move()

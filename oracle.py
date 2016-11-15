@@ -17,7 +17,7 @@ class Oracle:
 	# currently assumes no multiplier tiles for discarding
 	# keys
 	#####################################################		
-	def OracleMove(self):
+	def move(self):
 		board=self.board
 		#find possible moves to get the highest score
 		possibleMoves = [] 

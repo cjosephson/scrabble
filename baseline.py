@@ -33,7 +33,7 @@ class Baseline:
 	# currently assumes no multiplier tiles for discarding
 	# keys
 	#####################################################		
-	def baselineMove(self):
+	def move(self):
 		#make a new dict of sortedWords->realWords, sort our
 		#letters plus tiles, then remove a subset until a
 		#valid match is found
@@ -79,8 +79,11 @@ class Baseline:
                                                                                                                score,
                                                                                                                (c,y),
                                                                                                                'v') 
-                                                        return word
-                                #if we failed, try again
+                                                        #remove used letters
+                                                        print "score of word",self.board.insertWord(word, (c,y), 'v')
+                                                        (self.tiles.remove(t) for t in subset)
+                                                        (self.tiles.append(self.bag.getLetter()) for t in subset)
+                                                        return score
                 print "BASELINE found no word"
 		return None
 

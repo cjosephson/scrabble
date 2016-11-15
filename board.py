@@ -228,4 +228,5 @@ class Board:
                 wi += 1
         else:
             raise Exception("Invalid orientation:",orientation)
+        print "Inserted %s at %s %s-ly"%(word, startPoint, orientation) 
         return score
