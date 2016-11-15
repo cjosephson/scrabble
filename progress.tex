@@ -29,10 +29,14 @@ present preliminary experimental results, and outline additional work
 we plan to do before the final deadline.
 
 \subsubsection*{Model}
+Scrabble is a challenging game to design models for because the state
+space is very large, so traditional models like minimax are not a good
+fit. Furthermore, Blah blah.
+
 Based off appel-jacobsen is move generation algo, we will do a
 backtracking search on a trie where the letters are edges and nodes
-are partial words/words (leaf nodes are words). The trie is
-pre-computed from the dictionary.
+are partial words/words (leaf nodes are words). The maxmum number of
+edges from a node is 26. The trie is pre-computed from the dictionary.
 
 The trie itself enforces the constraint of each tile-placement being
 the substring of a word in the dictionary. The backtracking search
@@ -43,7 +47,11 @@ will enforce the other constraints, namely:
 
 From there, we will generate all possible moves (or some randomized
 subset of them, if this is far too time-consuming) and choose maximal
-weight move, where the weight is the standard Scrabble score function.
+weight move, where the weight is the standard Scrabble score
+function. Some Scrabble AIs have additional heuristics in the score,
+such as weighting words based on how they impact the tile rack. We
+stuck with the simple scording function for the first pass, but may
+conisder additional heuristics for the final result.
 
 With concrete example:
 
@@ -81,8 +89,7 @@ results below:
 
 \subsubsection*{Future Work}
 -Have our AI auto-play another AI
--do DAWG instead of trie if performance is bad?
 -do monte-carlo simulation to figure out what your opponent might do
--variables/factors/states/etc?
+-do DAWG instead of trie if performance is bad?
 
 \end{document}
