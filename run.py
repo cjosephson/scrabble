@@ -1,12 +1,19 @@
 import board
 import baseline
-import humanfriendly
+from optparse import OptionParser
+parser = OptionParser()
+parser.add_option("-m", "--human", action="store_true", dest="human", default=False,
+                  help="puts game into AI vs human mode, so you'll be told your tiles")
+
+(options, args) = parser.parse_args()
 
 def main():
     b = board.Board()
     AI = baseline.Baseline(b)
     scoreOpp = 0
     scoreMe = 0
+    if options.human:
+        tiles = [b.bag.getLetter() for i in xrange(7)]
     print b
     turn = False
     while True:
@@ -17,6 +24,7 @@ def main():
         else: #other goes
             valid = False
             while not valid:
+                print "Tiles:",tiles
                 userInput = raw_input("Enter a word, (row,col) and orientation 'h' or 'v': ")
                 inputList = userInput.split()
                 if len(inputList) != 3:
@@ -42,6 +50,17 @@ def main():
 
                 score = b.insertWord(word, loc, orientation)
                 if score > -1:
+                    #does not account for the case where a letter on
+                    #the board also appears in the tile
+                    #set... eit. We'll mostly be doing AI vs AI anyway
+                    r = 0
+                    for l in word:
+                        if l in tiles:
+                            tiles.remove(l)
+                            r += 1
+                    for i in xrange(r):
+                        tiles.append(b.bag.getLetter())
+                    
                     scoreOpp += score
                     print b
                     valid = True

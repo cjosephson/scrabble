@@ -20,12 +20,11 @@ class Baseline:
                                 self.sortedDict[s] = [k]
                         else:
                                 self.sortedDict[s] += k
-		self.bag = LetterBag() #later we should move this
 		self.tiles = [] # list of tiles current in posession 
 
 		# get first 7 tiles
                 for i in xrange(7):
-                        self.tiles.append(self.bag.getLetter())
+                        self.tiles.append(self.board.bag.getLetter())
 
 	#####################################################
 	# Score: 
@@ -82,60 +81,7 @@ class Baseline:
                                                         #remove used letters
                                                         print "score of word",self.board.insertWord(word, (c,y), 'v')
                                                         (self.tiles.remove(t) for t in subset)
-                                                        (self.tiles.append(self.bag.getLetter()) for t in subset)
+                                                        (self.tiles.append(self.board.bag.getLetter()) for t in subset)
                                                         return score
                 print "BASELINE found no word"
 		return None
-
-class LetterBag:
-	def __init__(self):
-		self.letters = []
-		count = 0
-		#fill the bag with starting values
-		for i in range(12):
-			self.letters.append('E')
-			if  i < 9: 
-				self.letters.append('I')
-			if i< 8: 
-				self.letters.append('A')
-			if i < 6:
-				self.letters.append('N')
-				self.letters.append('O')
-				self.letters.append('R')
-				self.letters.append('T')
-			if i < 5:
-				self.letters.append('W')
-			if i < 4:
-				self.letters.append('L')
-				self.letters.append('S')
-				self.letters.append('U')
-				self.letters.append('D')
-			if i < 3: 
-				self.letters.append('G')
-				self.letters.append('B')
-				self.letters.append('C')
-				self.letters.append('M')
-				self.letters.append('P')
-			if i < 2:
-				self.letters.append('F')
-				self.letters.append('H')
-				self.letters.append('V')
-				self.letters.append('Y')
-				self.letters.append('K')
-			if i < 1: 
-				self.letters.append('J')
-				self.letters.append('X')
-				self.letters.append('Q')
-				self.letters.append('Z')
-			
-		#print len(self.letters), count
-	def getLetter(self):
-		#grab a random number out of the bag
-		i = random.randint(0, len(self.letters)-1)
-		result = self.letters.pop(i)
-		return result
-
-
-
-if __name__ == '__main__':
-	bag = LetterBag()

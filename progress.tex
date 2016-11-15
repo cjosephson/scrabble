@@ -25,7 +25,8 @@ want). Report your initial experimental results.}
 \subsubsection*{Introduction}
 We are building a Scrabble AI, which is a turn-based board game. In
 this progress report we describe our model, our preliminary algorithm,
-and present preliminary experimental results.
+present preliminary experimental results, and outline additional work
+we plan to do before the final deadline.
 
 \subsubsection*{Model}
 Based off appel-jacobsen is move generation algo, we will do a
@@ -50,7 +51,18 @@ For a concrete example of the backtracking search constraints, please
 see the next section.
 
 \subsubsection*{Preliminary Implementation}
-Anchor tile, build left and right, choose maximal word.
+The core of the AI is the Appel-Jacobsen algorithm, which does
+backtracking search on a trie. At a high level, the backtracking
+search builds words around an anchor tile that is already on the
+board. The algorithm expands from the anchor left and right using
+letters from the player's tile set (or letters already existing on the
+board) and then adds tiles left and right until a valid word is
+formed. At this point, the word and its score are added to the
+list of moves. When the AJ algorithm is complete, the agent choose maximal
+scoring move.
+
+Pseudocode of the AJ algorithm:
+
 
 Toy example (include enforcing constraints):
 

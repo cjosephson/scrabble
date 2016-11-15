@@ -1,7 +1,6 @@
 #import numpy as np
 import copy
-import oracle
-import baseline
+import letterbag
 
 class Board:
     NORMAL = 'normal'
@@ -12,6 +11,7 @@ class Board:
 
     def __init__(self):
         self.board=[]
+        self.bag = letterbag.LetterBag()
         for i in xrange(15):
             self.board.append([(' ', Board.NORMAL) for i in xrange(15)])
         self.dictionary = {}
@@ -72,7 +72,7 @@ class Board:
         
 	s = 0
         wordMult = 1
-        x,y = startPoint
+        y,x = startPoint
 	for c in word:
             tile = self.board[y][x]
             #print "tile (%i,%i) = %s"%(x,y,tile)
@@ -91,7 +91,7 @@ class Board:
 	return s*wordMult	
 
     def valid(self, word, startPoint, orientation):
-        (ci, ri) = startPoint
+        (ri, ci) = startPoint
         if orientation == 'h':
             #check bounds
             #print "ci, ci+len = %s, %s"%(ci, ci+len(word))
@@ -148,14 +148,16 @@ class Board:
             col = [i for i in self.getCol(ci)]
             wi = 0
             l = len(word)
-            #print "range",range(ri, ri+len(word))
+            print "word",word
+            print "range",range(ri, ri+len(word))
+            print "col_%i %s"%(ci, [c[0] for c in col])
             for i in xrange(ri, ri+len(word)):
+                print "col[%s], word[%s] = %s,%s"%(i, wi, col[i][0], word[wi])
                 if col[i][0] == word[wi]:
-                    l -= 1 
+                    l -= 1
                 elif col[i][0] != ' ' and col[i][0] != word[wi]:
                     #print "col constraints false"
                     return False
-                #print "i, wi = %s,%s"%(i, wi)
                 col[i] = (word[wi], col[i][1])
                 wi += 1
             #print "l",l
@@ -209,7 +211,7 @@ class Board:
         self.board[x][y] = (c, self.board[x][y][1])
 
     def insertWord(self, word, startPoint, orientation, debug = False):
-        (ci, ri) = startPoint
+        (ri, ci) = startPoint
         score =  self.score(word, startPoint, orientation)
         wi = 0
         if not debug and score < 0:
@@ -217,16 +219,17 @@ class Board:
         
         if orientation == 'h':
              #print "range",range(ri, ri+len(word))
-            for i in xrange(ri, ri+len(word)):
-                #print "inserting %s at (%s,%s)"%(word[wi], ri, i)
-                self.insertChar(word[wi], (ci, i))
-                wi += 1
-        elif orientation == 'v':
             for i in xrange(ci, ci+len(word)):
                 #print "inserting %s at (%s,%s)"%(word[wi], ri, i)
-                self.insertChar(word[wi], (i, ri))
+                self.insertChar(word[wi], (ri, i))
+                wi += 1
+        elif orientation == 'v':
+            for i in xrange(ri, ri+len(word)):
+                #print "inserting %s at (%s,%s)"%(word[wi], ri, i)
+                self.insertChar(word[wi], (i, ci))
                 wi += 1
         else:
             raise Exception("Invalid orientation:",orientation)
-        print "Inserted %s at %s %s-ly"%(word, startPoint, orientation) 
+        #print "Inserted %s at %s %s-ly"%(word, startPoint, orientation) 
         return score
+
