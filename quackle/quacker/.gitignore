@@ -1,0 +1,10 @@
+Makefile
+moc_*
+moc
+obj
+quacker
+quacker.app
+Makefile.Debug
+Makefile.Release
+debug
+release
