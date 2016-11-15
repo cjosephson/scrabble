@@ -3,6 +3,7 @@ import pygtrie
 import os
 import stat
 import sys
+import pdb
 
 lexTree = pygtrie.CharTrie()
 
