@@ -1,5 +1,6 @@
 import board
 import baseline
+import copy
 from optparse import OptionParser
 parser = OptionParser()
 parser.add_option("-m", "--human", action="store_true", dest="human", default=False,
@@ -24,7 +25,7 @@ def main():
         else: #other goes
             valid = False
             while not valid:
-                print "Tiles:",tiles
+                if options.human: print "Tiles:",tiles
                 userInput = raw_input("Enter a word, (row,col) and orientation 'h' or 'v': ")
                 inputList = userInput.split()
                 if len(inputList) != 3:
@@ -47,26 +48,42 @@ def main():
                 if orientation != 'v' and orientation != 'h':
                     print "invalid orientation:",orientation
                     continue
-
-                score = b.insertWord(word, loc, orientation)
+#b.score
+#if not sure, break out of if
+                score = b.score(word, loc, orientation)
+                print score
                 if score > -1:
-                    #does not account for the case where a letter on
-                    #the board also appears in the tile
-                    #set... eit. We'll mostly be doing AI vs AI anyway
-                    r = 0
-                    for l in word:
-                        if l in tiles:
-                            tiles.remove(l)
-                            r += 1
-                    for i in xrange(r):
-                        tiles.append(b.bag.getLetter())
+                   
+                    b2 = copy.deepcopy(b)
+                    b2.insertWord(word, loc, orientation)
+                    print b2
+                    print "Move Score= ", score
+                    userInput = raw_input("Is this ok? (Y/N) ")   
+                    if (userInput == "Y" or userInput == "y"):
+                        b.insertWord(word, loc, orientation)
+                        print "move successful"
+                            #does not account for the case where a letter on
+                            #the board also appears in the tile
+                            #set... eit. We'll mostly be doing AI vs AI anyway
+                        r = 0
+                        for l in word:
+                            if l in tiles:
+                                tiles.remove(l)
+                                r += 1
+                        for i in xrange(r):
+                            tiles.append(b.bag.getLetter())
                     
-                    scoreOpp += score
-                    print b
-                    valid = True
+                        scoreOpp += score
+                        print b
+                        valid = True
+                        turn = not turn
+                    elif (userInput == "N" or userInput == "n"):
+                        print "Try Again"
+                    else: 
+                        print "Invalid Input"
                 else:
                     print "Invalid word!"
-            turn = not turn
+            
         print "AI: %s, Opponent: %s"% (scoreMe, scoreOpp)
 
 main()
