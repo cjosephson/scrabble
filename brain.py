@@ -102,6 +102,7 @@ class AJalgorithm:
                                 #in the anchor square
                                 self.ExtendLeft("", TopNode, lengthV,
                                                 (r+1,c), (r+1,c), 'v')
+                        #TODO: remove moves that use no letters from the rack
             
         ##############################################
         # Crosschecks
