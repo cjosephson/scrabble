@@ -148,11 +148,11 @@ class Board:
             col = [i for i in self.getCol(ci)]
             wi = 0
             l = len(word)
-            print "word",word
-            print "range",range(ri, ri+len(word))
-            print "col_%i %s"%(ci, [c[0] for c in col])
+            #print "word",word
+            #print "range",range(ri, ri+len(word))
+            #print "col_%i %s"%(ci, [c[0] for c in col])
             for i in xrange(ri, ri+len(word)):
-                print "col[%s], word[%s] = %s,%s"%(i, wi, col[i][0], word[wi])
+                #print "col[%s], word[%s] = %s,%s"%(i, wi, col[i][0], word[wi])
                 if col[i][0] == word[wi]:
                     l -= 1
                 elif col[i][0] != ' ' and col[i][0] != word[wi]:
