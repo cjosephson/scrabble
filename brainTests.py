@@ -44,17 +44,17 @@ alg.rack = ["O", "T", "A"]
 (TopNode, trace) = alg.trie._get_node("")
 #alg.ExtendRight("", TopNode, (10,11), (10,11), "h")
 
-alg.ExtendRight("", TopNode, (7,7), (7,7), "v")
-l1=len(alg.LegalMoves)
-alg.ExtendLeft("", TopNode, 0, (7,7), (7,7), 'v')
+#alg.ExtendRight("", TopNode, (7,7), (7,7), "v")
+#l1=len(alg.LegalMoves)
+#alg.ExtendLeft("", TopNode, 0, (7,7), (7,7), 'v')
 l2=len(alg.LegalMoves)
 #make sure an extendLeft with no free tiles to the left equals a call to extend right
-assert l1 == l2
+#assert l1 == l2
 alg.ExtendLeft("", TopNode, len(alg.rack), (7,7), (7,7), 'v')
 l3 = len(alg.LegalMoves)
 #make sude considering left tiles leads to more moves
 print "l3,l2",l3,l2
-assert l3 > l2
+#assert l3 > l2
 print "moves: ",alg.LegalMoves
 for m in alg.LegalMoves:
     assert b.score(m[0],m[1],m[2]) > -1

@@ -85,14 +85,14 @@ class AJalgorithm:
                                 #print "prefix",prefix
                                 
                                 self.ExtendLeft("", TopNode, lengthH,
-                                                (r,c), (r,c), 'h')
+                                                (r,c+1), (r,c+1), 'h')
                         elif o == 'v':
                                 #calculate blank tiles above
                                 bcol = self.board.getCol(c)
                                 prefix = [b[0] for b in bcol[:r+1]]
                                 i = len(prefix)-1
                                 lengthV = 0
-                                print "AnchorV",(r,c),(r,c)
+                                print "AnchorV",(r,c),(r+1,c)
                                 while True:
                                         if lengthV < 7 and lengthV < len(prefix) and prefix[i] == ' ':
                                                 lengthV +=1
@@ -197,10 +197,12 @@ class AJalgorithm:
                                 #validate
                                 print PartialWord, startSquare, orientation
                                 #pdb.set_trace()
-                                assert self.board.valid(PartialWord, startSquare,
-                                                        orientation)
-				self.LegalMoves.add((PartialWord, startSquare,
-                                                     orientation))
+                                
+                                #assert self.board.valid(PartialWord, startSquare,
+                                #                        orientation)
+                                if self.board.valid(PartialWord, startSquare, orientation):
+				        self.LegalMoves.add((PartialWord, startSquare,
+                                                             orientation))
 			for l in edges:
 				if l in self.rack:
 					if l in self.crosscheckList[row][col]:
@@ -225,23 +227,23 @@ class AJalgorithm:
 	######################################		
 	def ExtendLeft(self, PartialWord, node, limit,
                        anchorSquare,startSquare, orientation):
-                row, col = startSquare
-                rightSquare = ((row, col+1) if orientation == "h"
-                              else (row+1, col))
-                self.ExtendRight(PartialWord, node, rightSquare,
-                                 rightSquare, orientation)
-                                        
                 if limit > 0:
+                        row, col = startSquare
                         self.crosschecks(row, orientation)
+                        self.ExtendRight(PartialWord, node, anchorSquare,
+                                         startSquare, orientation)
+                        nextSquare = ((row, col-1) if orientation == "h"
+                                     else (row-1, col))
+                
                         edges = node.children.keys()
                         for l in edges:
                                 if l in self.rack:
                                         #pdb.set_trace()
-                                        print "rack",self.rack
-                                        print "l",l
-                                        print "ccl",self.crosscheckList[row][col]
-                                        if l in self.crosscheckList[row][col]:
+                                        if l in self.crosscheckList[nextSquare[0]][nextSquare[1]]:
+                                                print "l",l
                                                 print "part",PartialWord
+                                                print "nextSquare",nextSquare
+                                                print "ccl",self.crosscheckList[nextSquare[0]][nextSquare[1]]
 					        self.rack.remove(l)
 					        newNode = node.children[l]
 					        self.ExtendLeft(PartialWord+l,
