@@ -5,11 +5,18 @@ boards = []
 b = board.Board()
 boards.append(b)
 
-b.insertWord("UNIVERSITY", (7,3), 'h', debug=True) 
-b.insertWord("STANFORD", (4,4), 'v', debug=True)
+#b.insertWord("UNIVERSITY", (7,3), 'h', debug=True) 
+#b.insertWord("AH", (4,4), 'v', debug=True)
+b.insertWord("SKATE", (7,7), 'h')
+b.insertWord("WET", (5,10), 'v')
+b.insertWord("SUN", (3,5), 'h')
+print b.score("MEN", (1,7), 'v')
 
-print b
-print "Testing board verification function..."
+
+#########################################
+# test some stuff
+###########################################
+'''print "Testing board verification function..."
 print "score('TREE',(7,11), 'v') =? 4"
 assert b.score('TREE',(7,11), 'v') == 4
 print "score('TREEHOUSES',(7,11), 'v') =? -1"
@@ -29,18 +36,18 @@ b = board.Board()
 b.insertWord("PET", (7,7), 'h')
 b.insertWord("WET", (6,8), 'v')
 assert b.insertWord("AP", (7,8), 'v') == -1
-print b
+print b'''
 
 # #####################################################
 # # Test Board #2
 # #####################################################
-
+'''
 b2 = board.Board()
 boards.append(b2)
 b2.insertWord("HELLO", (7,4), 'h', debug=True)
 b2.insertWord("WORLD", (6,8), 'v', debug=True) 
 print b2
-
+'''
 # # #################################################
 # # # Test Board #3
 # # #################################################
