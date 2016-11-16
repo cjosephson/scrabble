@@ -130,7 +130,7 @@ class Board:
                 col =  self.getCol(i)
                 letters = [t[0] for t in col]
                 if not self.validWords(letters):
-                    #print "cross check fails col %i: %s"%(i,letters) 
+                    print "cross check fails col %i: %s"%(i,letters) 
                     self.board[ri] = oldrow
                     return False
             #add row back because we're just doing a validity check
@@ -178,7 +178,7 @@ class Board:
                 row[ci] = col[i] #add our new char
                 letters = [t[0] for t in row]
                 if not self.validWords(letters):
-                    #print "cross check fails row %i: %s"%(i,letters)
+                    print "cross check fails row %i: %s"%(i,letters)
                     self.board = oldBoard
                     #print self.__str__()
                     return False
