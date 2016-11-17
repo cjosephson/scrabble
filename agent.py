@@ -14,8 +14,9 @@ class Agent:
         if not debug:
             self.tiles += [self.board.bag.getLetter() for i in xrange(7)]
         
-    def move(self):
-        moves =  self.brain.generateMoves(self.tiles)
+    def move(self, tiles = None):
+        if not tiles: tiles = self.tiles
+        moves =  self.brain.generateMoves(tiles)
         print self.board
         print "There are",len(self.brain.LegalMoves),"legal moves:",self.brain.LegalMoves
         #for m in self.brain.LegalMoves:
