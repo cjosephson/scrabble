@@ -22,37 +22,115 @@ it's not fully optimized yet and it doesn't have all the features you
 want). Report your initial experimental results.}
 
 
-\subsubsection*{Introduction}
-We are building a Scrabble AI, which is a turn-based board game. In
+\section*{1. Introduction}
+
+	
+
+Our project is to build a scrabble-playing AI, which is a  In
 this progress report we describe our model, our preliminary algorithm,
 present preliminary experimental results, and outline additional work
-we plan to do before the final deadline.
+we plan to do before the final deadline. We consider the two-player case. 
 
-\subsubsection*{Model}
-Scrabble is a challenging game to design models for because the state
-space is very large, so traditional models like minimax are not a good
-fit. Furthermore, Blah blah.
 
-Based off appel-jacobsen is move generation algo, we will do a
-backtracking search on a trie where the letters are edges and nodes
-are partial words/words (leaf nodes are words). The maxmum number of
-edges from a node is 26. The trie is pre-computed from the dictionary.
+\section*{2. Model}
+\subsection*{2.0 Overview of Scrabble}
+Scrabble is a popular board game in which players build words on a 15x15 board using tiles representing letters. Different letters have different values, and the number of points a player recieves for forming a word is equal to the sum of the values of the tiles in the word, with multipliers depending on location on the board. There are a fixed set of tiles in the game, and at any point in the game, each player has access to at most 7 letter of these in their 'rack'.  When tiles are placed on the board they are replaced with ones drawn at random from a bag. If the players uses all 7 tiles this is called a 'bingo' and the move recieves a 50pt bonus, which can be about 1/8 of the total points in a tournament game.  Since each player can make no direct observations of the other player's rack, scrabble can be considerd a stochastic partially observable game [Russel and Norvig, 2003].  Thus it is very different from many games like othello, chess, or even go in which each player has complete knowledge of the state of the game at any point. In addition, the incredible number of possible moves renders typical decision-tree models to be all but impossible. \\
+CAN ADD MORE TO THIS? 
 
-The trie itself enforces the constraint of each tile-placement being
-the substring of a word in the dictionary. The backtracking search
-will enforce the other constraints, namely:
--selected letters must come from the player's tile set
--word must not form a non-word with another part of the board
--word must fit on the board
+\subsection*{2.1- Strategy}
 
-From there, we will generate all possible moves (or some randomized
-subset of them, if this is far too time-consuming) and choose maximal
-weight move, where the weight is the standard Scrabble score
-function. Some Scrabble AIs have additional heuristics in the score,
-such as weighting words based on how they impact the tile rack. We
-stuck with the simple scording function for the first pass, but may
-conisder additional heuristics for the final result.
+For humans, one of the most important qualities to a good scrabble player is an extensive vocabulary. However, that is not by itself sufficient for a competitive player. If a player optimizes for the best score on every turn they tend to retina tiles that are more difficult to use in play, leading to future racks that will produce a lower score. The best scrabble players try to maintain their rack in a way that will be conduscive to bingos in the future. Thus the general strategy for humans is to first look for bingos, then look for potentially high-scoring positions, and to then consider what remains on the rack. 
 
+For computers, which can be preprogrammed with the , entire permissible dictionary this is less of an issue. However, since that dictionary is tens of thousands of words long, searching through it for possible moves becomes a nontrivial undertaking, and most scrabble AIs give themselves a time limit to ensure reasonable progress of play. 
+
+One a list of possible moves has been generated, AI needs to select the best move as a weighted decision of the score differential the move would generate, the opportunities it would provide of the other player, and the effect it would have on the future rack. 
+
+The AI that plays scrabble faces the following problems: 
+	1) It needs to be able to generate a list of possible moves from the state of the board, the letters in the rack, and the allowable words in the dictionary. This is a nontrivial search problem. 
+	2) It needs to be able to balance getting the maximal score for a given turn with maintaining a rack that will be useful for future turns
+	3) This usually consists of a weighted sum acquired with machine learning plus a number of monte carlo simulations		
+	4) It needs to be able to play competitively, and try to avoid creating opportunities for the other player to place high scoring words
+
+
+Once the bag has been emptied (all tiles are either on the board or in one of the racks), the game switches to being one with a completely known state. At this point evaluatioin techniques like minimax become useful to maximize score. 
+
+Each of these things will be discussed in more detail below. 
+
+\subsection*{2.2- A Scrabble AI}
+
+Fortunately, much literature exists surrounding scrabble-playing AIs (people started looking at the problem in the 1880s), and we can pick and choose what we believe to be the best features of past solutions for our AI. 
+
+
+To help solve the search problem, we're using an algorithm that was (invented) in the 1980s by Andrew Appel and Guy Jacobson, and remains the backbone of most competitive scrabble AI players today. Appel and Jacobson propose restructuring the scrabble lexicon from a list of words into a trie or prefix tree, where each node is a partial word, the children of a node are words or partial words that can be created using that node. Figure 1 show an example, where the lexicon is a reduced set of words, but you can see how different words can be reached by following the different paths of the graph. All terminal leaves of the trie are words, as are some interm nodes, and the value of a node (True or False) describes whether or not it's considered a word. We found the pytrie library rather helpful for implimenting this algorithm, as it's CharTrie object was designed for implimentations such as this, where the children of a node are held in a dictionary that is indexed by letter (ex. startNode.children = {'c': <node object>, 'd': <node object>, 'e': <node object>). The maximim number of edges from a node is 26. Appel and Jacobson actually further reduce this to save on memory by combining nodes, but since we are now almost 30 years in the future, memory is less of a concern, so we decided to leave our dictionary as a trie. 
+	Now that the lexicon has been stored in a trie format, there are two other things that must be defined for the search for possible moves to begin. An 'anchor' is defined as the space to the left of an existing letter (for horizontal plays), or the space above an existing letter(for vertical plays). FIGURE 2 shows and example. Seeing as any word placed in scrabble must attach to an existing word, we can greatly reduce the search-space of the problem by only looking at possible moves that extend from anchors. After each new move on the board, the AI should update it's list of anchor squares*. The second critical piece of information is obtained by what Appel/Jacobson call 'crosschecks'. When a player is placing tiles on the board, all new words formed must exist in the dictionary. If the player is placing a vertical word directly on top of another horizonal word, a series of vertical words are created that all must be valid. Thus crosschecks must performed on both a horizonal and vertical case, checking to see what letters can be combined with existing placements below them (in a horizontal placement) or to their right (for a vertical placement). For example ON OUR EXAMPLE BOARD, WORDS WORDS WORDS. Compativbility with tiles above or to the left is handeled by other parts of the algorithm. These sets of acceptable placements are used and stored for use later. Since the crosscheck results for a given tile remain static unless the tiles adjacent to it change, the set of crosschecks needs only be updated once per move, and only for the tiles immediately adjacent to new ones that have been placed. 
+	With all of these things in place, we can now use a backtracking algorithm with constraints from the crosschecks and the letters that are in our rack. The backtracking algorithm has two recursive parts- ExtendLeft and ExtendRight. We will first defined ExtendRight, although ExtendLeft is actually the call that is used to start the backtracking algorithm. \\ 
+Here is pseudocode for the backtracking algorithm, assuming placement of a horizontal word)\\
+	ExtendRight (PartialWord, node N, square):\\
+		nextSquare = (square to the right of square)\\
+		if square is not empty:\\
+			if the letter l in square is an edge of N (PartialWord + l is a node):\\
+				PartialWord  = PartialWord + l\\
+				N' = N.children\[l\]\\
+				ExtendRight(PartialWord, N', nextSquare\\
+		else:\\
+			If N is a terminal node (PartialWord is a word):\\
+				LegalMoves.append(PartialWord)\\
+			for each letter l in rack:\\
+				if l is an edge out of N and l is in the cross-check set of square:\\
+					remove l from the rack\\
+					PartialWord = PartialWord + l\\
+					N' = N.children[l]\\
+					ExtendRight(PartialWord, N', nextSquare)\\
+					put tile l back into the rack\\
+
+Thus all possible words from the right of an anchor tile are produced. FOR OUR EXAMPLE BOARD we would see the following: \\
+
+	The next part of the algorithm is ExtendLeft, which tries placing tiles extending left of the anchor point, and then calls ExtendRight to see what words can be formed using those placements. 'Limit' is the number of blank tiles between the current anchor point and either the edge of the board, or any anchor points to the left of itl 
+	In pseudocode: \\
+	ExtendLeft(PartialWord, node N, square, limit):\\
+		ExtendRight(PartialWord, N, square)\\
+		if limit > 0: \\
+			for each letter l in rack: \\
+				if l is an edge of N: \\
+					remove l from the rack\\
+					PartialWord = l+PartialWord\\
+					N' = N.children[l]\\
+					ExtendLeft(PartialWord, N', nextSquare, limit -1)\\
+					put tile l back into the rack\\
+			
+The call to start the sequence would be LeftExtend("", root node, anchorSquare, Limit). This then results in a complete list of possible legal moves, computed in a time efficient fashion.  
+%Based off appel-jacobsen is move generation algo, we will do a
+%backtracking search on a trie where the letters are edges and nodes
+%are partial words/words (leaf nodes are words). The maxmum number of
+%edges from a node is 26. The trie is pre-computed from the dictionary.
+
+%The trie itself enforces the constraint of each tile-placement being
+%the substring of a word in the dictionary. The backtracking search
+%will enforce the other constraints, namely:
+%-selected letters must come from the player's tile set
+%-word must not form a non-word with another part of the board
+%-word must fit on the board
+
+%From there, we will generate all possible moves (or some randomized
+%subset of them, if this is far too time-consuming) and choose maximal
+%weight move, where the weight is the standard Scrabble score
+%function. Some Scrabble AIs have additional heuristics in the score,
+%such as weighting words based on how they impact the tile rack. We
+%stuck with the simple scording function for the first pass, but may
+%conisder additional heuristics for the final result.
+
+The next step of the problem is to try to decide which of the legal moves to make, given consideration of score, maintianing a reasonable rack, and not giving any advantages to the opponent. This is done through a combination of Monte Carlo simulation and linear predictors with learned weights.  The raw score of a move is trivially computed as a function of tile values and multipliers on the board. However, the point differential as a result of the move (which is far more important) is best computed through simulation.  For each of the top raw-scoring moves, the AI runs a number of Monte Carlo simulations playing against itself with probable opponent racks. Since the turnover rate of racks is so high, and the computation required per move is rather extensive, most competitive AIs run their models with a search depth >=3. 
+
+	Many scrabble AIs don't try to make any assumptions about the opposing player's rack, and just assign the opponent random unseen letters when running simulations. However, it is possible to use Bayes' algorithm to make a probabilistic modle of the tiles a player had on their rack at the start of a turn given the move they made during that turn. This is equivalent to having a model of many of the tiles the opposing player will have on their rack for the next turn (the rest are filled in at random from the letter bag). For instance, if the opposing player used the letters 'C, T' to attach to an A and make "CAT", it is unlikely that they left an S on their rack, because otherwise they would have played "C,T,S" to make "CATS", which is a higher scoring word. More formally P(leave | play) = P(play | leave)P(leave) \ P(play), where P(leave) is the probability that certain tiles wer left on the rack. When an AI's monte carlo simulations draw from this probability space rather a random assignment, the algorithm has better performance on a level that is statistically significant(cite paper). 
+	
+	Now that the scores have been computed by simulation, they are weighed along with heuristics for rack maintaince to select the best move to use. The features extracted for this purpose are: 
+	-counts of tile(A), duplicated tile (BB), and triples of a tile(CCC) for different letters.  It is apparent that 'UU' would be less desirable than 'AA', for example
+	- balance of vowels and constants (which has been proven to be an important factor in weight maintince
+	- 'QU' combination
+
+The weights for these features are learned by initially setting them all to zero, and having the AI play itself, running stochastic gradient descent using the difference in score at the end of the game. 
+
+SECTION: ENDGAME
 With concrete example:
 
 For a concrete example of the backtracking search constraints, please
@@ -90,6 +168,8 @@ results below:
 \subsubsection*{Future Work}
 -Have our AI auto-play another AI
 -do monte-carlo simulation to figure out what your opponent might do
+- heuristic weights?
+- simulation of opponent? 
 -do DAWG instead of trie if performance is bad?
 
 \end{document}
