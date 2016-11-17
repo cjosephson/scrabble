@@ -35,6 +35,7 @@ def main():
                     else:
                         AItiles=[i for i in userInput.upper()]
                         break
+            else: AItiles = None
             scoreMe += AI.move(AItiles)
             print b
             turn = not turn
@@ -102,8 +103,8 @@ def main():
                             break
                         else: 
                             print "Invalid Input"
-                    else:
-                        print "Invalid word!"
+                else:
+                    print "Invalid word!"
             
         print "AI: %s, You: %s"% (scoreMe, scoreOpp)
 
