@@ -15,6 +15,16 @@ def main():
     scoreMe = 0
     if options.human:
         tiles = [b.bag.getLetter() for i in xrange(7)]
+    else:
+        while True:
+            userInput = raw_input("Enter 7 tiles (e.g. ABCDEF): ")
+            if len(userInput) != 7:
+                print "Not seven letters!"
+            elif not userInput.isalpha():
+                print "Must be letters!"
+            else:
+                tiles=[i for i in userInput.upper()]
+                break
     print b
     turn = False
     while True:
@@ -25,7 +35,7 @@ def main():
         else: #other goes
             valid = False
             while not valid:
-                if options.human: print "Tiles:",tiles
+                print "Tiles:",tiles
                 userInput = raw_input("Enter a word, (row,col) and orientation 'h' or 'v': ")
                 inputList = userInput.split()
                 if len(inputList) != 3:

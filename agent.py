@@ -27,12 +27,13 @@ class Agent:
         #(self.tiles.append(self.board.bag.getLetter()) for t in subset)
         return score
 
-b = board.Board()
-a = Agent(b)
-#b.insertWord("UNIVERSITY", (7,3), 'h', debug=True) 
-#b.insertWord("AH", (4,4), 'v', debug=True)
-b.insertWord("SKATE", (7,7), 'h')
-b.insertWord("WET", (5,10), 'v')
-b.insertWord("SUN", (3,5), 'h')
-a.move()
-print b
+if __name__ == "__main__":
+    b = board.Board()
+    a = Agent(b)
+    #b.insertWord("UNIVERSITY", (7,3), 'h', debug=True) 
+    #b.insertWord("AH", (4,4), 'v', debug=True)
+    b.insertWord("SKATE", (7,7), 'h')
+    b.insertWord("WET", (5,10), 'v')
+    b.insertWord("SUN", (3,5), 'h')
+    a.move()
+    print b
