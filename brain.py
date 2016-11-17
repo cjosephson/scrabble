@@ -2,7 +2,7 @@ import treeBuilder
 import board
 import pygtrie
 import pdb
-
+import copy 
 ##################################
 # Appel Jaconson Algorithm Bits
 ################################
@@ -20,6 +20,7 @@ class AJalgorithm:
 		self.trie = treeBuilder.lexTree
 		self.LegalMoves = set() #list of legal moves. gets changed every time getMove is called
 		self.rack = []
+                self.origRack = []
 		self.crosscheckList = {} #dictionary of crosschec,s for every square
 
 		for row in range(15):
@@ -59,6 +60,7 @@ class AJalgorithm:
                 for c in v.iterkeys():
                         self.crosschecks(c, 'r')
                 self.rack = rack
+                self.origRack = copy.deepcopy(rack)
                 print "rac'",self.rack
                 #clear legal moves
                 self.LegalMoves = set()
@@ -71,7 +73,7 @@ class AJalgorithm:
                                 brow = self.board.getRow(r)
                                 #print "brow",brow
                                 prefix = [b[0] for b in brow[:c+1]]
-                                print "AnchorH",(r,c),(r,c+1)
+                                #print "AnchorH",(r,c),(r,c+1)
                                 if r == 0:
                                         print "prefix",prefix
                                 i = len(prefix)-1
@@ -92,7 +94,7 @@ class AJalgorithm:
                                 prefix = [b[0] for b in bcol[:r+1]]
                                 i = len(prefix)-1
                                 lengthV = 0
-                                print "AnchorV",(r,c),(r+1,c)
+                                #print "AnchorV",(r,c),(r+1,c)
                                 while True:
                                         if lengthV < 7 and lengthV < len(prefix) and prefix[i] == ' ':
                                                 lengthV +=1
@@ -103,6 +105,14 @@ class AJalgorithm:
                                 self.ExtendLeft("", TopNode, lengthV,
                                                 (r+1,c), (r+1,c), 'v')
                         #TODO: remove moves that use no letters from the rack
+                        remove = []
+                        #print "PRE",self.LegalMoves
+                        for m in self.LegalMoves:
+                                if m[3] == 0:
+                                        remove.append(m)
+                        #print "REMOVE",remove
+                        for r in remove:
+                                self.LegalMoves.remove(r)
             
         ##############################################
         # Crosschecks
@@ -148,6 +158,13 @@ class AJalgorithm:
 				validLetters[i] = list(letterList)
 		return validLetters 
 
+        def rackdiff(self):
+                used = 0
+                for t in self.origRack:
+                        if t not in self.rack:
+                                used += 1
+                return used
+        
 	###################################
 	# findAnchors
 	#
@@ -196,14 +213,15 @@ class AJalgorithm:
 		if squareVal == " ":
 			if type(node.value) is not type(_SENTINEL):
                                 #validate
-                                print PartialWord, startSquare, orientation
+                                #print PartialWord, startSquare, orientation
                                 #pdb.set_trace()
                                 
                                 #assert self.board.valid(PartialWord, startSquare,
                                 #                        orientation)
-                                if self.board.valid(PartialWord, startSquare, orientation):
+                                score = self.board.score(PartialWord, startSquare, orientation)
+                                if score > -1:
 				        self.LegalMoves.add((PartialWord, startSquare,
-                                                             orientation))
+                                                             orientation, self.rackdiff(), score))
 			for l in edges:
 				if l in self.rack:
 					if l in self.crosscheckList[row][col]:

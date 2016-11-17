@@ -60,11 +60,11 @@ for m in alg.LegalMoves:
     assert b.score(m[0],m[1],m[2]) > -1
 
 alg.generateMoves(["A", "N", "O", "T", "A", "K", "U"])
-l4 = alg.LegalMoves
-assert l4 > l3
+l4 = len(alg.LegalMoves)
+#assert l4 > l3
 for m in alg.LegalMoves:
     score = b.score(m[0],m[1],m[2])
-    print "score: move",score, m
+    #print "score: move",score, m
     assert score > -1
-
+print alg.LegalMoves
 #pdb.set_trace()
