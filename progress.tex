@@ -138,18 +138,27 @@ that the final result must be a valid word (enforced by the structure
 of the trie itself), all crosschecks pass, and the new letters placed
 on the board come from the player's rack. The search algoritm has two
 recursive parts: ExtendLeft and ExtendRight. Below is pseudocode for
-the backtracking algorithm to place a horizontal word:
+the backtracking algorithm to place a horizontal word:\\
 
-	ExtendRight (PartialWord, node N, square):\\
-		if square is not empty:\\
-			if the letter l in square is an edge of N (PartialWord + l is a node):\\
-				ExtendRight(PartialWord + l, N.children[l]', nextSquare)
-		else:\\
-			If PartialWord is a word): LegalMoves.append(PartialWord)\\
-			for each letter l that is in rack, s an edge out of N,in the cross-check set of square:\\
-					remove l from the rack\\
-					ExtendRight(PartialWord + l, N.children[l]', nextSquare)\\
-					put tile l back into the rack\\
+\quad ExtendRight (PartialWord, node N, square):
+
+\quad\quad if square is not empty:
+
+\quad\quad\quad if the letter l in square is an edge of N (PartialWord + l is a node):
+
+\quad\quad\quad\quad ExtendRight(PartialWord + l, N.children[l], nextSquare)
+
+\quad\quad else:
+
+\quad\quad\quad if PartialWord is a word: LegalMoves.append(PartialWord)
+
+\quad\quad\quad for each letter l that is in rack, s an edge out of N,in the cross-check set of square:
+
+\quad\quad\quad\quad\quad remove l from the rack
+
+\quad\quad\quad\quad\quad ExtendRight(PartialWord + l, N.children[l], nextSquare)
+
+\quad\quad\quad\quad\quad put tile l back into the rack\\
 
 Thus all possible words from the right of an anchor tile are produced. For out example in Figure 2, this would be 
 
@@ -159,13 +168,20 @@ of the anchor point and then calls ExtendRight to see what words can
 be formed using those placements. 'Limit' is the number of blank tiles
 between the current anchor point and the preceeding anchorpoint (or the end of the board), capped at the rack size of 7. The ExtendLeft pseudocode: \\
 
-	ExtendLeft(PartialWord, node N, square, limit):\\
-		ExtendRight(PartialWord, N, square)\\
-		if limit > 0: \\
-			for each letter l in rack that is an edge of N: \\
-					remove l from the rack\\
-					ExtendLeft(l+PartialWord, N' = N.children[l]\\, nextSquare, limit -1)\\
-					put tile l back into the rack\\
+\quad ExtendLeft(PartialWord, node N, square, limit):
+
+\quad\quad ExtendRight(PartialWord, N, square)
+
+\quad\quad if limit $>$ 0: 
+
+\quad\quad\quad for each letter l in rack that is an edge of N: 
+
+\quad\quad\quad\quad remove l from the rack
+
+\quad\quad\quad\quad ExtendLeft(l+PartialWord, N' =
+N.children[l], nextSquare, limit -1)
+
+\quad\quad\quad\quad put tile l back into the rack\\
 			
 To generate a list of all legal moves for a given board, call
 LeftExtend("", root node, anchorSquare, Limit) on all anchors.
