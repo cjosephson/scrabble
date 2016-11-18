@@ -18,7 +18,7 @@ crossword board game in which players build words on a 15x15 board
 using tiles representing letters. Since each player can make no direct
 observations of the other player's rack, it is a \emph{stochastic
   partially observable game} [Russel and Norvig, 2003], which makes it
-different from games like othello, chess, or even Go, where players
+different from games like Othello, chess, or even Go, where players
 has complete knowledge of the state of the game at any point. In
 addition, the incredible number of possible moves renders typical
 decision-tree models to be all but impossible. This makes Scrabble AIs
@@ -33,7 +33,6 @@ deadline. We consider the two-player case.
 %% Scrabble is a popular board game in which players build words on a 15x15 board using tiles representing letters. Different letters have different values, and the number of points a player recieves for forming a word is equal to the sum of the values of the tiles in the word, with multipliers depending on location on the board. There are a fixed set of tiles in the game, and at any point in the game, each player has access to at most 7 letter of these in their 'rack'.  When tiles are placed on the board they are replaced with ones drawn at random from a bag. If the players uses all 7 tiles this is called a 'bingo' and the move recieves a 50pt bonus, which can be about 1/8 of the total points in a tournament game.  Since each player can make no direct observations of the other player's rack, scrabble can be considerd a stochastic partially observable game [Russel and Norvig, 2003].  Thus it is very different from many games like othello, chess, or even go in which each player has complete knowledge of the state of the game at any point. In addition, the incredible number of possible moves renders typical decision-tree models to be all but impossible. \\
 %% CAN ADD MORE TO THIS? 
 
-\subsubsection*{Strategy}
 
 For humans, one of the most important qualities to a good Scrabble
 player is an extensive vocabulary. However, that is not by itself
@@ -42,7 +41,7 @@ best score on every turn they tend to retain tiles that are more
 difficult to use in play, leading to future racks that will produce a
 lower score. The best Scrabble players try to maintain their rack in a
 way that will be conducive to bingos\footnote{If the players uses all
-  7 tiles this is called a 'bingo' and the move recieves a 50pt bonus,
+  7 tiles this is called a 'bingo' and the move receives a 50pt bonus,
   which can be about 1/8 of the total points in a tournament game.} in
 the future. Thus the general strategy for humans is to first look for
 bingos, then look for potentially high-scoring positions, and to then
@@ -59,14 +58,14 @@ the best move as a weighted decision of the score differential the
 move would generate, the opportunities it would provide of the other
 player, and the effect it would have on the future rack.
 
-Scrabble AIs face the following challengess:
+Scrabble AIs face the following challenges:
 
 \begin{enumerate}
   \item \textbf{Move generation:} create a list of possible moves from
     the state of the board, the letters in the rack, and the allowable
     words in the dictionary. This is a nontrivial search problem.
     
-  \item \textbf{Rack maintenance:} balane the tradeoff between getting
+  \item \textbf{Rack maintenance:} balance the tradeoff between getting
     the maximal score for a given turn with maintaining a rack that
     will be useful for future turns, which usually involves a weighted
     sum acquired with machine learning plus a number of Monte Carlo
@@ -78,7 +77,7 @@ Scrabble AIs face the following challengess:
 
 Once the bag has been emptied (all tiles are either on the board or in
 one of the racks), the game switches to being one with a completely
-known state. At this point evaluatioin techniques like minimax become
+known state. At this point evaluation techniques like minimax become
 useful to maximize score. This is commonly referred to as
 \emph{endgame strategy}, and typically only state-of-the-art AIs go
 into this level of detail.
@@ -92,7 +91,7 @@ propose restructuring the Scrabble lexicon from a list of words into a
 trie or prefix tree, where each node is a partial word, the children
 of a node are words or partial words that can be created using that
 node (see Fig. 1). All terminal leaves of the trie are words, as are
-some interm nodes (e.g 'dog' vs. 'dogs'), and the value of a node is a
+some interim nodes (e.g 'dog' vs. 'dogs'), and the value of a node is a
 boolean indicating whether the sting is a full word in the dictionary.
 %% We found the pytrie library rather helpful for implimenting this
 %% algorithm, as it's CharTrie object was designed for implimentations
@@ -117,7 +116,7 @@ Before a potential move is added to the list of generated moves, it
 needs to be \emph{crosschecked} to ensure that new strings formed in
 the orthogonal dimension also exist in the dictionary. For example, if
 CAT and DOG are played horizontally right on top of each other, DC and
-TG are not words so the move is not valid.  Since the crosscheck
+GT are not words so the move is not valid.  Since the crosscheck
 results for a given tile remain static unless the tiles adjacent to it
 change, the set of crosschecks needs only be updated once per move,
 and only for the tiles immediately adjacent to new ones that have been
@@ -126,7 +125,7 @@ placed.
 The heart of the algorithm is a backtracking search with constraints
 that the final result must be a valid word (enforced by the structure
 of the trie itself), all crosschecks pass, and the new letters placed
-on the board come from the player's rack. The search algoritm has two
+on the board come from the player's rack. The search algorithm has two
 recursive parts: ExtendLeft and ExtendRight. Below is pseudocode for
 the backtracking algorithm to place a horizontal word:\\
 
@@ -198,7 +197,7 @@ LeftExtend("", root node, anchorSquare, Limit) on all anchors.
 
 \subsubsection*{Rack Maintenance and Adversarial Gameplay}
 The next step of the problem is to try to decide which of the legal
-moves to make, given consideration of score, maintianing a reasonable
+moves to make, given consideration of score, maintaining a reasonable
 rack, and not giving any advantages to the opponent. This is done
 through a combination of Monte Carlo simulation and linear predictors
 with learned weights. The raw score of a move is as a function of tile
@@ -227,7 +226,7 @@ rack, because otherwise they would have played "C,T,S" to make "CATS",
 which is a higher scoring word. More formally $P(leave | play) =
 \frac{P(play | leave)P(leave)}{P(play)}$, where P(leave) is the
 probability that certain tiles were left on the rack. When an AI's
-monte carlo simulations draw from this probability space rather a
+Monte Carlo simulations draw from this probability space rather a
 random assignment, the algorithm has better performance on a level
 that is statistically significant(TODO:cite paper).
 
@@ -252,7 +251,7 @@ see the next section.
 
 \subsubsection*{Examples and Preliminary Data}
 For our initial attempt at the Scrabble AI, we successfully
-implimented the Appel/Jacobson algorithm, but didn't consider any
+implemented the Appel/Jacobson algorithm, but didn't consider any
 features besides the raw score when selecting a move, and didn't
 attempt to do any opponent modeling.  To evaluate our AI's
 performance, we had it play an open-source scrabble AI 'Quackle',
@@ -274,7 +273,7 @@ capability to create a larger dataset for the final result. \\
 \caption{Raw scores and averages for 7 CS221 vs. Quackle games}
 \end{table}
 
-Here is an example of the input and output of our AI. On the left is an input board where the Quackle AI has played COMPOTE. Underneath is our AI's rack. On the right is the move our AI chose to make. Beneath the figures is an example of the LegalMoves list, over which the AI maximizes. 
+Here is an example of the input and output of our AI. On the left is an input board where the Quackle AI has played COMPOTE. Underneath is our AI's rack. On the right is the move our AI chose to mak, RAJES. Beneath the figures is an example of the LegalMoves list, over which the AI maximizes. 
 
 \begin{figure}[h]
   \minipage{0.5\textwidth}
