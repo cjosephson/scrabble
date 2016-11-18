@@ -22,7 +22,7 @@ it's not fully optimized yet and it doesn't have all the features you
 want). Report your initial experimental results.}
 
 
-\section{Introduction}
+\subsection{Introduction}
 Our project is to build a scrabble-playing AI, which is a popular
 crossword board game in which players build words on a 15x15 board
 using tiles representing letters. Since each player can make no direct
@@ -38,12 +38,12 @@ and outline additional work we plan to do before the final
 deadline. We consider the two-player case.
 
 
-\section*{Model and Algorithms}
+\subsection*{Model and Algorithms}
 %% \subsection*{2.0 Overview of Scrabble}
 %% Scrabble is a popular board game in which players build words on a 15x15 board using tiles representing letters. Different letters have different values, and the number of points a player recieves for forming a word is equal to the sum of the values of the tiles in the word, with multipliers depending on location on the board. There are a fixed set of tiles in the game, and at any point in the game, each player has access to at most 7 letter of these in their 'rack'.  When tiles are placed on the board they are replaced with ones drawn at random from a bag. If the players uses all 7 tiles this is called a 'bingo' and the move recieves a 50pt bonus, which can be about 1/8 of the total points in a tournament game.  Since each player can make no direct observations of the other player's rack, scrabble can be considerd a stochastic partially observable game [Russel and Norvig, 2003].  Thus it is very different from many games like othello, chess, or even go in which each player has complete knowledge of the state of the game at any point. In addition, the incredible number of possible moves renders typical decision-tree models to be all but impossible. \\
 %% CAN ADD MORE TO THIS? 
 
-\subsection{Strategy}
+\subsubsection{Strategy}
 
 For humans, one of the most important qualities to a good Scrabble
 player is an extensive vocabulary. However, that is not by itself
@@ -64,7 +64,7 @@ about 200,000 words long, searching through it for possible moves
 becomes a nontrivial undertaking, and most scrabble AIs give
 themselves a time limit to ensure reasonable progress of play.
 
-One a list of possible moves has been generated, AI needs to select
+Once a list of possible moves has been generated, the AI needs to select
 the best move as a weighted decision of the score differential the
 move would generate, the opportunities it would provide of the other
 player, and the effect it would have on the future rack.
@@ -141,21 +141,14 @@ recursive parts: ExtendLeft and ExtendRight. Below is pseudocode for
 the backtracking algorithm to place a horizontal word:
 
 	ExtendRight (PartialWord, node N, square):\\
-		nextSquare = (square to the right of square)\\
 		if square is not empty:\\
 			if the letter l in square is an edge of N (PartialWord + l is a node):\\
-				PartialWord  = PartialWord + l\\
-				N' = N.children\[l\]\\
-				ExtendRight(PartialWord, N', nextSquare\\
+				ExtendRight(PartialWord + l, N.children[l]', nextSquare)
 		else:\\
-			If N is a terminal node (PartialWord is a word):\\
-				LegalMoves.append(PartialWord)\\
-			for each letter l in rack:\\
-				if l is an edge out of N and l is in the cross-check set of square:\\
+			If PartialWord is a word): LegalMoves.append(PartialWord)\\
+			for each letter l that is in rack, s an edge out of N,in the cross-check set of square:\\
 					remove l from the rack\\
-					PartialWord = PartialWord + l\\
-					N' = N.children[l]\\
-					ExtendRight(PartialWord, N', nextSquare)\\
+					ExtendRight(PartialWord + l, N.children[l]', nextSquare)\\
 					put tile l back into the rack\\
 
 Thus all possible words from the right of an anchor tile are produced. FOR OUR EXAMPLE BOARD we would see the following: \\
@@ -170,12 +163,9 @@ between the current anchor point and the preceeding anchorpoint (or the end of t
 	ExtendLeft(PartialWord, node N, square, limit):\\
 		ExtendRight(PartialWord, N, square)\\
 		if limit > 0: \\
-			for each letter l in rack: \\
-				if l is an edge of N: \\
+			for each letter l in rack that is an edge of N: \\
 					remove l from the rack\\
-					PartialWord = l+PartialWord\\
-					N' = N.children[l]\\
-					ExtendLeft(PartialWord, N', nextSquare, limit -1)\\
+					ExtendLeft(l+PartialWord, N' = N.children[l]\\, nextSquare, limit -1)\\
 					put tile l back into the rack\\
 			
 To generate a list of all legal moves for a given board, call
@@ -280,4 +270,11 @@ results below:
 - simulation of opponent? 
 -do DAWG instead of trie if performance is bad?
 
+\begin{center}
+{\Large CS221 Fall 2016 Project Progress: Scrabble AI} \\
+
+\includegraphics{trie}\\
+\includegraphics{anchorexample}\\
+Figure 2: An Example of Anchor Squares
+\end{center}
 \end{document}
