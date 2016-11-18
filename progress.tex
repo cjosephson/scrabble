@@ -151,9 +151,8 @@ the backtracking algorithm to place a horizontal word:
 					ExtendRight(PartialWord + l, N.children[l]', nextSquare)\\
 					put tile l back into the rack\\
 
-Thus all possible words from the right of an anchor tile are produced. FOR OUR EXAMPLE BOARD we would see the following: \\
+Thus all possible words from the right of an anchor tile are produced. For out example in Figure 2, this would be 
 
-IMAGE HERE\\
 
 The next part of the algorithm is ExtendLeft, places tiles to the left
 of the anchor point and then calls ExtendRight to see what words can
@@ -246,32 +245,28 @@ For a concrete example of the backtracking search constraints, please
 see the next section.
 
 \subsubsection*{Examples and Preliminary Data}
-INSERT Toy example (include enforcing constraints):
+\includegraphics{boardex1}\\
+\includegraphics{boardex2}\\
 
-We plan to hook our AI in to the AI that comes with Quackle, an
-open-source Scrabble variant whose AI is based off Maven, a
-state-of-the-art Scrabble AI from 2006. The Quackle AI has beat human
-scrabble champions.
 
-Because the Quackle code is in C++, it is possible to make our AI play
-the Quackle AI in an automated manner, but we have not yet had time to
-implement that. We plan to do that for the final paper, but in the
-meantime we hand-played 5 games of Quackle vs our AI and present the
-results below:
+For our initial attempt at the Scrabble AI, we successfully implimented the Appel/Jacobson algorithm, but didn't consider any features besides the raw score when selecting a move, and didn't attempt to do any opponent modeling.  To evaluate our AI's performance, we had it play an open-source scrabble AI 'Quackle', which has beaten human champions. Because the Quackle code is in C++, it is possible to make our AI play
+the Quackle AI in an automated manner, and indeed necessary to get a large dataset for our final paper. Unfortunately, because of time constraints, the interface between the two AIs hasn't been built yet, so we have a collection of results obtained by manually interfacing the two AIs. Since this is a time-consuming process, we don't have a very large dataset. \\
 
+Results: \\
 (Us vs Quackle)
 234, 396
+0.2 AI 249   Quackle 278
+0.3- AI 236 / AI 97 Quackle 264
+ AI 181 /Quacle 303
+0.5 AI: 235,  quackle 386
+0.6 AI: 321  QUACKLE 441
+0.7 AI: 279  QUACKLE 417
 
 
 \subsubsection*{Future Work}
--Have our AI auto-play another AI
--do monte-carlo simulation to figure out what your opponent might do
-- heuristic weights?
-- simulation of opponent? 
--do DAWG instead of trie if performance is bad?
-
+One of our first tasks moving foward will be to find a way to interface our AI with Quackle so that they can play each other, and we can more easily see the results of our algorithm. We will also be able to use scores against Quackle as a metric for using stochastic gradient descent to create weight vectors for our rack-maintaince heuristics. After that, our goal is to have the AI use depth-2 monte carlo simulations to determent the point differential created by a word, instead of using the raw score of the tiles. If we have time we'll create a probalistic model for the opposing player to make the monte carlo simulations more accurate. 
 \begin{center}
-{\Large CS221 Fall 2016 Project Progress: Scrabble AI} \\
+{\Large Appendix} \\
 
 \includegraphics{trie}\\
 \includegraphics{anchorexample}\\
