@@ -24,25 +24,26 @@ deadline.
 %% CAN ADD MORE TO THIS? 
 
 
-Extensive vocabulary alone is not sufficient for a competitive scrabble player. If a player optimizes for the
-best score on every turn they tend to retain tiles that are more
-difficult to use in play, leading to future racks that will produce a
-lower score. The best Scrabble players try to maintain their rack in a
-way that will be conducive to future high-scoring plays.
+Extensive vocabulary alone is not sufficient for a competitive
+scrabble player. If a player optimizes for the best score on every
+turn they tend to retain tiles that are more difficult to use in play,
+leading to future racks that will produce a lower score. The best
+Scrabble players try to maintain their rack in a way that will be
+conducive to future high-scoring plays.
 
-Since can be preprogrammed with the entire permissible
-dictionary, sheer vocabulary is less of an issue. However, since that dictionary is
-about 200,000 words long, and the 7 letters on the rack can be combined with those on the board in tens of thousands of differnet permutations, the search for possible moves
-becomes a nontrivial undertaking. Most scrabble AIs give
-themselves a time limit to ensure reasonable progress of play.
+Computers can be preprogrammed with the entire permissible dictionary,
+since that dictionary is about 200,000 words long, and the 7 letters
+on the rack can be combined with those on the board in tens of
+thousands of different permutations, the search for possible moves
+becomes a nontrivial undertaking. Most scrabble AIs give themselves a
+time limit to ensure reasonable progress of play.
 
-Once a list of possible moves has been generated, the AI needs to select
-the best move as a weighted decision of the score that the
-move would generate, the opportunities it would provide of the other
+Once a list of possible moves has been generated, the AI needs to
+select the best move as a weighted decision of the score that the move
+would generate, the opportunities it would provide of the other
 player, and the effect it would have on the future rack.
 
 Scrabble AIs face the following challenges:
-
 \begin{enumerate}
   \item \textbf{Move generation:} create a list of possible moves from
     the state of the board, the letters in the rack, and the allowable
@@ -68,14 +69,15 @@ into this level of detail.
 \subsection*{Scrabble AI}
 \subsubsection*{Move Generation}
 To help solve the search problem, we're using an algorithm created in
-the 1980s by Andrew Appel and Guy Jacobson. Despite having existed for almost 40 years, this algorithm remains the backbone
-of most competitive scrabble AI players today. Appel and Jacobson
-propose restructuring the Scrabble lexicon from a list of words into a
-trie or prefix tree, where each node is a partial word, the children
-of a node are words or partial words that can be created using that
-node (see Fig. 3). All terminal leaves of the trie are words, as are
-some interm nodes (e.g 'dog' vs. 'dogs'), and the value of a node is a
-boolean indicating whether the sting is a full word in the dictionary.
+the 1980s by Andrew Appel and Guy Jacobson. This algorithm remains the
+backbone of most competitive Scrabble AIs today. Appel and
+Jacobson propose restructuring the Scrabble lexicon from a list of
+words into a trie or prefix tree, where each node is a partial word,
+the children of a node are words or partial words that can be created
+using that node (see Fig. 3). All terminal leaves of the trie are
+words, as are some interim nodes (e.g 'dog' vs. 'dogs'), and the value
+of a node is a boolean indicating whether the sting is a full word in
+the dictionary.
 %% We found the pytrie library rather helpful for implimenting this
 %% algorithm, as it's CharTrie object was designed for implimentations
 %% such as this, where the children of a node are held in a dictionary
@@ -86,27 +88,27 @@ boolean indicating whether the sting is a full word in the dictionary.
 %%   now almost 30 years in the future, memory is less of a concern, so
 %%   we decided to leave our dictionary as a trie.
   
-To search for a move on a given board, the algorithm examines all
+To search for moves on the board, the algorithm examines all
 \emph{anchors}, where an anchor is the space to the left (or above) an
 existing letter (for horizontal plays), or the space above an existing
 letter (see Fig. 4). Since a move in Scrabble must attach to an
-existing word (excepting the first move), only looking at possible
-moves that extend from anchors greatly reduces the search space. After
-each new move on the board, the AI should update it's list of anchor
-squares.
+existing word (excepting the first move), this greatly reduces the
+15x15 search space. After each new move on the board, the AI should
+update its list of anchor squares.
 
 Before a potential move is added to the list of generated moves, it
 needs to be \emph{crosschecked} to ensure that new strings formed in
-the orthogonal dimension also exist in the dictionary. For example, in Figure 3, when placing DOG underneat CATS, AD and TO are real words, but the vertical SG would fail a crosscheck.  Since the crosscheck
+the orthogonal dimension also exist in the dictionary. For example, in
+Figure 3, when placing DOG underneath CATS, AD and TO are real words,
+but the vertical SG would fail a crosscheck.  Since the crosscheck
 results for a given tile remain static unless the tiles adjacent to it
-change, the set of crosschecks needs only be updated once per move,
-and only for the tiles immediately adjacent to new ones that have been
-placed.
+change, the checks only need only be updated once per move, and only for the
+squares immediately adjacent to newly placed tiles.
 
 The heart of the algorithm is a backtracking search with constraints
 that the final result must be a valid word (enforced by the structure
 of the trie itself), all crosschecks pass, and the new letters placed
-on the board come from the player's rack. The search algoritm has two
+on the board come from the player's rack. The search algorithm has two
 recursive parts: ExtendLeft and ExtendRight. Below is pseudocode for
 the backtracking algorithm to place a horizontal word:\\
 
@@ -133,7 +135,7 @@ the backtracking algorithm to place a horizontal word:\\
 
 ExtendLeft places tiles to the left
 of the anchor point and then calls ExtendRight. 'Limit' is the number of blank tiles
-between the current anchor point and the preceeding anchorpoint (or the end of the board), capped at the rack size of 7.\\
+between the current anchor point and the preceding anchorpoint (or the end of the board), capped at the rack size of 7.\\
 
 \quad ExtendLeft(PartialWord, node N, square, limit):
 
@@ -151,7 +153,8 @@ N.children[l], nextSquare, limit -1)
 \quad\quad\quad\quad put tile l back into the rack\\
 			
 To generate a list of all legal moves for a given board, call
-LeftExtend("", root node, anchorSquare, Limit) on all anchors. See Figures 1 and 2 in 'Examples and Preliminary Data' 
+LeftExtend("", root node, anchorSquare, Limit) on all anchors. See
+Figures 1 and 2 in 'Examples and Preliminary Data'
 
 %Based off appel-jacobsen is move generation algo, we will do a
 %backtracking search on a trie where the letters are edges and nodes
@@ -175,21 +178,24 @@ LeftExtend("", root node, anchorSquare, Limit) on all anchors. See Figures 1 and
 
 \subsubsection*{Rack Maintenance and Adversarial Gameplay}
 The next step of the problem is to try to decide which of the legal
-moves is best, given consideration of score, maintianing a reasonable
+moves is best, given consideration of score, maintaining a reasonable
 rack, and not giving any advantages to the opponent. This is best done
 through a combination of Monte Carlo simulation and linear predictors
-with learned weights. 
+with learned weights.
 
-The raw score of a move is as a function of tile
-values and multipliers on the board, plus any resulting multi-word
-bonuses or bingos. This is simple to conpute, but also a simplified view of the situation. A better metric is the agent/opponent point differential obtained as the result of a move, which is the reuslt of the raw score of the move and also the opportunities it proves the opposing player. This differential is best computed
-through simulation. For each of the top raw-scoring moves, the AI runs
-a number of Monte Carlo simulations playing against itself with
-probable opponent racks. Since the turnover rate of racks is so high,
-and the computation required per move is rather extensive, most
-competitive AIs run their models with a search depth $\geq 3$. Our
-preliminary algorithm does not implement this, but we would like to
-add it for the final product.
+The raw score of a move is as a function of tile values and
+multipliers on the board, plus any resulting multi-word bonuses or
+bingos. This is simple to compute, but also a simplified view of the
+situation. A better metric is the agent/opponent point differential
+obtained as the result of a move, which is the result of the raw score
+of the move and also the opportunities it proves the opposing
+player. This differential is best computed through simulation. For
+each of the top raw-scoring moves, the AI runs a number of Monte Carlo
+simulations playing against itself with probable opponent racks. Since
+the turnover rate of racks is so high, and the computation required
+per move is rather extensive, most competitive AIs run their models
+with a search depth $\geq 3$. Our preliminary algorithm does not
+implement this, but we would like to add it for the final product.
 
 Many Scrabble AIs don't try to make any assumptions about the opposing
 player's rack, and just assign the opponent random unseen letters when
@@ -205,7 +211,7 @@ rack, because otherwise they would have played "C,T,S" to make "CATS",
 which is a higher scoring word. More formally $P(leave | play) =
 \frac{P(play | leave)P(leave)}{P(play)}$, where P(leave) is the
 probability that certain tiles were left on the rack. When an AI's
-monte carlo simulations draw from this probability space rather a
+Monte Carlo simulations draw from this probability space rather a
 random assignment, the algorithm has better performance on a level
 that is statistically significant(Richards and Amir, 2007).
 
@@ -225,23 +231,19 @@ that is statistically significant(Richards and Amir, 2007).
 
 %% The weights for these features are learned by initially setting them all to zero, and having the AI play itself, running stochastic gradient descent using the difference in score at the end of the game. 
 
-For a concrete example of the backtracking search constraints, please
-see the next section.
-
 \subsubsection*{Examples and Preliminary Data}
-For our initial attempt at the Scrabble AI, we successfully
-implemented the Appel/Jacobson algorithm, but didn't consider any
-features besides the raw score when selecting a move, and didn't
-attempt to do any opponent modeling.  To evaluate our AI's
-performance, we had it play an open-source scrabble AI 'Quackle',
-which has beaten human champions. Because the Quackle code is in C++,
-it is possible to make our AI play the Quackle AI in an automated
-manner, and indeed necessary to get a large dataset for our final
-paper. Unfortunately, because of time constraints, the interface
-between the two AIs hasn't been built yet, so we have a collection of
-results obtained by manually interfacing the two AIs, the results are
-presented below in Table 1.  We will have automated AI vs AI
-capability to create a larger dataset for the final result. \\
+For our initial attempt we successfully implemented the Appel/Jacobson
+algorithm, but didn't consider any features besides the raw score when
+selecting a move, and didn't attempt to do any opponent modeling.  To
+evaluate our AI's performance, we had it play an open-source scrabble
+AI 'Quackle', which has defeated human champions. The Quackle code is
+in C++ so it is possible to make our AI play the Quackle AI in an
+automated manner (and indeed necessary to get a large dataset for our
+final paper). Due to time constraints, the interface between the two
+AIs hasn't been built yet, so we have a collection of results obtained
+by manually interfacing the two AIs.  The results are presented below
+in Table 1.  We will have automated AI vs AI capability to create a
+larger dataset for the final result. \\
 
 \begin{table}[h]
   \centering
@@ -252,7 +254,7 @@ capability to create a larger dataset for the final result. \\
 \caption{Raw scores and averages for 7 CS221 vs. Quackle games}
 \end{table}
 
-Here is an example of the input and output of our AI. On the left is an input board where the Quackle AI has played COMPOTE. Underneath is our AI's rack. On the right is the move our AI chose to mak, RAJES. Beneath the figures is an example of the LegalMoves list, over which the AI maximizes. 
+Here is an example of the input and output of our AI. On the left is an input board where the Quackle AI has played COMPOTE. Underneath is our AI's rack. On the right is the move our AI chose to make, RAJES. Beneath the figures is an example of the LegalMoves list, over which the AI maximizes. 
 
 \begin{figure}[h]
   \minipage{0.5\textwidth}
@@ -267,14 +269,15 @@ Here is an example of the input and output of our AI. On the left is an input bo
   \endminipage{}
 \end{figure}
 
-The output of
+\noindent
 \texttt{There are 191 legal moves: [('JO', (6, 8), 'v', 17), ...,  ('RAJES', (4, 10), 'v', 36), ('TRAPS', (7, 9), 'v', 9)])\\
 max word RAJES with score 36}
 
 
 
 \subsubsection*{Future Work}
-One of our first tasks moving foward will be to find a way to interface our AI with Quackle so that they can play each other, and we can more easily see the results of our algorithm. We will also be able to use scores against Quackle as a metric for using stochastic gradient descent to create weight vectors for our rack-maintaince heuristics. After that, our goal is to have the AI use depth-2 monte carlo simulations to determent the point differential created by a word, instead of using the raw score of the tiles. If we have time we'll create a probalistic model for the opposing player to make the monte carlo simulations more accurate. The probalistic model will cause the monte carlo simulations to converge to a minimax model with rack probability = 1 when the endgame state is reached.
+One of our first tasks moving forward will be to find a way to interface our AI with Quackle so that they can play each other, and we can more easily see the results of our algorithm. We will also be able to use scores against Quackle as a metric for using stochastic gradient descent to create weight vectors for our rack-maintenance heuristics. After that, our goal is to have the AI use depth-2 Monte Carlo simulations to determent the point differential created by a word, instead of using the raw score of the tiles. If we have time we'll create a probabilistic model for the opposing player to make the Monte Carlo simulations more accurate. The probalistic model will cause the Monte Carlo simulations to converge to a minimax model with rack probability = 1 when the endgame state is reached.
+\clearpage
 \begin{center}
 \section*{Appendix}
 
@@ -291,6 +294,6 @@ A.W. Appel, G.J. Jacobson, The world’s fastest Scrabble program, Comm. ACM 31 
 Mark Richards and Eyal Amir. Opponent Modeling in Scrabble. IJCAI-07., 1482–1487, 2007. \\
 Stuart Russell and Peter Norvig. Artificial Intelligence: A Modern Approach. Prentice-Hall,
 Englewood Cliffs, NJ, 2nd edition edition, 2003 \\
-Brian Sheppard. World-championshipcaliber Scrabble. Artif. Intell., 134:241–245, 2002. \\
+Brian Sheppard. World-championship caliber Scrabble. Artif. Intell., 134:241–245, 2002. \\
 
 \end{document}
