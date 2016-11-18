@@ -13,20 +13,10 @@
 \end{center}
 
 \subsection*{Introduction}
-Our project is to build a scrabble-playing AI, which is a popular
-crossword board game in which players build words on a 15x15 board
-using tiles representing letters. Since each player can make no direct
-observations of the other player's rack, it is a \emph{stochastic
-  partially observable game} [Russel and Norvig, 2003], which makes it
-different from games like Othello, chess, or even Go, where players
-has complete knowledge of the state of the game at any point. In
-addition, the incredible number of possible moves renders typical
-decision-tree models to be all but impossible. This makes Scrabble AIs
-challenging to design. In this progress report we describe our model,
+The goal of our project is to build an AI that plays Scrabble.  In this progress report we describe our model,
 our preliminary algorithm, present preliminary experimental results,
 and outline additional work we plan to do before the final
-deadline. We consider the two-player case.
-
+deadline. 
 
 \subsection*{Model and Algorithms}
 %% \subsection*{2.0 Overview of Scrabble}
@@ -34,27 +24,20 @@ deadline. We consider the two-player case.
 %% CAN ADD MORE TO THIS? 
 
 
-For humans, one of the most important qualities to a good Scrabble
-player is an extensive vocabulary. However, that is not by itself
-sufficient for a competitive player. If a player optimizes for the
+Extensive vocabulary alone is not sufficient for a competitive scrabble player. If a player optimizes for the
 best score on every turn they tend to retain tiles that are more
 difficult to use in play, leading to future racks that will produce a
 lower score. The best Scrabble players try to maintain their rack in a
-way that will be conducive to bingos\footnote{If the players uses all
-  7 tiles this is called a 'bingo' and the move receives a 50pt bonus,
-  which can be about 1/8 of the total points in a tournament game.} in
-the future. Thus the general strategy for humans is to first look for
-bingos, then look for potentially high-scoring positions, and to then
-consider what remains on the rack.
+way that will be conducive to future high-scoring plays.
 
-For computers, which can be preprogrammed with the entire permissible
-dictionary this is less of an issue. However, since that dictionary is
-about 200,000 words long, searching through it for possible moves
-becomes a nontrivial undertaking, and most scrabble AIs give
+Since can be preprogrammed with the entire permissible
+dictionary, sheer vocabulary is less of an issue. However, since that dictionary is
+about 200,000 words long, and the 7 letters on the rack can be combined with those on the board in tens of thousands of differnet permutations, the search for possible moves
+becomes a nontrivial undertaking. Most scrabble AIs give
 themselves a time limit to ensure reasonable progress of play.
 
 Once a list of possible moves has been generated, the AI needs to select
-the best move as a weighted decision of the score differential the
+the best move as a weighted decision of the score that the
 move would generate, the opportunities it would provide of the other
 player, and the effect it would have on the future rack.
 
@@ -85,13 +68,13 @@ into this level of detail.
 \subsection*{Scrabble AI}
 \subsubsection*{Move Generation}
 To help solve the search problem, we're using an algorithm created in
-the 1980s by Andrew Appel and Guy Jacobson, and remains the backbone
+the 1980s by Andrew Appel and Guy Jacobson. Despite having existed for almost 40 years, this algorithm remains the backbone
 of most competitive scrabble AI players today. Appel and Jacobson
 propose restructuring the Scrabble lexicon from a list of words into a
 trie or prefix tree, where each node is a partial word, the children
 of a node are words or partial words that can be created using that
-node (see Fig. 1). All terminal leaves of the trie are words, as are
-some interim nodes (e.g 'dog' vs. 'dogs'), and the value of a node is a
+node (see Fig. 3). All terminal leaves of the trie are words, as are
+some interm nodes (e.g 'dog' vs. 'dogs'), and the value of a node is a
 boolean indicating whether the sting is a full word in the dictionary.
 %% We found the pytrie library rather helpful for implimenting this
 %% algorithm, as it's CharTrie object was designed for implimentations
@@ -106,7 +89,7 @@ boolean indicating whether the sting is a full word in the dictionary.
 To search for a move on a given board, the algorithm examines all
 \emph{anchors}, where an anchor is the space to the left (or above) an
 existing letter (for horizontal plays), or the space above an existing
-letter (see Fig. 2). Since a move in Scrabble must attach to an
+letter (see Fig. 4). Since a move in Scrabble must attach to an
 existing word (excepting the first move), only looking at possible
 moves that extend from anchors greatly reduces the search space. After
 each new move on the board, the AI should update it's list of anchor
@@ -114,9 +97,7 @@ squares.
 
 Before a potential move is added to the list of generated moves, it
 needs to be \emph{crosschecked} to ensure that new strings formed in
-the orthogonal dimension also exist in the dictionary. For example, if
-CAT and DOG are played horizontally right on top of each other, DC and
-GT are not words so the move is not valid.  Since the crosscheck
+the orthogonal dimension also exist in the dictionary. For example, in Figure 3, when placing DOG underneat CATS, AD and TO are real words, but the vertical SG would fail a crosscheck.  Since the crosscheck
 results for a given tile remain static unless the tiles adjacent to it
 change, the set of crosschecks needs only be updated once per move,
 and only for the tiles immediately adjacent to new ones that have been
@@ -125,7 +106,7 @@ placed.
 The heart of the algorithm is a backtracking search with constraints
 that the final result must be a valid word (enforced by the structure
 of the trie itself), all crosschecks pass, and the new letters placed
-on the board come from the player's rack. The search algorithm has two
+on the board come from the player's rack. The search algoritm has two
 recursive parts: ExtendLeft and ExtendRight. Below is pseudocode for
 the backtracking algorithm to place a horizontal word:\\
 
@@ -149,13 +130,10 @@ the backtracking algorithm to place a horizontal word:\\
 
 \quad\quad\quad\quad\quad put tile l back into the rack\\
 
-Thus all possible words from the right of an anchor tile are produced. For out example in Figure 2, this would be 
 
-
-The next part of the algorithm is ExtendLeft, places tiles to the left
-of the anchor point and then calls ExtendRight to see what words can
-be formed using those placements. 'Limit' is the number of blank tiles
-between the current anchor point and the preceeding anchorpoint (or the end of the board), capped at the rack size of 7. The ExtendLeft pseudocode: \\
+ExtendLeft places tiles to the left
+of the anchor point and then calls ExtendRight. 'Limit' is the number of blank tiles
+between the current anchor point and the preceeding anchorpoint (or the end of the board), capped at the rack size of 7.\\
 
 \quad ExtendLeft(PartialWord, node N, square, limit):
 
@@ -173,7 +151,7 @@ N.children[l], nextSquare, limit -1)
 \quad\quad\quad\quad put tile l back into the rack\\
 			
 To generate a list of all legal moves for a given board, call
-LeftExtend("", root node, anchorSquare, Limit) on all anchors.
+LeftExtend("", root node, anchorSquare, Limit) on all anchors. See Figures 1 and 2 in 'Examples and Preliminary Data' 
 
 %Based off appel-jacobsen is move generation algo, we will do a
 %backtracking search on a trie where the letters are edges and nodes
@@ -197,13 +175,14 @@ LeftExtend("", root node, anchorSquare, Limit) on all anchors.
 
 \subsubsection*{Rack Maintenance and Adversarial Gameplay}
 The next step of the problem is to try to decide which of the legal
-moves to make, given consideration of score, maintaining a reasonable
-rack, and not giving any advantages to the opponent. This is done
+moves is best, given consideration of score, maintianing a reasonable
+rack, and not giving any advantages to the opponent. This is best done
 through a combination of Monte Carlo simulation and linear predictors
-with learned weights. The raw score of a move is as a function of tile
+with learned weights. 
+
+The raw score of a move is as a function of tile
 values and multipliers on the board, plus any resulting multi-word
-bonuses or bingos. However, the point differential (TODO: DEFINE THIS)
-as a result of the move (which is far more important) is best computed
+bonuses or bingos. This is simple to conpute, but also a simplified view of the situation. A better metric is the agent/opponent point differential obtained as the result of a move, which is the reuslt of the raw score of the move and also the opportunities it proves the opposing player. This differential is best computed
 through simulation. For each of the top raw-scoring moves, the AI runs
 a number of Monte Carlo simulations playing against itself with
 probable opponent racks. Since the turnover rate of racks is so high,
@@ -226,9 +205,9 @@ rack, because otherwise they would have played "C,T,S" to make "CATS",
 which is a higher scoring word. More formally $P(leave | play) =
 \frac{P(play | leave)P(leave)}{P(play)}$, where P(leave) is the
 probability that certain tiles were left on the rack. When an AI's
-Monte Carlo simulations draw from this probability space rather a
+monte carlo simulations draw from this probability space rather a
 random assignment, the algorithm has better performance on a level
-that is statistically significant(TODO:cite paper).
+that is statistically significant(Richards and Amir, 2007).
 
 	
 %% Now that the scores have been computed by simulation, they are weighed
@@ -278,12 +257,12 @@ Here is an example of the input and output of our AI. On the left is an input bo
 \begin{figure}[h]
   \minipage{0.5\textwidth}
     \centering
-  \includegraphics[scale=0.5]{exampleboard}
+  \includegraphics[scale=0.4]{exampleboard}
   \caption{Example of an input board}
   \endminipage
   \minipage{0.5\textwidth}
       \centering
-  \includegraphics[scale=0.5]{exampleplay}\\
+  \includegraphics[scale=0.4]{exampleplay}\\
    \caption{Our AI plays 'RAJES' on the board}
   \endminipage{}
 \end{figure}
@@ -295,21 +274,23 @@ max word RAJES with score 36}
 
 
 \subsubsection*{Future Work}
-One of our first tasks moving foward will be to find a way to
-interface our AI with Quackle so that they can play each other, and we
-can more easily see the results of our algorithm. We will also be able
-to use scores against Quackle as a metric for using stochastic
-gradient descent to create weight vectors for our rack-maintaince
-heuristics. After that, our goal is to have the AI use depth-2 monte
-carlo simulations to determent the point differential created by a
-word, instead of using the raw score of the tiles. If we have time
-we'll create a probalistic model for the opposing player to make the
-monte carlo simulations more accurate.
-\section*{Appendix}
+One of our first tasks moving foward will be to find a way to interface our AI with Quackle so that they can play each other, and we can more easily see the results of our algorithm. We will also be able to use scores against Quackle as a metric for using stochastic gradient descent to create weight vectors for our rack-maintaince heuristics. After that, our goal is to have the AI use depth-2 monte carlo simulations to determent the point differential created by a word, instead of using the raw score of the tiles. If we have time we'll create a probalistic model for the opposing player to make the monte carlo simulations more accurate. The probalistic model will cause the monte carlo simulations to converge to a minimax model with rack probability = 1 when the endgame state is reached.
 \begin{center}
+\section*{Appendix}
+
   From Appel-Jacobsen '86\\
   \includegraphics[scale=0.6]{trie}\\
+Figure 3: An Example of a Trie \\
 \includegraphics{anchorexample}\\
-Figure 3: An Example of Anchor Squares
+Figure 4: An Example of Anchor Squares
+
+\vspace{ 8cm }
+{\Large References} 
 \end{center}
+A.W. Appel, G.J. Jacobson, The world’s fastest Scrabble program, Comm. ACM 31 (5) (1988) 572–578, 585. \\
+Mark Richards and Eyal Amir. Opponent Modeling in Scrabble. IJCAI-07., 1482–1487, 2007. \\
+Stuart Russell and Peter Norvig. Artificial Intelligence: A Modern Approach. Prentice-Hall,
+Englewood Cliffs, NJ, 2nd edition edition, 2003 \\
+Brian Sheppard. World-championshipcaliber Scrabble. Artif. Intell., 134:241–245, 2002. \\
+
 \end{document}
