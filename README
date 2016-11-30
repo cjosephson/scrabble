@@ -1,22 +1,55 @@
+brain.py: the Appel-Jacobsen move generator
+agent.py: AI to choose an optimal move
+run.py: human vs AI mode
+autorun.py: quackle vs CS221 AI mode
 
+To use autorun.py, you need quackle
+(https://github.com/cjosephson/quackle). Follow the README in the root
+to build, and then go to quackle/test and run:
 
-Current status: 
-	DONE
-		Board:
-			score
-			isValid*
-		Oracle (class)
-			convolve
-			isSubstring
-			score (need to move)
-			OracleMove* 
-* untested
+       qmake test.pro && make 
 
-	Need to do: 
-		-test oracle w/ board
-		-baseline
-		
-		
-		-make more sample boards, test
+This will create an executable called 'test' in quackle/test. We'll be
+running the test program with these options:
 
-		-Writeup 
+./test  --repetitions=N lexicon=cs221 --mode=cs221
+
+This tells the quackle test harness to run N games in cs221 mode with
+the cs221 lexicon. The code for cs221 mode is mainly defined in the
+function selfPlayCS221Game() inside test/testharness.cpp.
+
+To run quackle vs. CS221, first start the quackle test program above,
+then start the python program in the root of the repo:
+
+     python autorun.py
+
+This will run our lovely python AI, which will interface with the
+quackle AI via text files in quackle/test. Quackle's data is written
+to quackle/test/quacklegame-n.gcg, which autorun.py reads and
+parses. After parsing and committing the quackle move, our AI
+calculates its own move, commits it, and writes it to the file
+test/quackle/cs221game-n.
+
+NOTE: This is like the alpha version of the quackle vs cs221
+framework. The file io shit I'm doing is super janky. It seems to
+'work', but we might need to switch to FIFO/named pipes (inter-process
+communication), which I don't know muck about...  Also, definitely
+expecting there to be a few more random crashes that come up and need
+to be solved for us to reliably get something where we can run 1000
+games in a row.
+
+TODOs:
+-autorun.py needs to handle the no valid moves case:
+	File "/home/cjoseph/Documents/scrabble/agent.py", line 34, in
+	quackleMove (word, loc, orientation, usedTiles, score) =
+	           max(self.brain.LegalMoves, key=itemgetter(4)) 
+	ValueError: max() arg is an empty sequence
+-autorun.py needs to handle quackle passing or doing a tile swap right
+-autorun.py output sometimes shows mysterious floating words not
+ attached to the rest of the crossword structure.
+-quackle testharness.cpp needs to write to quacklegame-n.gcg when a game is over
+-autorun.py needs to properly interpret when a game is over and start a new one
+-quackle testharness.cpp program only works for 1 repetition in cs221 mode
+-autorun.py needs to save scores of completed games and calculate stats on them
+-quackle testharness.py outputting 0 scores at end of cs221 games....why???
+-selfPlayCS221Games() needs to delete any old game files before running a new set, otherwise we'll just be re-playing old games.

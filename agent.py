@@ -30,6 +30,14 @@ class Agent:
         #(self.tiles.append(self.board.bag.getLetter()) for t in subset)
         return score
 
+    def quackleMove(self, tiles):
+        if not tiles: tiles = self.tiles
+        moves =  self.brain.generateMoves(tiles)
+        (word, loc, orientation, usedTiles, score) = max(self.brain.LegalMoves, key=itemgetter(4))
+        self.board.insertWord(word, loc, orientation)
+        return (word, loc, orientation, usedTiles, score)
+
+
 if __name__ == "__main__":
     b = board.Board()
     a = Agent(b)
