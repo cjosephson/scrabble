@@ -63,7 +63,7 @@ def simulation(rack1, rack2, board):
 class AJalgorithm:
 	def __init__(self, board):
 		self.board = board
-		self.trie = treeBuilder.lexTree
+		self.trie = pickle.load(open("trie.p", "rb"))
 		self.LegalMoves = set() #list of legal moves. gets changed every time getMove is called
 		self.rack = []
                 self.origRack = []

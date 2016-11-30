@@ -4,6 +4,8 @@ import os
 import stat
 import sys
 import pdb
+import pickle
+
 
 lexTree = pygtrie.CharTrie()
 
@@ -11,7 +13,7 @@ f = file('scrabblewords.txt','r')
 for w in f:
     lexTree[str.strip(w)] = True
 
-
+pickle.dump(lexTree, open("trie.p", "wb"))
 
 '''
 
