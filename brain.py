@@ -259,10 +259,10 @@ class AJalgorithm:
                                 if l in self.rack:
                                         #pdb.set_trace()
                                         if l in self.crosscheckList[nextSquare[0]][nextSquare[1]]:
-                                                print "l",l
-                                                print "part",PartialWord
-                                                print "nextSquare",nextSquare
-                                                print "ccl",self.crosscheckList[nextSquare[0]][nextSquare[1]]
+                                                #print "l",l
+                                                #print "part",PartialWord
+                                                #print "nextSquare",nextSquare
+                                                #print "ccl",self.crosscheckList[nextSquare[0]][nextSquare[1]]
 					        self.rack.remove(l)
 					        newNode = node.children[l]
 					        self.ExtendLeft(PartialWord+l,
