@@ -35,8 +35,8 @@ def main():
                     else:
                         AItiles=[i for i in userInput.upper()]
                         break
-            else: AItiles = None
-            scoreMe += AI.move(AItiles)
+           
+            scoreMe += AI.move(AItiles) else: AItiles = None
             print b
             turn = not turn
         else: #other goes

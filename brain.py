@@ -14,6 +14,52 @@ alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G',\
 			'O', 'P', 'Q', 'R', 'S', 'T', 'U',\
 			'V', 'W', 'X', 'Y', 'Z']
 
+def rackFeatureExtractor(origRack):
+    features = {}
+    rack = copy.deepcopy(origRack)  
+    #even to odd ratop
+    #features['rato'] = 
+    if ('Q' in rack) and ('U' in rack): features['QU'] = 1
+
+    for char in alphabet:
+        c2 = char+char
+        c3 = char+char+char
+        if char in rack:
+            rack.remove(char)
+            if char in rack:
+                rack.remove(char)
+                if (char) in rack: 
+                    features[c2] = 1
+                else:
+                    features[c3] = 1
+            else:
+                features[char] = 1
+    return features
+
+def runSimulations(rack, board):
+    scoreDiff = 0
+    #average/weighted average of many simulations
+    return scoreDiff
+
+def simulation(rack1, rack2, board): 
+    #use a tempboard
+    tempBoard = copy.deepcopy(board)
+    alg = AJalgorithm(board)
+    #move1
+        moveList = alg.generateMoves(rack1)
+        if len(self.brain.LegalMoves > 0):
+            (word, loc, orientation, usedTiles, score) = max(self.brain.LegalMoves, key=itemgetter(4))
+            score1 = tempBoard.insertWord(word, loc, orientation)
+    #move2
+        moveList = alg.generateMoves(rack2)
+        if len(self.brain.LegalMoves > 0):
+            (word, loc, orientation, usedTiles, score) = max(self.brain.LegalMoves, key=itemgetter(4))
+            score1 = tempBoard.insertWord(word, loc, orientation)
+    return score1-score2
+
+
+
+
 class AJalgorithm:
 	def __init__(self, board):
 		self.board = board

@@ -62,18 +62,92 @@ class Board:
     causes invalid words in the orthogonal dimension), it returns -1.
     '''
     def score(self, word, startPoint, orientation):
-        if not self.valid(word, startPoint, orientation):
-            return -1
+       # if not self.valid(word, startPoint, orientation):
+        #    return -1
+        y,x = startPoint
+        print word, len(word), x, y, orientation
+        if (orientation == "h") and (len(word)+x > 14): return -1 
+        if (orientation == "v") and (len(word)+y > 14): return -1
+        wordsFormed = []
+        wordsFormed.append((word, startPoint)) 
+        s = 0
+        wordMult = 1
+        y,x = startPoint
+        originalLen = 0
+        if orientation == "h":
+            for i in range(len(word)):
+                c = self.getCol(i+x)
+               # print c
+                if c[y][0] != " ": originalLen +=1
+                partialWord = word[i]
+                cont = True
+                pos = 1;
+                l = c[y-1][0] 
+                if l == " ": cont = False
+                while(cont):
+                    partialWord = l + partialWord
+                    pos +=1
+                    l = c[y-pos][0] 
+                    if l == " ": cont = False
+                pos = 1;
+                l = c[y+1][0] 
+                cont = True
+                if l == " ": cont = False
+                while(cont):
+                    partialWord = partialWord + l
+                    pos +=1
+                    l = c[y+pos][0] 
+                    if l == " ": cont = False
+                wordsFormed.append((partialWord, (y, i+x)))
+        elif orientation == "v":
+            for i in range(len(word)):
+                c = self.getRow(i+y)
+                if c[x][0] != " ": originalLen +=1
+                partialWord = word[i]
+                cont = True
+                pos = 1;
+                l = c[x-1][0] 
+                if l == " ": cont = False
+                while(cont):
+                    partialWord = l + partialWord
+                    pos +=1
+                    l = c[x-pos][0] 
+                    if l == " ": cont = False
+                pos = 1;
+                l = c[x+1][0] 
+                cont = True
+                if l == " ": cont = False
+                while(cont):
+                    partialWord = partialWord + l
+                    pos +=1
+                    l = c[x+pos][0] 
+                    if l == " ": cont = False
+                wordsFormed.append((partialWord,(i+y, x)))
+        sum = 0
+        if len(word) - originalLen == 7: sum += 50
+        print 'wf', wordsFormed
+        for w in wordsFormed:
+            print "w", w
+            (wor, sp) = w
+            val = self.rawScore(wor, sp, orientation)
+            if val == -1: return -1
+            sum += val
+        return sum
+
+    def rawScore(self, word, startPoint, orientation):
+        #if not self.valid(word, startPoint, orientation):
+        #    return -1
+        if (word not in self.dictionary.keys()) and (len(word) > 1): return -1
         letterToPoints = {'W':2, 'D':2, 'B':3, 'C':3, 'M':3, 'P':3, 'F':4, 'H':4, 'V':4, 'Y':4,
-			  'K':5, 'J':8, 'X':8, 'Q':10, 'Z':10,'A':1, 'E':1, 'I':1, 'O':1, 'N':1, 
-			  'R':1, 'T':1, 'L':1, 'S':1, 'U':1, 'G':3}
+              'K':5, 'J':8, 'X':8, 'Q':10, 'Z':10,'A':1, 'E':1, 'I':1, 'O':1, 'N':1, 
+              'R':1, 'T':1, 'L':1, 'S':1, 'U':1, 'G':3}
         mults = {Board.NORMAL:1, Board.DOUBLELETTER:2, Board.DOUBLEWORD:3,
                  Board.TRIPLELETTER:3, Board.TRIPLEWORD:3}
         
-	s = 0
+        s = 0
         wordMult = 1
         y,x = startPoint
-	for c in word:
+        for c in word:
             tile = self.board[y][x]
             #print "tile (%i,%i) = %s"%(x,y,tile)
             if tile[0] == ' ':
@@ -88,8 +162,7 @@ class Board:
                 x += 1
             else:
                 y += 1
-	return s*wordMult	
-
+        return s*wordMult   
     def valid(self, word, startPoint, orientation):
         (ri, ci) = startPoint
         if orientation == 'h':
@@ -213,8 +286,10 @@ class Board:
     def insertWord(self, word, startPoint, orientation, debug = False):
         (ri, ci) = startPoint
         score =  self.score(word, startPoint, orientation)
+        print score, score < 0
         wi = 0
         if not debug and score < 0:
+            print 'here?'
             return score
         
         if orientation == 'h':

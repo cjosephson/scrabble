@@ -21,9 +21,11 @@ class Agent:
         print "There are",len(self.brain.LegalMoves),"legal moves:",self.brain.LegalMoves
         #for m in self.brain.LegalMoves:
             #print m
-        (word, loc, orientation, usedTiles, score) = max(self.brain.LegalMoves, key=itemgetter(4))
-        print "max word",word,self.board.insertWord(word, loc, orientation)
-        self.board.insertWord(word, loc, orientation)
+        score = 0
+        if len(self.brain.LegalMoves > 0):
+            (word, loc, orientation, usedTiles, score) = max(self.brain.LegalMoves, key=itemgetter(4))
+            print "max word",word,self.board.insertWord(word, loc, orientation)
+            self.board.insertWord(word, loc, orientation)
         #(self.tiles.remove(t) for t in usedTiles)
         #(self.tiles.append(self.board.bag.getLetter()) for t in subset)
         return score

@@ -5,12 +5,21 @@ boards = []
 b = board.Board()
 boards.append(b)
 
+#####################################
+# test score function
+#####################################
+#b.insertWord("UNIVERSITY", (6,3), 'h', debug=True)
+b.insertWord("UNIVERSITY", (3,8), 'v')  
+print b
+print "here"
+print b.score("TEST", (7,7), "v")
+
 #b.insertWord("UNIVERSITY", (7,3), 'h', debug=True) 
 #b.insertWord("AH", (4,4), 'v', debug=True)
-b.insertWord("SKATE", (7,7), 'h')
-b.insertWord("WET", (5,10), 'v')
-b.insertWord("SUN", (3,5), 'h')
-print b.score("MEN", (1,7), 'v')
+#b.insertWord("SKATE", (7,7), 'h')
+#b.insertWord("WET", (5,10), 'v')
+#b.insertWord("SUN", (3,5), 'h')
+#print b.score("MEN", (1,7), 'v')
 
 
 #########################################
@@ -58,7 +67,7 @@ print b2
 # b3.insertWord("SPARROW", (6,5), 'h', debug=True) 
 # #print b3
 
-# # ################################################
+# # 			
 # # # Test Board #4
 # # ################################################
 # b4 = board.Board()
