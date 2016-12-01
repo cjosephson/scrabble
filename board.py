@@ -65,7 +65,7 @@ class Board:
        # if not self.valid(word, startPoint, orientation):
         #    return -1
         y,x = startPoint
-        print word, len(word), x, y, orientation
+        #print word, len(word), x, y, orientation
         if (orientation == "h") and (len(word)+x > 14): return -1 
         if (orientation == "v") and (len(word)+y > 14): return -1
         wordsFormed = []
@@ -125,9 +125,9 @@ class Board:
                 wordsFormed.append((partialWord,(i+y, x)))
         sum = 0
         if len(word) - originalLen == 7: sum += 50
-        print 'wf', wordsFormed
+        #print 'wf', wordsFormed
         for w in wordsFormed:
-            print "w", w
+            #print "w", w
             (wor, sp) = w
             val = self.rawScore(wor, sp, orientation)
             if val == -1: return -1

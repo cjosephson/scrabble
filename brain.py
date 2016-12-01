@@ -3,6 +3,7 @@ import board
 import pygtrie
 import pdb
 import copy 
+import pickle
 ##################################
 # Appel Jaconson Algorithm Bits
 ################################
@@ -46,15 +47,15 @@ def simulation(rack1, rack2, board):
     tempBoard = copy.deepcopy(board)
     alg = AJalgorithm(board)
     #move1
-        moveList = alg.generateMoves(rack1)
-        if len(self.brain.LegalMoves > 0):
-            (word, loc, orientation, usedTiles, score) = max(self.brain.LegalMoves, key=itemgetter(4))
-            score1 = tempBoard.insertWord(word, loc, orientation)
+    moveList = alg.generateMoves(rack1)
+    if len(self.brain.LegalMoves > 0):
+        (word, loc, orientation, usedTiles, score) = max(self.brain.LegalMoves, key=itemgetter(4))
+        score1 = tempBoard.insertWord(word, loc, orientation)
     #move2
-        moveList = alg.generateMoves(rack2)
-        if len(self.brain.LegalMoves > 0):
-            (word, loc, orientation, usedTiles, score) = max(self.brain.LegalMoves, key=itemgetter(4))
-            score1 = tempBoard.insertWord(word, loc, orientation)
+    moveList = alg.generateMoves(rack2)
+    if len(self.brain.LegalMoves > 0):
+        (word, loc, orientation, usedTiles, score) = max(self.brain.LegalMoves, key=itemgetter(4))
+        score1 = tempBoard.insertWord(word, loc, orientation)
     return score1-score2
 
 
@@ -107,10 +108,10 @@ class AJalgorithm:
                         self.crosschecks(c, 'r')
                 self.rack = rack
                 self.origRack = copy.deepcopy(rack)
-                print "rac'",self.rack
+                #print "rac'",self.rack
                 #clear legal moves
                 self.LegalMoves = set()
-                print "LegalMoves",self.LegalMoves
+                #print "LegalMoves",self.LegalMoves
                 (TopNode, trace) = self.trie._get_node("")
                 for (r,c,o) in anchors:
                         if o == 'h':
