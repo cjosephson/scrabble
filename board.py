@@ -148,6 +148,7 @@ class Board:
         wordMult = 1
         y,x = startPoint
         for c in word:
+	    if x > 14 or y > 14: return -1
             tile = self.board[y][x]
             #print "tile (%i,%i) = %s"%(x,y,tile)
             if tile[0] == ' ':
