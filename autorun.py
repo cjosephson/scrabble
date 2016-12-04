@@ -32,12 +32,15 @@ def main():
                     
                 elif player == "cs221":
                     rack = yourMove[-1]
-                    (word, (row,col) , orientation, usedTiles, score) = AI.quackleMove([t for t in rack])
-                    scoreMe += score
-                    #write move to file
-                    # TODO: fix format of word to match quackle's; wildcard fills are lowercase
-                    me.write("%s %s %s %s\n"%(word, row, col, orientation))
-                    me.flush()
+                    move = AI.quackleMove([t for t in rack])
+                    if len(move) > 0: #write move to file
+                        (word, (row,col) , orientation, usedTiles, score) = move
+                        scoreMe += score
+                        me.write("%s %s %s %s\n"%(word, row, col, orientation))
+                        me.flush()
+                    else: #write pass to file
+                        me.write("pass\n")
+                        me.flush()
                 print b
                 print "CS221: %s, Quackle: %s"% (scoreMe, scoreYou)
 
