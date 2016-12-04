@@ -39,6 +39,7 @@ to be solved for us to reliably get something where we can run 1000
 games in a row.
 
 TODOs:
+- fix path for quackle run files
 -autorun.py needs to handle the no valid moves case:
 	File "/home/cjoseph/Documents/scrabble/agent.py", line 34, in
 	quackleMove (word, loc, orientation, usedTiles, score) =
