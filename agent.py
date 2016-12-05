@@ -18,18 +18,21 @@ class Agent:
     def move(self, tiles = None):
         if not tiles: tiles = self.tiles
         moves =  self.brain.generateMoves(tiles)
-        print self.board
-        print "There are",len(self.brain.LegalMoves),"legal moves:",self.brain.LegalMoves
+        #print self.board
+        #print "There are",len(self.brain.LegalMoves),"legal moves:",self.brain.LegalMoves
         #for m in self.brain.LegalMoves:
             #print m
         score = 0
-        if len(self.brain.LegalMoves > 0):
+        moves =  self.brain.generateMoves(tiles)
+        if moves != None:
             (word, loc, orientation, usedTiles, score) = max(self.brain.LegalMoves, key=itemgetter(4))
             print "max word",word,self.board.insertWord(word, loc, orientation)
             self.board.insertWord(word, loc, orientation)
-        #(self.tiles.remove(t) for t in usedTiles)
-        #(self.tiles.append(self.board.bag.getLetter()) for t in subset)
-        return score
+            #(self.tiles.remove(t) for t in usedTiles)
+            #(self.tiles.append(self.board.bag.getLetter()) for t in subset)
+            return (word, loc, orientation, usedTiles, score)
+        else:
+            return None
 
     def quackleMove(self, tiles):
         if not tiles: tiles = self.tiles
@@ -39,7 +42,7 @@ class Agent:
             self.board.insertWord(word, loc, orientation)
             return (word, loc, orientation, usedTiles, score)
         else: 
-            return ()
+            return None
 
 
 if __name__ == "__main__":

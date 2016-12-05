@@ -33,7 +33,7 @@ def main():
                 elif player == "cs221":
                     rack = yourMove[-1]
                     move = AI.quackleMove([t for t in rack])
-                    if len(move) > 0: #write move to file
+                    if move != None: #write move to file
                         (word, (row,col) , orientation, usedTiles, score) = move
                         scoreMe += score
                         me.write("%s %s %s %s\n"%(word, row, col, orientation))
