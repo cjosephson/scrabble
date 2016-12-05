@@ -12,7 +12,7 @@ class Agent:
         self.board = board
         self.brain = AJalgorithm(self.board)
         self.tiles = []
-        if not debug:
+        if not debug and len(self.board.bag.letters) > 0:
             self.tiles += [self.board.bag.getLetter() for i in xrange(7)]
         
     def move(self, tiles = None):
@@ -27,15 +27,15 @@ class Agent:
         if len(self.brain.LegalMoves) > 0:
             #moves =  self.brain.generateMoves(tiles)
             (word, loc, orientation, usedTiles, score) = max(self.brain.LegalMoves, key=itemgetter(4))
-            print "max word",word,self.board.insertWord(word, loc, orientation)
+            #print "max word",word,self.board.insertWord(word, loc, orientation)
             self.board.insertWord(word, loc, orientation)
-            print "usedTiles",usedTiles
+            #print "usedTiles",usedTiles
             for t in usedTiles:
                 self.tiles.remove(t) 
-            print self.tiles
+            #print self.tiles
             for t in usedTiles:
                 self.tiles.append(self.board.bag.getLetter())
-            print self.tiles
+            #print self.tiles
             return (word, loc, orientation, usedTiles, score)
         else:
             return None

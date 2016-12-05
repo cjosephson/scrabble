@@ -72,10 +72,14 @@ class Board:
         y,x = startPoint
         #print word, len(word), x, y, orientation
         #print y,x, len(word), (len(word) + x)
-        if (orientation == "h") and (len(word)+x-1 > 14): return -1 
-       # print "pt A"
-        if (orientation == "v") and (len(word)+y-1 > 14): return -1
-      #  print "pt b"
+        if (orientation == "h") and (len(word)+x-1 > 15):
+            #print "exceeded horizontal len check"
+            return -1 
+        # print "pt A"
+        if (orientation == "v") and (len(word)+y-1 > 15):
+            #print "exceeded vert len check"
+            return -1
+        # print "pt b"
         wordsFormed = []
         wordsFormed.append((word, startPoint)) 
         s = 0
@@ -161,7 +165,7 @@ class Board:
             #print "w", w
             (wor, sp) = w
             val = self.rawScore(wor, sp, or2)
-           # print val
+            #print "rawscore",val
             if val == -1: return -1
             sum += val
         return sum
@@ -202,7 +206,9 @@ class Board:
     def rawScore(self, word, startPoint, orientation):
         #if not self.valid(word, startPoint, orientation):
         #    return -1
-        if (word not in self.dictionary.keys()) and (len(word) > 1): return -1
+        if (word not in self.dictionary.keys()) and (len(word) > 1):
+            #print "word not in dict",word
+            return -1
         #print "?"
         letterToPoints = {'W':2, 'D':2, 'B':3, 'C':3, 'M':3, 'P':3, 'F':4, 'H':4, 'V':4, 'Y':4,
               'K':5, 'J':8, 'X':8, 'Q':10, 'Z':10,'A':1, 'E':1, 'I':1, 'O':1, 'N':1, 
@@ -212,11 +218,15 @@ class Board:
         
         s = 0
         wordMult = 1
-        y,x = startPoint
+        row,col = startPoint
+        #print word, orientation
         for c in word:
-	    if x > 14 or y > 14: return -1
+            #print row,col, c
+	    if row > 14 or col > 14:
+                #print "fails len check in raw",row,col
+                return -1
          #   print "??"
-            tile = self.board[y][x]
+            tile = self.board[row][col]
             #print "tile (%i,%i) = %s"%(x,y,tile)
             if tile[0] == ' ':
                 if tile[1] in [Board.TRIPLEWORD, Board.DOUBLEWORD]:
@@ -227,9 +237,9 @@ class Board:
             else:
                     s+=letterToPoints[c]
             if orientation == 'h':
-                x += 1
+                row += 1
             else:
-                y += 1
+                col += 1
         #print 's', s
         return s*wordMult   
     
@@ -240,9 +250,9 @@ class Board:
         for c in word:
             if c not in tiles:
                 if c != self.getChar(pos):
-                    print c,  self.getChar(pos), tiles
+                    #print c,  self.getChar(pos), tiles
                     tile = False
-                    print "failed tile check!"
+                    #print "failed tile check!"
                     break
             if orientation == 'h':
                 pos = (pos[0], pos[1] + 1)
@@ -257,7 +267,7 @@ class Board:
         if orientation == 'h':
             #check bounds
             #print "ci, ci+len = %s, %s"%(ci, ci+len(word))
-            if ci + len(word) >= 15:
+            if ci + len(word) > 15:
                 #print "fails fit check horizontally"
                 return False
             
@@ -292,7 +302,7 @@ class Board:
                 col =  self.getCol(i)
                 letters = [t[0] for t in col]
                 if not self.validWords(letters):
-                    print "cross check fails col %i: %s"%(i,letters) 
+                    #print "cross check fails col %i: %s"%(i,letters) 
                     self.board[ri] = oldrow
                     return False
             #add row back because we're just doing a validity check
@@ -302,7 +312,7 @@ class Board:
         elif orientation == 'v':
             #check bounds
             #print "ri, ri+len = %s, %s"%(ri, ri+len(word))
-            if ri + len(word) >= 15:
+            if ri + len(word) > 15:
                 #print "fails fit check vertically"
                 return False
             #check that the word satisfies column constraints
@@ -340,7 +350,7 @@ class Board:
                 row[ci] = col[i] #add our new char
                 letters = [t[0] for t in row]
                 if not self.validWords(letters):
-                    print "cross check fails row %i: %s"%(i,letters)
+                    #print "cross check fails row %i: %s"%(i,letters)
                     self.board = oldBoard
                     #print self.__str__()
                     return False
@@ -370,10 +380,14 @@ class Board:
 
     def getChar(self, pos):
         x,y = pos
+        if x > 14 or y > 14:
+            return ''
         return self.board[x][y][0]
 
     def insertChar(self, c, pos):
         x,y = pos
+        if x > 14 or y > 14:
+            return
         self.board[x][y] = (c, self.board[x][y][1])
 
     def insertWord(self, word, startPoint, orientation, debug = False):
