@@ -9,11 +9,28 @@ boards.append(b)
 # test score function
 #####################################
 #b.insertWord("UNIVERSITY", (6,3), 'h', debug=True)
-b.insertWord("UNIVERSITY", (3,8), 'v')  
+#print b
+#print "here"
+#b.insertWord("TEST", (7,7), "h")
+#print b.score("TEST", (0,14), "h") #-1 
+#print b.score("TEST", (0,0), "h") 
+#print b.score("TEST", (10,11), "h") #??
+#print b.score("TEST", (0,11), "h") 
+#print b.score("TEST", (14,11), "h") 
+#print b.score("TEST", (10,12), "h") #-1
+#b.insertWord("TEST", (11,12), "h") #-1
+#print b
+#print b.score("TEST", (0,14), "v") 
+#print b.score("TEST", (0,0), "v") 
+#print b.score("TEST", (10,11), "v") #??
+#print b.score("TEST", (0,11), "v") 
+#print b.score("TEST", (14,11), "v") #-1
+#print b.score("TEST", (10,12), "v") 
+#print b.score("TEST", (7,6), "v") #-1
+#print b.score("TEST", (12,0), "v") #-1
+b.insertWord("TEST", (14,0), "h") 
 print b
-print "here"
-print b.score("TEST", (7,7), "v")
-
+print b.score("TEST", (11,0), "v") #-1)
 #b.insertWord("UNIVERSITY", (7,3), 'h', debug=True) 
 #b.insertWord("AH", (4,4), 'v', debug=True)
 #b.insertWord("SKATE", (7,7), 'h')
