@@ -16,6 +16,7 @@ class Agent:
             self.tiles += [self.board.bag.getLetter() for i in xrange(7)]
         
     def move(self, tiles = None):
+        print "AI move"
         if not tiles: tiles = self.tiles
         moves =  self.brain.generateMoves(tiles)
         #print self.board
@@ -23,8 +24,8 @@ class Agent:
         #for m in self.brain.LegalMoves:
             #print m
         score = 0
-        moves =  self.brain.generateMoves(tiles)
-        if moves != None:
+        if len(self.brain.LegalMoves) > 0:
+            #moves =  self.brain.generateMoves(tiles)
             (word, loc, orientation, usedTiles, score) = max(self.brain.LegalMoves, key=itemgetter(4))
             print "max word",word,self.board.insertWord(word, loc, orientation)
             self.board.insertWord(word, loc, orientation)

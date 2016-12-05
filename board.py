@@ -64,6 +64,11 @@ class Board:
     causes invalid words in the orthogonal dimension), it returns -1.
     '''
     def score(self, word, startPoint, orientation):
+        return self.oldScore(word, startPoint, orientation)
+       # print 'score start'
+       # if not self.valid(word, startPoint, orientation):
+        #    return -1
+        '''y,x = startPoint
         #if not self.valid(word, startPoint, orientation):
         #    return -1
         # print 'score start'
@@ -155,13 +160,12 @@ class Board:
             print val
             if val == -1: return -1
             sum += val
-        return sum
-
-    def rawScore(self, word, startPoint, orientation):
-        #if not self.valid(word, startPoint, orientation):
-        #    return -1
+        return sum'''
+    def oldScore(self, word, startPoint, orientation):
+        if not self.valid(word, startPoint, orientation):
+            return -1
         if (word not in self.dictionary.keys()) and (len(word) > 1): return -1
-        print "?"
+        #print "?"
         letterToPoints = {'W':2, 'D':2, 'B':3, 'C':3, 'M':3, 'P':3, 'F':4, 'H':4, 'V':4, 'Y':4,
               'K':5, 'J':8, 'X':8, 'Q':10, 'Z':10,'A':1, 'E':1, 'I':1, 'O':1, 'N':1, 
               'R':1, 'T':1, 'L':1, 'S':1, 'U':1, 'G':3}
@@ -172,8 +176,8 @@ class Board:
         wordMult = 1
         y,x = startPoint
         for c in word:
-	    if x > 14 or y > 14: return -1
-            print "??"
+            if x > 14 or y > 14: return -1
+         #   print "??"
             tile = self.board[y][x]
             #print "tile (%i,%i) = %s"%(x,y,tile)
             if tile[0] == ' ':
@@ -188,7 +192,40 @@ class Board:
                 x += 1
             else:
                 y += 1
-        print 's', s
+        #print 's', s
+        return s*wordMult
+    def rawScore(self, word, startPoint, orientation):
+        #if not self.valid(word, startPoint, orientation):
+        #    return -1
+        if (word not in self.dictionary.keys()) and (len(word) > 1): return -1
+        #print "?"
+        letterToPoints = {'W':2, 'D':2, 'B':3, 'C':3, 'M':3, 'P':3, 'F':4, 'H':4, 'V':4, 'Y':4,
+              'K':5, 'J':8, 'X':8, 'Q':10, 'Z':10,'A':1, 'E':1, 'I':1, 'O':1, 'N':1, 
+              'R':1, 'T':1, 'L':1, 'S':1, 'U':1, 'G':3}
+        mults = {Board.NORMAL:1, Board.DOUBLELETTER:2, Board.DOUBLEWORD:3,
+                 Board.TRIPLELETTER:3, Board.TRIPLEWORD:3}
+        
+        s = 0
+        wordMult = 1
+        y,x = startPoint
+        for c in word:
+	    if x > 14 or y > 14: return -1
+         #   print "??"
+            tile = self.board[y][x]
+            #print "tile (%i,%i) = %s"%(x,y,tile)
+            if tile[0] == ' ':
+                if tile[1] in [Board.TRIPLEWORD, Board.DOUBLEWORD]:
+                    wordMult = mults[tile[1]]
+                    s+=letterToPoints[c]
+                else: #it's just a letter multiplier
+                    s+=letterToPoints[c]*mults[tile[1]]
+            else:
+                    s+=letterToPoints[c]
+            if orientation == 'h':
+                x += 1
+            else:
+                y += 1
+        #print 's', s
         return s*wordMult   
     
     def humanValid(self, word, startPoint, orientation, tiles):
@@ -196,11 +233,12 @@ class Board:
         tile = True
         pos = startPoint
         for c in word:
-            if c not in tiles and c != self.getChar(pos):
-                print c,  self.getChar(pos), tiles
-                tile = False
-                print "failed tile check!"
-                break
+            if c not in tiles:
+                if c != self.getChar(pos):
+                    print c,  self.getChar(pos), tiles
+                    tile = False
+                    print "failed tile check!"
+                    break
             if orientation == 'h':
                 pos = (pos[0], pos[1] + 1)
             else:
