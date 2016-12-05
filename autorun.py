@@ -26,13 +26,19 @@ def main():
                     print "quackle move",yourMove
                     orientation= yourMove[1]
                     loc = (int(yourMove[2]), int(yourMove[3]))
-                    word = yourMove[4].upper()
-                    print "word, loc, score:",word,loc,orientation,scoreYou
-                    scoreYou += b.insertWord(word, loc, orientation, debug = False)
+                    if len(yourMove) >= 4:
+                        word = yourMove[4].upper()
+                        print "word, loc, score:",word,loc,orientation,scoreYou
+                        scoreYou += b.insertWord(word, loc, orientation, debug = False)
+                    else:
+                        print "quackle pass?"
                     
                 elif player == "cs221":
                     rack = yourMove[-1]
                     move = AI.quackleMove([t for t in rack])
+                    print "----------------------------------------------------"
+                    print "cs221 move",move
+                    print "----------------------------------------------------"
                     if move != None: #write move to file
                         (word, (row,col) , orientation, usedTiles, score) = move
                         scoreMe += score
@@ -41,7 +47,11 @@ def main():
                     else: #write pass to file
                         me.write("pass\n")
                         me.flush()
+                elif player == "Game": #game over
+                    print "Game over!"
+                    #continue
                 print b
                 print "CS221: %s, Quackle: %s"% (scoreMe, scoreYou)
+
 
 main()

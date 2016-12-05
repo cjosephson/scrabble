@@ -18,7 +18,7 @@ class Agent:
     def move(self, tiles = None):
         if not tiles: tiles = self.tiles
         print "AI move with rack",tiles
-        moves =  self.brain.generateMoves(tiles)
+        self.brain.generateMoves(tiles)
         #print self.board
         #print "There are",len(self.brain.LegalMoves),"legal moves:",self.brain.LegalMoves
         #for m in self.brain.LegalMoves:
@@ -42,8 +42,8 @@ class Agent:
 
     def quackleMove(self, tiles):
         if not tiles: tiles = self.tiles
-        moves =  self.brain.generateMoves(tiles)
-        if moves != None:
+        self.brain.generateMoves(tiles)
+        if len(self.brain.LegalMoves) > 0:
             (word, loc, orientation, usedTiles, score) = max(self.brain.LegalMoves, key=itemgetter(4))
             self.board.insertWord(word, loc, orientation)
             return (word, loc, orientation, usedTiles, score)
