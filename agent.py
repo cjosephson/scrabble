@@ -28,8 +28,8 @@ class Agent:
             (word, loc, orientation, usedTiles, score) = max(self.brain.LegalMoves, key=itemgetter(4))
             print "max word",word,self.board.insertWord(word, loc, orientation)
             self.board.insertWord(word, loc, orientation)
-            #(self.tiles.remove(t) for t in usedTiles)
-            #(self.tiles.append(self.board.bag.getLetter()) for t in subset)
+            (self.tiles.remove(t) for t in usedTiles)
+            (self.tiles.append(self.board.bag.getLetter()) for t in subset)
             return (word, loc, orientation, usedTiles, score)
         else:
             return None
