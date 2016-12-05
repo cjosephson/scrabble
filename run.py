@@ -36,7 +36,8 @@ def main():
                         AItiles=[i for i in userInput.upper()]
                         break
            
-            scoreMe += AI.move(AItiles) else: AItiles = None
+                scoreMe += AI.move(AItiles) 
+            else: AItiles = None
             print b
             turn = not turn
         else: #other goes
@@ -67,6 +68,7 @@ def main():
                     continue
                 #b.score
                 #if not sure, break out of if
+                print "checking score"
                 score = b.score(word, loc, orientation)
                 print score
                 if options.boss or score > -1:
