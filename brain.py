@@ -155,7 +155,7 @@ class AJalgorithm:
                         remove = []
                         #print "PRE",self.LegalMoves
                         for m in self.LegalMoves:
-                                if m[3] == 0:
+                                if len(m[3]) == 0:
                                         remove.append(m)
                         #print "REMOVE",remove
                         for r in remove:
@@ -206,10 +206,10 @@ class AJalgorithm:
 		return validLetters 
 
         def rackdiff(self):
-                used = 0
+                used = ''
                 for t in self.origRack:
                         if t not in self.rack:
-                                used += 1
+                                used += t
                 return used
         
 	###################################

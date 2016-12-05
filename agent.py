@@ -16,8 +16,8 @@ class Agent:
             self.tiles += [self.board.bag.getLetter() for i in xrange(7)]
         
     def move(self, tiles = None):
-        print "AI move"
         if not tiles: tiles = self.tiles
+        print "AI move with rack",tiles
         moves =  self.brain.generateMoves(tiles)
         #print self.board
         #print "There are",len(self.brain.LegalMoves),"legal moves:",self.brain.LegalMoves
@@ -29,8 +29,13 @@ class Agent:
             (word, loc, orientation, usedTiles, score) = max(self.brain.LegalMoves, key=itemgetter(4))
             print "max word",word,self.board.insertWord(word, loc, orientation)
             self.board.insertWord(word, loc, orientation)
-            (self.tiles.remove(t) for t in usedTiles)
-            (self.tiles.append(self.board.bag.getLetter()) for t in subset)
+            print "usedTiles",usedTiles
+            for t in usedTiles:
+                self.tiles.remove(t) 
+            print self.tiles
+            for t in usedTiles:
+                self.tiles.append(self.board.bag.getLetter())
+            print self.tiles
             return (word, loc, orientation, usedTiles, score)
         else:
             return None
