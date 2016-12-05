@@ -1,5 +1,6 @@
-'''The agent runs the AJ algorithm, which generates a list of moves. The
-agent chooses the maximal scoring move and plays it on the board
+'''The agent runs the AJ algorithm, which generates a list of
+moves. The agent chooses the maximal scoring move and plays it on the
+board
 
 '''
 from brain import AJalgorithm
@@ -33,9 +34,12 @@ class Agent:
     def quackleMove(self, tiles):
         if not tiles: tiles = self.tiles
         moves =  self.brain.generateMoves(tiles)
-        (word, loc, orientation, usedTiles, score) = max(self.brain.LegalMoves, key=itemgetter(4))
-        self.board.insertWord(word, loc, orientation)
-        return (word, loc, orientation, usedTiles, score)
+        if moves != None:
+            (word, loc, orientation, usedTiles, score) = max(self.brain.LegalMoves, key=itemgetter(4))
+            self.board.insertWord(word, loc, orientation)
+            return (word, loc, orientation, usedTiles, score)
+        else: 
+            return ()
 
 
 if __name__ == "__main__":
