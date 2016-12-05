@@ -30,19 +30,20 @@ def main():
 
     #start quackle game in background
     print "starting quackle..."
-    os.system("cd "+options.path+" && ./test  --repetitions=%i lexicon=cs221 --mode=cs221 &"%options.numgames)
+    os.system("cd "+options.path+" && ./test  --repetitions=%i lexicon=cs221 --mode=cs221 --quiet &"%options.numgames)
     sleep(1)
     print "done."
-
+    
     for i in xrange(0, options.numgames):    
+        sleep(1)
         you = open(options.path+"/quackgame-%i.gcg"%i,'r')
         me = open(options.path+"/cs221game-%i"%i,'w+')
+
         b = board.Board()
         AI = agent.Agent(b)
         scoreYou = 0
         scoreMe = 0
-        print b
-
+        if not options.silent: print b
         turn = False
         yourMove = ""
         myMove = ""
@@ -55,24 +56,30 @@ def main():
             #m = me.readline().strip()
             if y != yourMove and y != "":
                 yourMove = y.split()
+                #print "yourMove",yourMove
                 player = yourMove[0]
                 if player == "quackle":
-                    print "quackle move",yourMove
+                    if not options.silent: print "quackle move",yourMove
+                    else: print "q",
                     orientation= yourMove[1]
                     loc = (int(yourMove[2]), int(yourMove[3]))
-                    if len(yourMove) >= 4:
+                    if len(yourMove) == 5:
                         word = yourMove[4].upper()
-                        print "word, loc, score:",word,loc,orientation,scoreYou
+                        if not options.silent: print "word, loc, score:",word,loc,orientation,scoreYou
                         scoreYou += b.insertWord(word, loc, orientation, debug = False)
+                    elif len(yourMove) > 5: #abort
+                        print yourMove
+                        print "breaking"
+                        break
                     else:
-                        print "quackle pass?"
+                        if not options.silent: print "quackle pass?"
                     
                 elif player == "cs221":
                     rack = yourMove[-1]
+                    rack.replace('?','E')  #pick E every time for random tiles
                     move = AI.quackleMove([t for t in rack])
-                    print "----------------------------------------------------"
-                    print "cs221 move",move
-                    print "----------------------------------------------------"
+                    if not options.silent: print "cs221 move",move
+                    else: print "c",
                     if move != None: #write move to file
                         (word, (row,col) , orientation, usedTiles, score) = move
                         scoreMe += score
@@ -84,10 +91,15 @@ def main():
                 elif player == "Game": #game over
                     print "Game over!"
                     break
-                print b
-                print "CS221: %s, Quackle: %s"% (scoreMe, scoreYou)
+                else: #TODO: this shouldn't happen, fix it!
+                    me.write("pass\n")
+                    me.flush()
+                    #continue 
+                if not options.silent: 
+                    print b
+                    print "CS221: %s, Quackle: %s"% (scoreMe, scoreYou)
         print "Game score CS221: %s, Quackle: %s"% (scoreMe, scoreYou)
         scores[i]=(scoreMe,scoreYou)
-
+        print "scores (cs221, quackle):",scores
     print "scores (cs221, quackle):",scores
 main()

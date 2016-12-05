@@ -84,7 +84,7 @@ class Board:
         originalLen = 0
         if orientation == "h":
             #print 'pos:', y,x
-            for i in range(len(word)):
+            for i in xrange(len(word)):
                 if i+x < 15:
                     c = self.getCol(i+x)
          #           print i+x
@@ -120,7 +120,7 @@ class Board:
                      #   print i+x, y, c[y][0]
                         wordsFormed.append((partialWord, (y, i+x)))
         elif orientation == "v":
-            for i in range(len(word)):
+            for i in xrange(len(word)):
                 if i+y < 15:
                     c = self.getRow(i+y)
                     if c[x][0] != " ": originalLen +=1
@@ -165,6 +165,7 @@ class Board:
             if val == -1: return -1
             sum += val
         return sum
+
     def oldScore(self, word, startPoint, orientation):
         if not self.valid(word, startPoint, orientation):
             return -1
@@ -381,7 +382,6 @@ class Board:
         #print score, score < 0
         wi = 0
         if not debug and score < 0:
-            print 'here?'
             return score
         
         if orientation == 'h':

@@ -121,8 +121,7 @@ class AJalgorithm:
                                 #print "brow",brow
                                 prefix = [b[0] for b in brow[:c+1]]
                                 #print "AnchorH",(r,c),(r,c+1)
-                                if r == 0:
-                                        print "prefix",prefix
+                                #if r == 0: print "prefix",prefix
                                 i = len(prefix)-1
                                 lengthH = 0
                                 while True:
