@@ -19,32 +19,26 @@ def main():
     AI = agent.Agent(b)
     scoreOpp = 0
     scoreMe = 0
-    if options.human:
-        tiles = [b.bag.getLetter() for i in xrange(7)]
+    tiles = [b.bag.getLetter() for i in xrange(7)]
     print b
     turn = False
     while True:
         if turn: #AI's turn
-            if options.specify:
-                while True:
-                    userInput = raw_input("Enter 7 tiles for AI (e.g. ABCDEF): ")
-                    if len(userInput) != 7:
-                        print "Not seven letters!"
-                    elif not userInput.isalpha():
-                        print "Must be letters!"
-                    else:
-                        AItiles=[i for i in userInput.upper()]
-                        break
-           
-                scoreMe += AI.move(AItiles) 
-            else: AItiles = None
-            print b
+            print "Generating AI move..."
+            move = AI.move()
+            if move != None:
+                (word, (row,col) , orientation, usedTiles, score) = move
+                scoreMe += score
+                print "Done! AI playing %s at (%s,%s) with score %s."%(word, row, col, score)
+                print b
+            else:
+                print "AI passing turn."
             turn = not turn
-        else: #other goes
+        else: #human goes
             valid = False
             while not valid:
-                if options.human: print "Tiles:",tiles
-                userInput = raw_input("Enter a word, (row,col) and orientation 'h' or 'v': ")
+                if options.human: print "Your turn! Tiles:",tiles
+                userInput = raw_input("Enter \"word (row,col) 'h'||'v'\": ")
                 inputList = userInput.split()
                 if len(inputList) != 3:
                     print "Invalid input format, try again!"
@@ -66,17 +60,14 @@ def main():
                 if orientation != 'v' and orientation != 'h':
                     print "invalid orientation:",orientation
                     continue
-                #b.score
                 #if not sure, break out of if
-                print "checking score"
-                score = b.score(word, loc, orientation)
-                print score
-                if options.boss or score > -1:
+                valid = b.humanValid(word, loc, orientation, tiles)
+                if options.boss or valid:
                     #make a copy of board and insert to preview move
                     b2 = copy.deepcopy(b)
-                    b2.insertWord(word, loc, orientation, debug = options.boss)
+                    score = b2.insertWord(word, loc, orientation, debug = options.boss)
                     print b2
-                    print "Move Score= ", score
+                    print "Move Score =", score
                     ok = False
                     while not ok:
                         userInput = raw_input("Is this ok? (Y/N) ")
@@ -84,6 +75,7 @@ def main():
                             ok=True
                             b.insertWord(word, loc, orientation, debug = options.boss)
                             print "move successful"
+                            #TODO: fix this?
                             #does not account for the case where a letter on
                             #the board also appears in the tile
                             #set... eit. We'll mostly be doing AI vs AI anyway
@@ -95,9 +87,9 @@ def main():
                                         r += 1
                                 for i in xrange(r):
                                     tiles.append(b.bag.getLetter())
-                                
+                                    
                             scoreOpp += score
-                            print b
+                            #print b
                             valid = True
                             turn = not turn
                         elif (userInput == "N" or userInput == "n"):

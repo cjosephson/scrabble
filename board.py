@@ -45,8 +45,10 @@ class Board:
 	
 
     def __str__(self):
-        mults = {Board.NORMAL: ' ', Board.DOUBLELETTER:'2', Board.DOUBLEWORD:'*',
-                 Board.TRIPLELETTER:'3', Board.TRIPLEWORD:'&'}
+        mults = {Board.NORMAL: ' ', Board.DOUBLELETTER:' ', Board.DOUBLEWORD:' ',
+                 Board.TRIPLELETTER:' ', Board.TRIPLEWORD:' '}
+        #mults = {Board.NORMAL: ' ', Board.DOUBLELETTER:'2', Board.DOUBLEWORD:'*',
+        #         Board.TRIPLELETTER:'3', Board.TRIPLEWORD:'&'}
         s = ''
         for i in xrange(len(self.board)):
             s += ("%02d"%(i))+": "+str([mults[b[1]] if b[0] == ' ' else  b[0]
@@ -54,7 +56,7 @@ class Board:
         s+="     "
         for i in xrange(15):
             s+=("|%02d| "%(i))
-        s+="\nLegend: 2=double letter, *=double word, 3=triple letter, &=triple word"
+        #s+="\nLegend: 2=double letter, *=double word, 3=triple letter, &=triple word"
         return s
 
     '''Given a word, a start point, and an orientation, return a score for
@@ -67,6 +69,10 @@ class Board:
        # if not self.valid(word, startPoint, orientation):
         #    return -1
         '''y,x = startPoint
+        #if not self.valid(word, startPoint, orientation):
+        #    return -1
+        # print 'score start'
+        y,x = startPoint
         #print word, len(word), x, y, orientation
         print y,x, len(word), (len(word) + x)
         if (orientation == "h") and (len(word)+x-1 > 14): return -1 
@@ -221,6 +227,26 @@ class Board:
                 y += 1
         #print 's', s
         return s*wordMult   
+    
+    def humanValid(self, word, startPoint, orientation, tiles):
+        #tile check
+        tile = True
+        pos = startPoint
+        for c in word:
+            if c not in tiles:
+                if c != self.getChar(pos):
+                    print c,  self.getChar(pos), tiles
+                    tile = False
+                    print "failed tile check!"
+                    break
+            if orientation == 'h':
+                pos = (pos[0], pos[1] + 1)
+            else:
+                pos = (pos[0] +1, pos[1])
+        #crosscheck
+        cross = self.valid(word, startPoint, orientation)
+        return tile and cross
+
     def valid(self, word, startPoint, orientation):
         (ri, ci) = startPoint
         if orientation == 'h':
@@ -337,6 +363,10 @@ class Board:
             col = [self.board[i][ci] for i in xrange(15)]
         return col
 
+    def getChar(self, pos):
+        x,y = pos
+        return self.board[x][y][0]
+
     def insertChar(self, c, pos):
         x,y = pos
         self.board[x][y] = (c, self.board[x][y][1])
@@ -344,7 +374,7 @@ class Board:
     def insertWord(self, word, startPoint, orientation, debug = False):
         (ri, ci) = startPoint
         score =  self.score(word, startPoint, orientation)
-        print score, score < 0
+        #print score, score < 0
         wi = 0
         if not debug and score < 0:
             print 'here?'
