@@ -64,21 +64,18 @@ class Board:
     causes invalid words in the orthogonal dimension), it returns -1.
     '''
     def score(self, word, startPoint, orientation):
-        return self.oldScore(word, startPoint, orientation)
-       # print 'score start'
-       # if not self.valid(word, startPoint, orientation):
-        #    return -1
-        '''y,x = startPoint
+        #return self.oldScore(word, startPoint, orientation)
+        #print 'score start'
         #if not self.valid(word, startPoint, orientation):
         #    return -1
         # print 'score start'
         y,x = startPoint
         #print word, len(word), x, y, orientation
-        print y,x, len(word), (len(word) + x)
+        #print y,x, len(word), (len(word) + x)
         if (orientation == "h") and (len(word)+x-1 > 14): return -1 
-        print "pt A"
+       # print "pt A"
         if (orientation == "v") and (len(word)+y-1 > 14): return -1
-        print "pt b"
+      #  print "pt b"
         wordsFormed = []
         wordsFormed.append((word, startPoint)) 
         s = 0
@@ -118,7 +115,10 @@ class Board:
                             if y+pos < 15: l = c[y+pos][0] 
                             if l == " ": cont = False
                             if y+pos == 15: cont = False
-                    wordsFormed.append((partialWord, (y, i+x)))
+                    #print partialWord, self.board[y][i+x][0]
+                    if len(partialWord) > 1 and self.board[y][i+x][0] == " ": 
+                     #   print i+x, y, c[y][0]
+                        wordsFormed.append((partialWord, (y, i+x)))
         elif orientation == "v":
             for i in range(len(word)):
                 if i+y < 15:
@@ -147,20 +147,24 @@ class Board:
                             if x+pos < 15: l = c[x+pos][0] 
                             if l == " ": cont = False
                             if x+pos == 15: cont = False
-                    wordsFormed.append((partialWord,(i+y, x)))
+                    if len(partialWord) > 1 and self.board[i+y][x][0] == " ":
+                      #  print partialWord 
+                      #  print i+x, y, c[y][0]
+                        wordsFormed.append((partialWord,(i+y, x)))
         sum = 0
         if len(word) - originalLen == 7: sum += 50
         #print 'wf', wordsFormed
         if orientation == "h": or2 = 'v'
         else: or2 = 'h' 
+        print wordsFormed
         for w in wordsFormed:
-            print "w", w
+            #print "w", w
             (wor, sp) = w
             val = self.rawScore(wor, sp, or2)
-            print val
+           # print val
             if val == -1: return -1
             sum += val
-        return sum'''
+        return sum
     def oldScore(self, word, startPoint, orientation):
         if not self.valid(word, startPoint, orientation):
             return -1

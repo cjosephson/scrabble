@@ -5,6 +5,14 @@ boards = []
 b = board.Board()
 boards.append(b)
 
+
+
+
+####################################
+b.insertWord("HELD", (3,7), 'h')
+b.insertWord("EPHA", (1,7), 'v')
+print b
+print b.score('GOAT', (4,5), 'h')
 #####################################
 # test score function
 #####################################
@@ -28,9 +36,9 @@ boards.append(b)
 #print b.score("TEST", (10,12), "v") 
 #print b.score("TEST", (7,6), "v") #-1
 #print b.score("TEST", (12,0), "v") #-1
-b.insertWord("TEST", (14,0), "h") 
-print b
-print b.score("TEST", (11,0), "v") #-1)
+#b.insertWord("TEST", (14,0), "h") 
+#print b
+#print b.score("TEST", (11,0), "v") #-1)
 #b.insertWord("UNIVERSITY", (7,3), 'h', debug=True) 
 #b.insertWord("AH", (4,4), 'v', debug=True)
 #b.insertWord("SKATE", (7,7), 'h')
