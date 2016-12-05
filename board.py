@@ -156,7 +156,7 @@ class Board:
         #print 'wf', wordsFormed
         if orientation == "h": or2 = 'v'
         else: or2 = 'h' 
-        print wordsFormed
+        #print wordsFormed
         for w in wordsFormed:
             #print "w", w
             (wor, sp) = w
