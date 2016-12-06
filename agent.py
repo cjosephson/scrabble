@@ -4,6 +4,7 @@ board
 
 '''
 from brain import AJalgorithm
+import brain as smarts
 import board
 from operator import itemgetter
 
@@ -26,9 +27,40 @@ class Agent:
         score = 0
         if len(self.brain.LegalMoves) > 0:
             #moves =  self.brain.generateMoves(tiles)
-            (word, loc, orientation, usedTiles, score) = max(self.brain.LegalMoves, key=itemgetter(4))
-            print "max word",word,self.board.insertWord(word, loc, orientation)
-            self.board.insertWord(word, loc, orientation)
+            print self.brain.LegalMoves
+            moves = list(self.brain.LegalMoves)
+            print "set to list"
+            print moves
+            moves = moves.sort(key = itemgetter(4))
+            print moves
+            if len(moves) > 3:
+                topN = moves[:3]
+            else: topN = moves
+
+ 
+            scoreDiff = -1*float('inf')
+            wFinal = None
+            lFinal = None
+            oFinal = None
+            usedTiles = None
+            score = None
+            for (word, loc, orientation, used, s) in topN:
+                
+                sd = smarts.runSimulations(tiles, word, loc, orientation, self.board, brain, 2)
+                if sd > scoreDiff: 
+                    scoreDiff = sd
+                    wFinal = word
+                    lFinal = loc
+                    oFinal = orientation
+                    usedTiles = used
+                    score = s
+            #(word, loc, orientation, usedTiles, score) = max(self.brain.LegalMoves, key=itemgetter(4))
+            #print "max word",word,self.board.insertWord(word, loc, orientation)
+            #self.board.insertWord(word, loc, orientation)
+            
+            self.board.insertWord(wFinal, lFinal, oFinal)
+            
+
             print "usedTiles",usedTiles
             for t in usedTiles:
                 self.tiles.remove(t) 
@@ -36,7 +68,7 @@ class Agent:
             for t in usedTiles:
                 self.tiles.append(self.board.bag.getLetter())
             print self.tiles
-            return (word, loc, orientation, usedTiles, score)
+            return (wFinal, lFinal, oFinal, usedTiles, score)
         else:
             return None
 
