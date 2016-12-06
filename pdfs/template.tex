@@ -1,0 +1,70 @@
+\documentclass[12pt]{article}
+\usepackage{fullpage,enumitem,amsmath,amssymb,graphicx}
+
+\begin{document}
+
+\begin{center}
+{\Large CS221 Fall 2016 Homework [number]}
+
+\begin{tabular}{rl}
+SUNet ID: & cajoseph \\
+Name: & Colleen Josephson \\
+Collaborators: & [list all the people you worked with]
+\end{tabular}
+\end{center}
+
+By turning in this assignment, I agree by the Stanford honor code and
+declare that all of this is my own work.
+
+\section*{Problem 1}
+
+\begin{enumerate}[label=(\alph*)]
+  \item (your solution)
+  \item (your solution)
+\end{enumerate}
+
+\section*{Problem 2}
+
+\begin{enumerate}[label=(\alph*)]
+  \item (your solution)
+  \item (your solution)
+\end{enumerate}
+
+\quad ExtendRight (PartialWord, node N, square):
+
+\quad\quad if square is not empty:
+
+\quad\quad\quad if the letter l in square is an edge of N (PartialWord + l is a node):
+
+\quad\quad\quad\quad ExtendRight(PartialWord + l, N.children[l], nextSquare)
+
+\quad\quad else:
+
+\quad\quad\quad if PartialWord is a word: LegalMoves.append(PartialWord)
+
+\quad\quad\quad for each letter l that is in rack, s an edge out of N,in the cross-check set of square:
+
+\quad\quad\quad\quad\quad remove l from the rack
+
+\quad\quad\quad\quad\quad ExtendRight(PartialWord + l, N.children[l], nextSquare)
+
+\quad\quad\quad\quad\quad put tile l back into the rack
+
+
+\quad ExtendLeft(PartialWord, node N, square, limit):
+
+\quad\quad ExtendRight(PartialWord, N, square)
+
+\quad\quad if limit $>$ 0: 
+
+\quad\quad\quad for each letter l in rack that is an edge of N: 
+
+\quad\quad\quad\quad remove l from the rack
+
+\quad\quad\quad\quad ExtendLeft(l+PartialWord, N' =
+N.children[l], nextSquare, limit -1)
+
+\quad\quad\quad\quad put tile l back into the rack
+
+
+\end{document}
