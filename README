@@ -18,39 +18,30 @@ This tells the quackle test harness to run N games in cs221 mode with
 the cs221 lexicon. The code for cs221 mode is mainly defined in the
 function selfPlayCS221Game() inside test/testharness.cpp.
 
-To run quackle vs. CS221, first start the quackle test program above,
-then start the python program in the root of the repo:
 
-     python autorun.py
-
-This will run our lovely python AI, which will interface with the
+The Python half is in scrabble/autorun.py. It interfaces with the
 quackle AI via text files in quackle/test. Quackle's data is written
 to quackle/test/quacklegame-n.gcg, which autorun.py reads and
 parses. After parsing and committing the quackle move, our AI
 calculates its own move, commits it, and writes it to the file
 test/quackle/cs221game-n.
 
-NOTE: This is like the alpha version of the quackle vs cs221
-framework. The file io shit I'm doing is super janky. It seems to
-'work', but we might need to switch to FIFO/named pipes (inter-process
-communication), which I don't know muck about...  Also, definitely
-expecting there to be a few more random crashes that come up and need
-to be solved for us to reliably get something where we can run 1000
-games in a row.
+To run quackle vs. CS221:
 
-TODOs:
-- fix path for quackle run files
--autorun.py needs to handle the no valid moves case:
-	File "/home/cjoseph/Documents/scrabble/agent.py", line 34, in
-	quackleMove (word, loc, orientation, usedTiles, score) =
-	           max(self.brain.LegalMoves, key=itemgetter(4)) 
-	ValueError: max() arg is an empty sequence
--autorun.py needs to handle quackle passing or doing a tile swap right
+     python autorun.py -n <NUM_GAMES> -p <PATH_TO_QUACKLE_TEST>
+
+Optionally, add a -s flag to suppress ascii-board output, useful when running large batches. 
+
+
+
+TODOs (urgent):
+-fix score fxn (12/6 becca)
+-rack heuristic (12/6, colleen)
+-tile exchange (12/7, colleen)
+-finish monte-carlo (12/7, becca)
+-collect new data for vanilla, heuristic and MC (12/9, colleen)
+-human mode testing + endgame (12/12)
+TODOs (If time/as needed):
 -autorun.py output sometimes shows mysterious floating words not
  attached to the rest of the crossword structure.
--quackle testharness.cpp needs to write to quacklegame-n.gcg when a game is over
--autorun.py needs to properly interpret when a game is over and start a new one
--quackle testharness.cpp program only works for 1 repetition in cs221 mode
--autorun.py needs to save scores of completed games and calculate stats on them
--quackle testharness.py outputting 0 scores at end of cs221 games....why???
--selfPlayCS221Games() needs to delete any old game files before running a new set, otherwise we'll just be re-playing old games.
+-make autorun.py detect when a file has raced, abort, and tell quackle to move to the next game. this will let us run the full N time trials, instead of running until the first race. If super optimistic, use one file per move OR named pipes for file io (which doesn't have race problem, but needed byte-level file reads)

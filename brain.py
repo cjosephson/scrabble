@@ -11,31 +11,9 @@ import pickle
 _SENTINEL =  object()
 
 alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G',\
-			'H', 'I', 'J', 'K', 'L', 'M', 'N',\
-			'O', 'P', 'Q', 'R', 'S', 'T', 'U',\
-			'V', 'W', 'X', 'Y', 'Z']
-
-def rackFeatureExtractor(origRack):
-    features = {}
-    rack = copy.deepcopy(origRack)  
-    #even to odd ratop
-    #features['rato'] = 
-    if ('Q' in rack) and ('U' in rack): features['QU'] = 1
-
-    for char in alphabet:
-        c2 = char+char
-        c3 = char+char+char
-        if char in rack:
-            rack.remove(char)
-            if char in rack:
-                rack.remove(char)
-                if (char) in rack: 
-                    features[c2] = 1
-                else:
-                    features[c3] = 1
-            else:
-                features[char] = 1
-    return features
+	    'H', 'I', 'J', 'K', 'L', 'M', 'N',\
+	    'O', 'P', 'Q', 'R', 'S', 'T', 'U',\
+	    'V', 'W', 'X', 'Y', 'Z']
 
 def runSimulations(rack, board):
     scoreDiff = 0
@@ -57,9 +35,6 @@ def simulation(rack1, rack2, board):
         (word, loc, orientation, usedTiles, score) = max(self.brain.LegalMoves, key=itemgetter(4))
         score1 = tempBoard.insertWord(word, loc, orientation)
     return score1-score2
-
-
-
 
 class AJalgorithm:
 	def __init__(self, board):
