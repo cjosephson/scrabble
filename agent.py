@@ -51,7 +51,7 @@ class Agent:
                 (word, loc, orientation, usedTiles, score) = move
                 phi = featureExtractor([t for t in self.tiles if t not in usedTiles], score)
                 consider[i] = (dotProduct(weights, phi), move)
-            print consider
+            #print consider
             (word, loc, orientation, usedTiles, score) = max(consider, key=itemgetter(0))[1] #the top scoring move
             
         #print "max word",word,self.board.insertWord(word, loc, orientation)
