@@ -8,6 +8,7 @@ import brain as smarts
 import board
 from operator import itemgetter
 from util import * 
+from random import shuffle
 
 class Agent:
     def __init__(self, board, debug=False, heuristic=False, montecarlo=False, quackle = False, N=3):
@@ -32,6 +33,13 @@ class Agent:
             #print m
         score = 0
         if len(self.brain.LegalMoves) == 0:
+            #try tile swap
+            if len(self.board.bag.letters) > 0:
+                shuffle(self.tiles)
+                discard = self.tiles.pop()
+                if not self.quackle: #quackle handles exhanges in quacklemode
+                    self.tiles.append(self.board.bag.exchange(discard))
+                return ('', discard, None, None, 0)
             return None
         
         moves = sorted(list(self.brain.LegalMoves), key=itemgetter(4), reverse=True)
@@ -64,39 +72,6 @@ class Agent:
             for t in usedTiles:
                 self.tiles.append(self.board.bag.getLetter())
         return (word, loc, orientation, usedTiles, score)
-
-    #TODO: merge this with normal move, just add a quackle mode to move
-    def quackleMove(self, tiles):
-        if not tiles: tiles = self.tiles
-        self.brain.generateMoves(tiles)
-        if len(self.brain.LegalMoves) > 0:
-            (word, loc, orientation, usedTiles, score) = max(self.brain.LegalMoves, key=itemgetter(4))
-            self.board.insertWord(word, loc, orientation)
-            return (word, loc, orientation, usedTiles, score)
-        else: 
-            return None
-        
-    def rackFeatureExtractor(self, origRack):
-        features = {}
-        rack = copy.deepcopy(origRack)  
-        #even to odd ratop
-        #features['rato'] = 
-        if ('Q' in rack) and ('U' in rack): features['QU'] = 1
-
-        for char in alphabet:
-            c2 = char+char
-            c3 = char+char+char
-            if char in rack:
-                rack.remove(char)
-                if char in rack:
-                    rack.remove(char)
-                    if (char) in rack: 
-                        features[c2] = 1
-                    else:
-                        features[c3] = 1
-                else:
-                    features[char] = 1
-        return features
 
 if __name__ == "__main__":
     b = board.Board()

@@ -39,10 +39,19 @@ class LetterBag:
 		self.letters.append('X')
 		self.letters.append('Q')
 		self.letters.append('Z')
+
     def getLetter(self):
 	#grab a random number out of the bag
 	i = random.randint(0, len(self.letters)-1)
 	result = self.letters.pop(i)
 	return result
+
+    def exchange(self, t):
+        self.letters.append(t)
+        return self.getLetter()
+    
+    def empty(self):
+        return len(self.letters) == 0
+    
         
 

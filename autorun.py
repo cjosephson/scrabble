@@ -40,7 +40,7 @@ def main():
         me = open(options.path+"/cs221game-%i"%i,'w+')
 
         b = board.Board()
-        AI = agent.Agent(b)
+        AI = agent.Agent(b, quackle=True)
         scoreYou = 0
         scoreMe = 0
         if not options.silent: print b
@@ -77,14 +77,20 @@ def main():
                 elif player == "cs221":
                     rack = yourMove[-1]
                     rack.replace('?','E')  #pick E every time for random tiles
-                    move = AI.quackleMove([t for t in rack])
+                    move = AI.move([t for t in rack])
                     if not options.silent: print "cs221 move",move
                     else: print "c",
                     if move != None: #write move to file
-                        (word, (row,col) , orientation, usedTiles, score) = move
-                        scoreMe += score
-                        me.write("%s %s %s %s\n"%(word, row, col, orientation))
-                        me.flush()
+                        (word, pos , orientation, usedTiles, score) = move
+                        if len(word) > 0:
+                            row,col = pos
+                            scoreMe += score
+                            me.write("%s %s %s %s\n"%(word, row, col, orientation))
+                            me.flush()
+                        else: #tile exchange
+                            tile = pos
+                            me.write("%s %s\n"%(word, tile))
+                            me.flush()
                     else: #write pass to file
                         me.write("pass\n")
                         me.flush()

@@ -27,9 +27,13 @@ def main():
             print "Generating AI move..."
             move = AI.move()
             if move != None:
-                (word, (row,col) , orientation, usedTiles, score) = move
-                scoreMe += score
-                print "Done! AI playing %s at (%s,%s) with score %s."%(word, row, col, score)
+                (word, pos , orientation, usedTiles, score) = move
+                if len(word) > 0:
+                    row,col = pos
+                    scoreMe += score
+                    print "Done! AI playing %s at (%s,%s) with score %s."%(word, row, col, score)
+                else:
+                    print "Done! AI exchanged tiles."
             else:
                 print "AI passing turn."
             turn = not turn
@@ -45,6 +49,20 @@ def main():
                     turn = not turn
                     print "Passing turn."
                     break
+                elif (len(inputList) == 2 and inputList[0] == "exchange"):
+                    old = inputList[1].upper()
+                    print old, tiles
+                    if old in tiles and not b.bag.empty():
+                        tiles.remove(old)
+                        new = b.bag.exchange(old)
+                        tiles.append(new)
+                        valid = True
+                        turn = not turn
+                        print "Exchanged tile %s for %s."%(old, new)
+                        break
+                    else:
+                        print "Invalid tile or no tiles in bag!"
+                        continue
                 elif (len(inputList) != 3):
                     print "Invalid input format, try again!"
                     continue
