@@ -4,6 +4,8 @@ import pygtrie
 import pdb
 import copy 
 import pickle
+import letterbag
+from operator import itemgetter
 ##################################
 # Appel Jaconson Algorithm Bits
 ################################
@@ -15,25 +17,51 @@ alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G',\
 	    'O', 'P', 'Q', 'R', 'S', 'T', 'U',\
 	    'V', 'W', 'X', 'Y', 'Z']
 
-def runSimulations(rack, board):
+def runSimulations(rack, word, loc, orientation, board, alg, depth = 2):
     scoreDiff = 0
-    #average/weighted average of many simulations
-    return scoreDiff
-
-def simulation(rack1, rack2, board): 
-    #use a tempboard
+    rack1 = rack
+    numIters = 10
     tempBoard = copy.deepcopy(board)
-    alg = AJalgorithm(board)
+    alg.board = tempBoard
+   # alg = AJalgorithm(tempBoard)
+    # start by assigning random
+    for i in range(numIters):
+        print i
+        simbag = letterbag.LetterBag()
+        rack2 = []
+        for l in range(7):
+            rack2.append(simbag.getLetter())
+        #print "Rack 1", rack1
+        #print "Rack 2", rack2
+        scoreDiff += simulation(rack1, rack2, word, loc, orientation, tempBoard, depth, alg)
+    #average/weighted average of many simulations
+    alg.board = board
+    return scoreDiff/numIters
+
+def simulation(rack1, rack2, word, loc, orientation, tempBoard, depth, alg): 
+    #use a tempboard
+    #print tempBoard
     #move1
-    moveList = alg.generateMoves(rack1)
-    if len(self.brain.LegalMoves > 0):
-        (word, loc, orientation, usedTiles, score) = max(self.brain.LegalMoves, key=itemgetter(4))
+    if depth > 2: 
+        moveList = alg.generateMoves(rack1)
+        score1 = 0
+        score2 = 0
+        if len(alg.LegalMoves) > 0:
+            (word, loc, orientation, usedTiles, score) = max(alg.LegalMoves, key=itemgetter(4))
+            score1 = tempBoard.insertWord(word, loc, orientation)
+     #       print score1
+    else:
         score1 = tempBoard.insertWord(word, loc, orientation)
+      #  print score1
+
+    #print tempBoard
     #move2
     moveList = alg.generateMoves(rack2)
-    if len(self.brain.LegalMoves > 0):
-        (word, loc, orientation, usedTiles, score) = max(self.brain.LegalMoves, key=itemgetter(4))
-        score1 = tempBoard.insertWord(word, loc, orientation)
+    if len(alg.LegalMoves) > 0:
+        (word, loc, orientation, usedTiles, score) = max(alg.LegalMoves, key=itemgetter(4))
+        score2 = tempBoard.insertWord(word, loc, orientation)
+     #   print score2
+    #print tempBoard
     return score1-score2
 
 class AJalgorithm:

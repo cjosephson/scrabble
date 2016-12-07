@@ -81,7 +81,7 @@ class Board:
             return -1
         # print "pt b"
         wordsFormed = []
-        wordsFormed.append((word, startPoint)) 
+        wordsFormed.append((word, startPoint, orientation)) 
         s = 0
         wordMult = 1
         y,x = startPoint
@@ -91,22 +91,22 @@ class Board:
             for i in xrange(len(word)):
                 if i+x < 15:
                     c = self.getCol(i+x)
-         #           print i+x
+                    #print i+x
                     if c[y][0] != " ": originalLen +=1
                     partialWord = word[i]
                     cont = True
-                    pos = 1;
+                    pos1 = 1;
                     if y > 0:
                         l = c[y-1][0] 
                         if l == " ": cont = False
                         while(cont):
                           #  print pos
                             partialWord = l + partialWord
-                            pos +=1
+                            pos1 +=1
                         
-                            if y - pos > -1: l = c[y-pos][0] 
+                            if y - pos1 > -1: l = c[y-pos1][0] 
                             if l == " ": cont = False
-                            if y - pos == -1: cont = False
+                            if y - pos1 == -1: cont = False
                     pos = 1;
                     if y < 14:
                         l = c[y+1][0] 
@@ -122,7 +122,7 @@ class Board:
                     #print partialWord, self.board[y][i+x][0]
                     if len(partialWord) > 1 and self.board[y][i+x][0] == " ": 
                      #   print i+x, y, c[y][0]
-                        wordsFormed.append((partialWord, (y, i+x)))
+                        wordsFormed.append((partialWord, (y-pos1, i+x), 'v'))
         elif orientation == "v":
             for i in xrange(len(word)):
                 if i+y < 15:
@@ -130,16 +130,16 @@ class Board:
                     if c[x][0] != " ": originalLen +=1
                     partialWord = word[i]
                     cont = True
-                    pos = 1;
+                    pos1 = 1;
                     if x > 0:
                         l = c[x-1][0] 
                         if l == " ": cont = False
                         while(cont):
                             partialWord = l + partialWord
-                            pos +=1
-                            if x-pos > -1: l = c[x-pos][0] 
+                            pos1 +=1
+                            if x-pos1 > -1: l = c[x-pos1][0] 
                             if l == " ": cont = False
-                            if x-pos == -1: cont = False
+                            if x-pos1 == -1: cont = False
                     pos = 1;
                     if x < 14:
                         l = c[x+1][0] 
@@ -152,20 +152,12 @@ class Board:
                             if l == " ": cont = False
                             if x+pos == 15: cont = False
                     if len(partialWord) > 1 and self.board[i+y][x][0] == " ":
-                      #  print partialWord 
-                      #  print i+x, y, c[y][0]
-                        wordsFormed.append((partialWord,(i+y, x)))
+                        wordsFormed.append((partialWord,(i+y, x-pos1),'h'))
         sum = 0
         if len(word) - originalLen == 7: sum += 50
-        #print 'wf', wordsFormed
-        if orientation == "h": or2 = 'v'
-        else: or2 = 'h' 
-        #print wordsFormed
         for w in wordsFormed:
-            #print "w", w
-            (wor, sp) = w
+            (wor, sp, or2) = w
             val = self.rawScore(wor, sp, or2)
-            #print "rawscore",val
             if val == -1: return -1
             sum += val
         return sum
@@ -174,7 +166,7 @@ class Board:
         if not self.valid(word, startPoint, orientation):
             return -1
         if (word not in self.dictionary.keys()) and (len(word) > 1): return -1
-        #print "?"
+        
         letterToPoints = {'W':2, 'D':2, 'B':3, 'C':3, 'M':3, 'P':3, 'F':4, 'H':4, 'V':4, 'Y':4,
               'K':5, 'J':8, 'X':8, 'Q':10, 'Z':10,'A':1, 'E':1, 'I':1, 'O':1, 'N':1, 
               'R':1, 'T':1, 'L':1, 'S':1, 'U':1, 'G':3}
@@ -186,9 +178,9 @@ class Board:
         y,x = startPoint
         for c in word:
             if x > 14 or y > 14: return -1
-         #   print "??"
+         
             tile = self.board[y][x]
-            #print "tile (%i,%i) = %s"%(x,y,tile)
+         
             if tile[0] == ' ':
                 if tile[1] in [Board.TRIPLEWORD, Board.DOUBLEWORD]:
                     wordMult = mults[tile[1]]
@@ -201,15 +193,14 @@ class Board:
                 x += 1
             else:
                 y += 1
-        #print 's', s
+        
         return s*wordMult
     def rawScore(self, word, startPoint, orientation):
         #if not self.valid(word, startPoint, orientation):
         #    return -1
         if (word not in self.dictionary.keys()) and (len(word) > 1):
-            #print "word not in dict",word
             return -1
-        #print "?"
+        
         letterToPoints = {'W':2, 'D':2, 'B':3, 'C':3, 'M':3, 'P':3, 'F':4, 'H':4, 'V':4, 'Y':4,
               'K':5, 'J':8, 'X':8, 'Q':10, 'Z':10,'A':1, 'E':1, 'I':1, 'O':1, 'N':1, 
               'R':1, 'T':1, 'L':1, 'S':1, 'U':1, 'G':3}
@@ -218,16 +209,12 @@ class Board:
         
         s = 0
         wordMult = 1
-        row,col = startPoint
-        #print word, orientation
+        col,row = startPoint
         for c in word:
-            #print row,col, c
-	    if row > 14 or col > 14:
-                #print "fails len check in raw",row,col
+            if row > 14 or col > 14: 
                 return -1
-         #   print "??"
+            
             tile = self.board[row][col]
-            #print "tile (%i,%i) = %s"%(x,y,tile)
             if tile[0] == ' ':
                 if tile[1] in [Board.TRIPLEWORD, Board.DOUBLEWORD]:
                     wordMult = mults[tile[1]]
@@ -240,7 +227,6 @@ class Board:
                 row += 1
             else:
                 col += 1
-        #print 's', s
         return s*wordMult   
     
     def humanValid(self, word, startPoint, orientation, tiles):
@@ -250,7 +236,6 @@ class Board:
         for c in word:
             if c not in tiles:
                 if c != self.getChar(pos):
-                    #print c,  self.getChar(pos), tiles
                     tile = False
                     #print "failed tile check!"
                     break

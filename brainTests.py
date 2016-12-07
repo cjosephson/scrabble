@@ -5,8 +5,21 @@ import brain
 b =board.Board()
 alg = brain.AJalgorithm(b)
 
-b.insertWord("HELLO", (7,7), "h")
+b.insertWord("HELLO", (7,7), 'h')
+#print b.insertWord("HI", (7,7), 'v')
+print b
+rack1 = ['W', 'O', 'R', 'L', 'D', 'X', 'Y']
+#rack2 = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
+#
+#print brain.simulation(rack1, rack2, b)
+print brain.runSimulations(rack1, "HI", (7,7), 'v', b, alg, 2)
+
+
+#print b.score("ORYX", (7,11), 'v')
+#print b.score("DEFACE", (2,8), 'v')
+'''b.insertWord("HELLO", (7,7), "h")
 b.insertWord("WORLD", (6,11), "v")
+
 b.insertWord("STANFORD", (1,1), "h")
 b.insertWord("FRIENDLINESS", (1,5), 'v', debug=True)
 print b
@@ -68,3 +81,4 @@ for m in alg.LegalMoves:
     assert score > -1
 print alg.LegalMoves
 #pdb.set_trace()
+'''
