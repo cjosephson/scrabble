@@ -7,11 +7,7 @@ from brain import AJalgorithm
 import brain as smarts
 import board
 from operator import itemgetter
-
-alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G',\
-	    'H', 'I', 'J', 'K', 'L', 'M', 'N',\
-	    'O', 'P', 'Q', 'R', 'S', 'T', 'U',\
-	    'V', 'W', 'X', 'Y', 'Z']
+from util import * 
 
 class Agent:
     def __init__(self, board, debug=False, heuristic=False, montecarlo=False, quackle = False, N=3):
@@ -26,7 +22,7 @@ class Agent:
         if not debug and len(self.board.bag.letters) > 0:
             self.tiles += [self.board.bag.getLetter() for i in xrange(7)]
         
-    def move(self, tiles = None):
+    def move(self, tiles = None, weights = None):
         if not tiles: tiles = self.tiles
         #print "AI move with rack",tiles
         self.brain.generateMoves(tiles)
@@ -49,14 +45,14 @@ class Agent:
             
         #run feature extrator on the racks, and also add monte carlo score diff as a feature
         #Do L2 SGD on the feature vector and then select the best one
-        w = {}
         if self.heuristic:
             consider = moves[0:self.N]
             for i,move in enumerate(consider):
                 (word, loc, orientation, usedTiles, score) = move
-                phi = self.rackFeatureExtractor(usedTiles)
-                consider[i] = (dotProduct(weights, featureExtractor(x)), m)
-            (word, loc, orientation, usedTiles, score) = max(consider, key=itemgetter[0]) #the top scoring move
+                phi = featureExtractor([t for t in self.tiles if t not in usedTiles], score)
+                consider[i] = (dotProduct(weights, phi), move)
+            print consider
+            (word, loc, orientation, usedTiles, score) = max(consider, key=itemgetter(0))[1] #the top scoring move
             
         #print "max word",word,self.board.insertWord(word, loc, orientation)
         self.board.insertWord(word, loc, orientation)

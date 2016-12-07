@@ -1,5 +1,52 @@
 import os, random, operator, sys
 from collections import Counter
+import copy
+
+alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G',\
+	    'H', 'I', 'J', 'K', 'L', 'M', 'N',\
+	    'O', 'P', 'Q', 'R', 'S', 'T', 'U',\
+	    'V', 'W', 'X', 'Y', 'Z']
+
+vowels = ['A','E','I','O','U','Y']
+
+letterToPoints = {'W':2, 'D':2, 'B':3, 'C':3, 'M':3, 'P':3, 'F':4, 'H':4, 'V':4, 'Y':4,
+                  'K':5, 'J':8, 'X':8, 'Q':10, 'Z':10,'A':1, 'E':1, 'I':1, 'O':1, 'N':1, 
+                  'R':1, 'T':1, 'L':1, 'S':1, 'U':1, 'G':3}
+
+def featureExtractor(origRack, raw_score, mc_score=None):
+    features = {}
+    rack = copy.deepcopy(origRack)  
+    # Features TODO:
+    # -doubles/triples (done)
+    # -'qu' (done)
+    # -consonants to vowels ratio
+    # -include scrabble letter value somehow? sum of tile values
+    if ('Q' in rack) and ('U' in rack): features['QU'] = 1
+    features['raw_score'] = raw_score
+    def multiplier(c):
+        return 1#letterToPoint[c]
+    if mc_score:
+        features['mc_score'] = mc_score
+    for char in alphabet:
+        c2 = char+char
+        c3 = char+char+char
+        if char in rack:
+            rack.remove(char)
+            if char in rack:
+                rack.remove(char)
+                if char in rack: 
+                    features[c2] = 1*multiplier(char)
+                else:
+                    features[c3] = 1*multiplier(char)
+            else:
+                features[char] = 1*multiplier(char)
+        v = 0
+        c = 0
+        for t in rack:
+            if t in vowels: v += 1
+            else: c += 1
+        features['vc_ratio'] = (v+1)/(float(c)+1)
+    return features
 
 def dotProduct(d1, d2):
     """

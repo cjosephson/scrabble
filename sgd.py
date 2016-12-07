@@ -1,6 +1,5 @@
 import board
 import agent
-import copy
 import os
 from collections import defaultdict 
 from util import *
@@ -10,75 +9,54 @@ letterMap = {'A':0, 'B':1, 'C':2, 'D':3, 'E':4, 'F':5, 'G':6, 'H':7, 'I':8, 'J':
 
 def SGD(eta=1, numIters = 10):
     weights = defaultdict(float)#{}  # feature => weight
+    weights['raw_score'] = 1 #initialize to all score
     while numIters > 0:
         b = board.Board()
+        #TODO: random seed word?
         b.insertWord("UNIVERSITY", (7,3), 'h', debug=True)
-        A = agent.Agent(b) #souped up agent
+        A = agent.Agent(b, heuristic=True) #souped up agent
         B = agent.Agent(b) #vanilla agent
-        scoreA = 0
-        scoreB = 0
-        tiles = [b.bag.getLetter() for i in xrange(7)]
-        turn = False
+        totA = 0
+        totB = 0
+        passCount = 0
         for i in xrange(50):
-            if turn: #A's turn
-                print "A",
-                move = A.move()
-                if move != None:
-                    (word, (row,col) , orientation, usedTiles, score) = move
-                    scoreA += score
-                    #print "Done! AI playing %s at (%s,%s) with score %s."%(word, row, col, score)
-                turn = not turn
-            else:
-                print "B",
-                move = B.move()
-                if move != None:
-                    #(word, (row,col) , orientation, usedTiles, score) = move
-                    scoreB += move[4]
-                    #print "Done! AI playing %s at (%s,%s) with score %s."%(word, row, col, score)
-                turn = not turn
-        print "scoreA-scoreB",scoreA-scoreB
+            scoreA = 0
+            scoreB = 0
+            usedTiles = []
+            print "A",
+            rack = A.tiles
+            print "rack",rack
+            move = A.move(weights = weights)
+            if move != None:
+                (word, (row,col) , orientation, usedTiles, scoreA) = move
+                totA += scoreA
+            else: 
+                if passCount > 2:
+                    break #endgame
+                passCount += 1
+            print "B",
+            move = B.move()
+            if move != None:
+                scoreB = move[4]
+                totB += scoreB
+
+            y = scoreA-scoreB
+            phi_x = featureExtractor([t for t in rack if t not in usedTiles], scoreA)
+            # DESCEND: w = w - eta*grad(loss(x, y w))
+            increment(weights, -1*eta, grad(phi_x, y, weights))
+            print "scoreA-scoreB",scoreA-scoreB
         numIters -= 1
-        '''
-        phi_x = featureExtractor()
-        # loss_abs = |w*phi(x) - y|
-        # grad(loss_abs) = -phi(x)*sgn(y-w*phi(x))
-        def grad(phi_x, y, w):
-            g = defaultdict(float)
-            sign = (1 if y*dotProduct(weights,phi_x) > 0 else -1)
-            for k,v in phi_x.iteritems():
-                g[k] = -v*sign
-                #print "margin, g: %s, %s "%(margin, g)
-            return g
-        #print "weightsBefore: ",weights
-        
-        # DESCEND: w = w - eta*grad(loss(x, y w))
-        increment(weights, -1*eta, grad(phi_x, y, weights))
-        '''
+        print "totA-totB",totA-totB
+        print weights
     return weights
 
-def featureExtractor(self, origRack):
-    features = {}
-    rack = copy.deepcopy(origRack)  
-    # Features TODO:
-    # -doubles/triples (done)
-    # -'qu' (done)
-    # -consonants to vowels ratio
-    # -include scrabble letter value somehow? sum of tile values
-    if ('Q' in rack) and ('U' in rack): features['QU'] = 1
-    
-    for char in alphabet:
-        c2 = char+char
-        c3 = char+char+char
-        if char in rack:
-            rack.remove(char)
-            if char in rack:
-                rack.remove(char)
-                if (char) in rack: 
-                    features[c2] = 1
-                else:
-                    features[c3] = 1
-            else:
-                features[char] = 1
-    return features
+# loss_abs = |w*phi(x) - y|
+# grad(loss_abs) = -phi(x)*sgn(y-w*phi(x))
+def grad(phi_x, y, w):
+    g = defaultdict(float)
+    sign = (1 if y*dotProduct(w,phi_x) > 0 else -1)
+    for k,v in phi_x.iteritems():
+        g[k] = -v*sign
+    return g
             
 SGD(numIters = 10)
