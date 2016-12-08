@@ -2,6 +2,7 @@ import board
 import agent
 import copy
 import os
+import subprocess
 from util import *
 from random import randint
 from time import sleep
@@ -32,7 +33,9 @@ def main():
 
     #start quackle game in background
     print "starting quackle..."
-    os.system("cd "+options.path+" && ./test  --repetitions=%i lexicon=cs221 --mode=cs221 --quiet &"%options.numgames)
+    quackle = subprocess.Popen("./test  --repetitions=%i lexicon=cs221 --mode=cs221 --quiet"%options.numgames, cwd = options.path, shell=True)
+    #os.system("cd "+options.path+" && ./test  --repetitions=%i lexicon=cs221 --mode=cs221 --quiet &"%options.numgames)
+    
     sleep(1)
     print "done."
     
@@ -131,4 +134,6 @@ def main():
             OK = True
         #print "scores (cs221, quackle):",scores
     print "scores (cs221, quackle):",scores
+    quackle.terminate()
+    quackle.wait()
 main()
