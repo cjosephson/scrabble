@@ -34,7 +34,7 @@ class Agent:
         score = 0
         if len(self.brain.LegalMoves) == 0:
             #try tile swap
-            if len(self.board.bag.letters) > 0:
+            if len(self.board.bag.letters) > 0 and len(self.tiles) > 0:
                 shuffle(self.tiles)
                 discard = self.tiles.pop()
                 if not self.quackle: #quackle handles exhanges in quacklemode
