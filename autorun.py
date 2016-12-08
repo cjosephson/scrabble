@@ -96,8 +96,9 @@ def main():
                             scoreMe += score
                             if wildcard in usedTiles:
                                 word = list(word)
-                                word[word.index(wildcard)]=wildcard.upper()
+                                word[word.index(wildcard)]=wildcard.lower()
                                 word = ''.join(word)
+                                #print "wildcard used",wildcard,word,rack
                             me.write("%s %s %s %s %s\n"%(word,
                                                          row,
                                                          col,
