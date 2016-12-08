@@ -2,6 +2,8 @@ import board
 import agent
 import copy
 import os
+from util import *
+from random import randint
 from time import sleep
 from optparse import OptionParser
 parser = OptionParser()
@@ -44,7 +46,7 @@ def main():
         scoreYou = 0
         scoreMe = 0
         if not options.silent: print b
-        turn = False
+        OK  = True
         yourMove = ""
         myMove = ""
         print "-------------------------------------------------"
@@ -76,7 +78,14 @@ def main():
                     
                 elif player == "cs221":
                     rack = yourMove[-1]
-                    rack.replace('?','E')  #pick E every time for random tiles
+                    #wildcard tiles, add a vowel if we have none
+                    #otherwise pick a random letter
+                    wildcard = ''
+                    if sum([1 for v in vowels if v in rack]) > 0:
+                        wildcard = vowels[randint(0,5)]
+                    else:
+                        wildcard = alphabet[randint(0,25)]
+                    rack.replace('?',wildcard)
                     move = AI.move([t for t in rack])
                     if not options.silent: print "cs221 move",move
                     else: print "c",
@@ -85,11 +94,19 @@ def main():
                         if len(word) > 0:
                             row,col = pos
                             scoreMe += score
-                            me.write("%s %s %s %s\n"%(word, row, col, orientation))
+                            if wildcard in usedTiles:
+                                word = list(word)
+                                word[word.index(wildcard)]=wildcard.upper()
+                                word = ''.join(word)
+                            me.write("%s %s %s %s %s\n"%(word,
+                                                         row,
+                                                         col,
+                                                         orientation,
+                                                         score))
                             me.flush()
                         else: #tile exchange
                             tile = pos
-                            me.write("%s %s\n"%(word, tile))
+                            me.write("%s %s\n"%("exchange", tile))
                             me.flush()
                     else: #write pass to file
                         me.write("pass\n")
@@ -98,14 +115,19 @@ def main():
                     print "Game over!"
                     break
                 else: #TODO: this shouldn't happen, fix it!
-                    me.write("pass\n")
+                    print "file %s in a bad state, ending"%you
+                    me.write("end\n")
                     me.flush()
-                    #continue 
+                    OK = False
+                    break
                 if not options.silent: 
                     print b
                     print "CS221: %s, Quackle: %s"% (scoreMe, scoreYou)
-        print "Game score CS221: %s, Quackle: %s"% (scoreMe, scoreYou)
-        scores[i]=(scoreMe,scoreYou)
-        print "scores (cs221, quackle):",scores
+        if OK:
+            print "Game score CS221: %s, Quackle: %s"% (scoreMe, scoreYou)
+            scores[i]=(scoreMe,scoreYou)
+        else: #don't add score for terminated games
+            OK = True
+        #print "scores (cs221, quackle):",scores
     print "scores (cs221, quackle):",scores
 main()
