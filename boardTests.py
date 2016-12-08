@@ -30,7 +30,7 @@ b=board.Board()
 b.insertWord('TINE', (10,12), 'v')
 print b.humanValid('TAM', (10,12), 'h', ['L', 'M', 'J', 'D', 'W', 'E', 'D'])
 b.insertWord('TAM', (10,12), 'h')
-print b
+print b 
 
 #TODO: fix
 b=board.Board()
@@ -41,8 +41,31 @@ print b.humanValid('POPES', (1,10), 'h', ['U', 'C', 'I', 'L', 'A', 'A', 'S'])
 b.insertWord('POPES', (1,10), 'h')
 print b
 
-#TODO: fix 
+
 assert b.score("WELT", (10,10), 'h') ==  b.insertWord("WELT", (10,10), 'h')
+
+b=board.Board()
+b.insertWord('MURA', (0,0), 'h')
+print b.valid('MULE', (0,0), 'v')
+b.insertWord('MULE', (0,0), 'v')
+print b
+
+b=board.Board()
+b.insertWord('AVOW', (11,10), 'v')
+b.insertWord('WAILS', (14,10), 'h')
+b.insertWord('WAGES', (10,14), 'v')
+print b
+
+b=board.Board()
+b.insertWord('AVOW', (10,10), 'v')
+b.insertWord('WAILS', (13,10), 'h')
+b.insertWord('WAGES', (9,14), 'v')
+print b.score('ET', (14,11), 'h')
+b.insertWord('ET', (14,11), 'h' )
+print b
+#TODO: test cases all corners of the board 
+	
+
 
 #####################################
 # test score function
