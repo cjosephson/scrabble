@@ -4,6 +4,8 @@ board
 
 '''
 from brain import AJalgorithm
+import brain
+import copy
 import brain as smarts
 import board
 from operator import itemgetter
@@ -24,6 +26,7 @@ class Agent:
             self.tiles += [self.board.bag.getLetter() for i in xrange(7)]
         
     def move(self, tiles = None, weights = None):
+        
         if not tiles: tiles = self.tiles
         #print "AI move with rack",tiles
         self.brain.generateMoves(tiles)
@@ -31,7 +34,7 @@ class Agent:
         #print "There are",len(self.brain.LegalMoves),"legal moves:",self.brain.LegalMoves
         #for m in self.brain.LegalMoves:
             #print m
-        score = 0
+        score = 0+
         if len(self.brain.LegalMoves) == 0:
             #try tile swap
             if len(self.board.bag.letters) > 0:
@@ -49,7 +52,16 @@ class Agent:
         #run depth 2 monte carlo on top N=3, returns score
         #difference between agent and simulated opponnent
         if self.montecarlo:
-            pass
+            print self.tiles
+            consider = moves[0:self.N]
+            #print consider
+            for i,move in enumerate(consider):
+                print move
+                (word, loc, orientation, usedTiles, score) = move
+                rack1 = [x for x in self.tiles if x not in usedTiles]
+                scoreDiff = brain.runSimulations(rack1, word, loc, orientation, self.board, self.brain, 2)
+                print scoreDiff
+            #pass
             
         #run feature extrator on the racks, and also add monte carlo score diff as a feature
         #Do L2 SGD on the feature vector and then select the best one
