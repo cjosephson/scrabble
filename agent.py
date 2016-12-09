@@ -35,7 +35,7 @@ class Agent:
         #print "There are",len(self.brain.LegalMoves),"legal moves:",self.brain.LegalMoves
         #for m in self.brain.LegalMoves:
             #print m
-        score = 0+
+        score = 0
         if len(self.brain.LegalMoves) == 0:
             #try tile swap
             if len(self.board.bag.letters) > 0 and len(self.tiles) > 0:
