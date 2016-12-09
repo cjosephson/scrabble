@@ -16,7 +16,7 @@ parser.add_option("-b", "--boss", action="store_true", dest="boss", default=Fals
 
 def main():
     b = board.Board()
-    AI = agent.Agent(b)
+    AI = agent.Agent(b, montecarlo=True)
     scoreOpp = 0
     scoreMe = 0
     tiles = [b.bag.getLetter() for i in xrange(7)]

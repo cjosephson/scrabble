@@ -32,7 +32,7 @@ class Agent:
         print "cs221 move with rack",tiles
         self.brain.generateMoves(tiles)
         #print self.board
-        print "There are",len(self.brain.LegalMoves),"legal moves:",self.brain.LegalMoves
+        print "There are",len(self.brain.LegalMoves),"legal moves:",#self.brain.LegalMoves
         #for m in self.brain.LegalMoves:
             #print m
         score = 0
@@ -61,6 +61,7 @@ class Agent:
                 (word, loc, orientation, usedTiles, score) = move
                 rack1 = [x for x in self.tiles if x not in usedTiles]
                 scoreDiff = brain.runSimulations(rack1, word, loc, orientation, self.board, self.brain, 2)
+                print word, scoreDiff, score
                 consider[i] = (scoreDiff, move)
             print "consider",consider
             (word, loc, orientation, usedTiles, score) = max(consider, key=itemgetter(0))[1] #the top scoring move
