@@ -29,10 +29,10 @@ class Agent:
     def move(self, tiles = None, weights = None):
         if self.heuristic: weights = self.weights
         if not tiles: tiles = self.tiles
-        print "cs221 move with rack",tiles
+        #print "cs221 move with rack",tiles
         self.brain.generateMoves(tiles)
         #print self.board
-        print "There are",len(self.brain.LegalMoves),"legal moves:",#self.brain.LegalMoves
+        #print "There are",len(self.brain.LegalMoves),"legal moves:",#self.brain.LegalMoves
         #for m in self.brain.LegalMoves:
             #print m
         score = 0
@@ -53,19 +53,19 @@ class Agent:
         #run depth 2 monte carlo on top N=3, returns score
         #difference between agent and simulated opponnent
         if self.montecarlo:
-            print "tiles ++++++++++++++++++",self.tiles
+            #print "tiles ++++++++++++++++++",self.tiles
             consider = moves[0:self.N]
-            print "consider",consider
+            #print "consider",consider
             for i,move in enumerate(consider):
                 #print move
                 (word, loc, orientation, usedTiles, score) = move
                 rack1 = [x for x in self.tiles if x not in usedTiles]
                 scoreDiff = brain.runSimulations(rack1, word, loc, orientation, self.board, self.brain, 2)
-                print word, scoreDiff, score
+                #print word, scoreDiff, score
                 consider[i] = (scoreDiff, move)
-            print "consider",consider
+            #print "consider",consider
             (word, loc, orientation, usedTiles, score) = max(consider, key=itemgetter(0))[1] #the top scoring move
-            print "max",max(consider, key=itemgetter(0)) 
+            #print "max",max(consider, key=itemgetter(0)) 
             #pass
             
         #run feature extrator on the racks, and also add monte carlo score diff as a feature
