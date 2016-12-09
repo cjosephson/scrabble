@@ -38,7 +38,6 @@ def main():
     #start quackle game in background
     print "starting quackle..."
     quackle = subprocess.Popen("./test  --repetitions=%i lexicon=cs221 --mode=cs221 --quiet"%options.numgames, cwd = options.path, shell=True)
-    #os.system("cd "+options.path+" && ./test  --repetitions=%i lexicon=cs221 --mode=cs221 --quiet &"%options.numgames)
     
     sleep(1)
     print "done."
@@ -49,7 +48,7 @@ def main():
         me = open(options.path+"/cs221game-%i"%i,'w+')
 
         b = board.Board()
-        AI = agent.Agent(b, quackle=True, heuristic=weightsA)
+        AI = agent.Agent(b, quackle=True, montecarlo=True)#heuristic=weightsA)
         scoreYou = 0
         scoreMe = 0
         if not options.silent: print b
@@ -94,7 +93,7 @@ def main():
                         wildcard = alphabet[randint(0,25)]
                     rack.replace('?',wildcard)
                     move = AI.move([t for t in rack])
-                    if not options.silent: print "cs221 move",move
+                    if not options.silent: print "\ncs221 move",move
                     else: print "c",
                     if move != None: #write move to file
                         (word, pos , orientation, usedTiles, score) = move

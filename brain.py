@@ -26,7 +26,9 @@ def runSimulations(rack, word, loc, orientation, board, alg, depth = 2):
    # alg = AJalgorithm(tempBoard)
     # start by assigning random
     for i in range(numIters):
-        print i
+        print '.',
+        import sys
+        sys.stdout.flush()
         simbag = letterbag.LetterBag()
         rack2 = []
         for l in range(7):
