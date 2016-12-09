@@ -42,10 +42,10 @@ def simulation(rack1, rack2, word, loc, orientation, tempBoard, depth, alg):
     #use a tempboard
     #print tempBoard
     #move1
+    score1 = 0
+    score2 = 0
     if depth > 2: 
         moveList = alg.generateMoves(rack1)
-        score1 = 0
-        score2 = 0
         if len(alg.LegalMoves) > 0:
             (word, loc, orientation, usedTiles, score) = max(alg.LegalMoves, key=itemgetter(4))
             score1 = tempBoard.insertWord(word, loc, orientation)
