@@ -42,8 +42,13 @@ class LetterBag:
 
     def getLetter(self):
 	#grab a random number out of the bag
-	i = random.randint(0, len(self.letters)-1)
-	result = self.letters.pop(i)
+        if self.size() > 1:
+	    i = random.randint(0, len(self.letters)-1)
+	    result = self.letters.pop(i)
+        elif self.size() == 1:
+            result = self.letters.pop()
+        else:
+            result = None
 	return result
 
     def exchange(self, t):
@@ -52,6 +57,8 @@ class LetterBag:
     
     def empty(self):
         return len(self.letters) == 0
-    
+
+    def size(self):
+        return len(self.letters)
         
 

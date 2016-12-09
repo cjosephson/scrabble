@@ -25,6 +25,7 @@ class Agent:
         
     def move(self, tiles = None, weights = None):
         if not tiles: tiles = self.tiles
+        if self.heuristic and not weights: weights = self.heuristic
         #print "AI move with rack",tiles
         self.brain.generateMoves(tiles)
         #print self.board
@@ -34,12 +35,12 @@ class Agent:
         score = 0
         if len(self.brain.LegalMoves) == 0:
             #try tile swap
-            if len(self.board.bag.letters) > 0:
+            if len(self.board.bag.letters) > 6:
                 shuffle(self.tiles)
                 discard = self.tiles.pop()
                 if not self.quackle: #quackle handles exhanges in quacklemode
                     self.tiles.append(self.board.bag.exchange(discard))
-                return ('', discard, None, None, 0)
+                return ('', discard, None, [], 0)
             return None
         
         moves = sorted(list(self.brain.LegalMoves), key=itemgetter(4), reverse=True)
@@ -54,6 +55,7 @@ class Agent:
         #run feature extrator on the racks, and also add monte carlo score diff as a feature
         #Do L2 SGD on the feature vector and then select the best one
         if self.heuristic:
+            #print "weights",weights
             consider = moves[0:self.N]
             for i,move in enumerate(consider):
                 (word, loc, orientation, usedTiles, score) = move
@@ -70,7 +72,9 @@ class Agent:
                 self.tiles.remove(t) 
             #print self.tiles
             for t in usedTiles:
-                self.tiles.append(self.board.bag.getLetter())
+                l = self.board.bag.getLetter()
+                if l:
+                    self.tiles.append(l)
         return (word, loc, orientation, usedTiles, score)
 
 if __name__ == "__main__":
