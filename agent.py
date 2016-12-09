@@ -11,12 +11,13 @@ from util import *
 from random import shuffle
 
 class Agent:
-    def __init__(self, board, debug=False, heuristic=False, montecarlo=False, quackle = False, N=3):
+    def __init__(self, board, debug=False, heuristic=None, montecarlo=False, quackle = False, N=3):
         self.board = board
         self.brain = AJalgorithm(self.board)
         self.tiles = []
         self.debug = debug
         self.heuristic = heuristic
+        self.weights = heuristic
         self.montecarlo = montecarlo
         self.quackle = quackle
         self.N = N
@@ -24,6 +25,7 @@ class Agent:
             self.tiles += [self.board.bag.getLetter() for i in xrange(7)]
         
     def move(self, tiles = None, weights = None):
+        if self.heuristic: weights = self.weights
         if not tiles: tiles = self.tiles
         #print "AI move with rack",tiles
         self.brain.generateMoves(tiles)
