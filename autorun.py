@@ -2,6 +2,7 @@ import board
 import agent
 import copy
 import os
+import subprocess
 from util import *
 from random import randint
 from time import sleep
@@ -19,6 +20,10 @@ letterMap = {'A':0, 'B':1, 'C':2, 'D':3, 'E':4, 'F':5, 'G':6, 'H':7, 'I':8, 'J':
              0:'A', 1:'B', 2:'C', 3:'D', 4:'E', 5:'F', 6:'G', 7:'H', 8:'I', 9:'J', 10:'K', 11:'L', 12:'M', 13:'N', 14:'O'}
 scores = {}
 
+# rack heuristics, no monte carlo
+weightsA = {'AA': -333, 'AAA': 264, 'BB': 15, 'DD': -29, 'WW': -195, 'EEE': 365, 'CCC': -161, 'CC': 44, 'NNN': -140, 'Z': -133, 'RR': -659, 'VVV': 40, 'LL': -164, 'UU': -240, 'TTT': -44, 'EE': -1303, 'GGG': -40, 'PPP': -379, 'LLL': 125, 'III': -253, 'RRR': -107, 'A': 1138, 'C': 19, 'B': 134, 'E': 1806, 'D': 514, 'G': 653, 'F': 347, 'I': 1037, 'H': 360, 'K': 138, 'J': 923, 'M': 482, 'vc_ratio': -4227.833333333332, 'O': 657, 'L': 286, 'II': -940, 'P': 446, 'S': 264, 'R': 109, 'raw_score': 294456, 'T': 1259, 'W': 1523, 'V': 322, 'Y': 674, 'X': 176, 'N': 1132, 'DDD': 274, 'OO': 148, 'Q': 465, 'WWW': -972, 'QU': 201, 'NN': -337, 'SS': -102, 'OOO': 259, 'YYY': 38, 'SSS': 36, 'MMM': 55, 'UUU': -335, 'KKK': 16, 'FFF': 68, 'U': 947, 'HHH': 25, 'TT': 260, 'BBB': 9}
+
+
 def main():
     #delete old game files
     i = 0
@@ -32,7 +37,8 @@ def main():
 
     #start quackle game in background
     print "starting quackle..."
-    os.system("cd "+options.path+" && ./test  --repetitions=%i lexicon=cs221 --mode=cs221 --quiet &"%options.numgames)
+    quackle = subprocess.Popen("./test  --repetitions=%i lexicon=cs221 --mode=cs221 --quiet"%options.numgames, cwd = options.path, shell=True)
+    
     sleep(1)
     print "done."
     
@@ -42,7 +48,7 @@ def main():
         me = open(options.path+"/cs221game-%i"%i,'w+')
 
         b = board.Board()
-        AI = agent.Agent(b, quackle=True)
+        AI = agent.Agent(b, quackle=True, montecarlo=True)#heuristic=weightsA)
         scoreYou = 0
         scoreMe = 0
         if not options.silent: print b
@@ -87,7 +93,7 @@ def main():
                         wildcard = alphabet[randint(0,25)]
                     rack.replace('?',wildcard)
                     move = AI.move([t for t in rack])
-                    if not options.silent: print "cs221 move",move
+                    if not options.silent: print "\ncs221 move",move
                     else: print "c",
                     if move != None: #write move to file
                         (word, pos , orientation, usedTiles, score) = move
@@ -131,4 +137,6 @@ def main():
             OK = True
         #print "scores (cs221, quackle):",scores
     print "scores (cs221, quackle):",scores
+    quackle.terminate()
+    quackle.wait()
 main()

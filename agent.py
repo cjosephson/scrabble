@@ -4,6 +4,8 @@ board
 
 '''
 from brain import AJalgorithm
+import brain
+import copy
 import brain as smarts
 import board
 from operator import itemgetter
@@ -11,12 +13,13 @@ from util import *
 from random import shuffle
 
 class Agent:
-    def __init__(self, board, debug=False, heuristic=False, montecarlo=False, quackle = False, N=3):
+    def __init__(self, board, debug=False, heuristic=None, montecarlo=False, quackle = False, N=3):
         self.board = board
         self.brain = AJalgorithm(self.board)
         self.tiles = []
         self.debug = debug
         self.heuristic = heuristic
+        self.weights = heuristic
         self.montecarlo = montecarlo
         self.quackle = quackle
         self.N = N
@@ -24,18 +27,20 @@ class Agent:
             self.tiles += [self.board.bag.getLetter() for i in xrange(7)]
         
     def move(self, tiles = None, weights = None):
-        if not tiles: tiles = self.tiles
         if self.heuristic and not weights: weights = self.heuristic
+        if not tiles: tiles = self.tiles
+
         #print "AI move with rack",tiles
+        #print "cs221 move with rack",tiles
         self.brain.generateMoves(tiles)
         #print self.board
-        #print "There are",len(self.brain.LegalMoves),"legal moves:",self.brain.LegalMoves
+        #print "There are",len(self.brain.LegalMoves),"legal moves:",#self.brain.LegalMoves
         #for m in self.brain.LegalMoves:
             #print m
         score = 0
         if len(self.brain.LegalMoves) == 0:
             #try tile swap
-            if len(self.board.bag.letters) > 6:
+            if len(self.board.bag.letters) > 0 and len(self.tiles) > 0:
                 shuffle(self.tiles)
                 discard = self.tiles.pop()
                 if not self.quackle: #quackle handles exhanges in quacklemode
@@ -50,7 +55,20 @@ class Agent:
         #run depth 2 monte carlo on top N=3, returns score
         #difference between agent and simulated opponnent
         if self.montecarlo:
-            pass
+            #print "tiles ++++++++++++++++++",self.tiles
+            consider = moves[0:self.N]
+            #print "consider",consider
+            for i,move in enumerate(consider):
+                #print move
+                (word, loc, orientation, usedTiles, score) = move
+                rack1 = [x for x in self.tiles if x not in usedTiles]
+                scoreDiff = brain.runSimulations(rack1, word, loc, orientation, self.board, self.brain, 2)
+                #print word, scoreDiff, score
+                consider[i] = (scoreDiff, move)
+            #print "consider",consider
+            (word, loc, orientation, usedTiles, score) = max(consider, key=itemgetter(0))[1] #the top scoring move
+            #print "max",max(consider, key=itemgetter(0)) 
+            #pass
             
         #run feature extrator on the racks, and also add monte carlo score diff as a feature
         #Do L2 SGD on the feature vector and then select the best one
@@ -87,39 +105,3 @@ if __name__ == "__main__":
     b.insertWord("SUN", (3,5), 'h')
     a.move()
     print b
-
-    '''   print self.brain.LegalMoves
-            moves = list(self.brain.LegalMoves)
-            print "set to list"
-            print moves
-            moves = moves.sort(key = itemgetter(4))
-            print moves
-            if len(moves) > 3:
-                topN = moves[:3]
-            else: topN = moves
-
- 
-            scoreDiff = -1*float('inf')
-            wFinal = None
-            lFinal = None
-            oFinal = None
-            usedTiles = None
-            score = None
-            for (word, loc, orientation, used, s) in topN:
-                
-                sd = smarts.runSimulations(tiles, word, loc, orientation, self.board, brain, 2)
-                if sd > scoreDiff: 
-                    scoreDiff = sd
-                    wFinal = word
-                    lFinal = loc
-                    oFinal = orientation
-                    usedTiles = used
-                    score = s
-            #(word, loc, orientation, usedTiles, score) = max(self.brain.LegalMoves, key=itemgetter(4))
-            #print "max word",word,self.board.insertWord(word, loc, orientation)
-            #self.board.insertWord(word, loc, orientation)
-            
-            self.board.insertWord(wFinal, lFinal, oFinal)
-            
-
-            print "usedTiles",usedTiles '''

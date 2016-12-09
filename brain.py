@@ -26,7 +26,9 @@ def runSimulations(rack, word, loc, orientation, board, alg, depth = 2):
    # alg = AJalgorithm(tempBoard)
     # start by assigning random
     for i in range(numIters):
-        print i
+        print '.',
+        import sys
+        sys.stdout.flush()
         simbag = letterbag.LetterBag()
         rack2 = []
         for l in range(7):
@@ -42,10 +44,10 @@ def simulation(rack1, rack2, word, loc, orientation, tempBoard, depth, alg):
     #use a tempboard
     #print tempBoard
     #move1
+    score1 = 0
+    score2 = 0
     if depth > 2: 
         moveList = alg.generateMoves(rack1)
-        score1 = 0
-        score2 = 0
         if len(alg.LegalMoves) > 0:
             (word, loc, orientation, usedTiles, score) = max(alg.LegalMoves, key=itemgetter(4))
             score1 = tempBoard.insertWord(word, loc, orientation)
@@ -59,7 +61,7 @@ def simulation(rack1, rack2, word, loc, orientation, tempBoard, depth, alg):
     moveList = alg.generateMoves(rack2)
     if len(alg.LegalMoves) > 0:
         (word, loc, orientation, usedTiles, score) = max(alg.LegalMoves, key=itemgetter(4))
-        score2 = tempBoard.insertWord(word, loc, orientation)
+        score2 = tempBoard.score(word, loc, orientation)
      #   print score2
     #print tempBoard
     return score1-score2
@@ -71,7 +73,7 @@ class AJalgorithm:
 		self.LegalMoves = set() #list of legal moves. gets changed every time getMove is called
 		self.rack = []
                 self.origRack = []
-		self.crosscheckList = {} #dictionary of crosschec,s for every square
+		self.crosscheckList = {} #dictionary of crosschecks for every square
 
 		for row in range(15):
 			self.crosscheckList[row] = {}
@@ -97,6 +99,9 @@ class AJalgorithm:
         ##########################################################
         def generateMoves(self, rack):
                 # compute anchors and crosschecks
+             #   print 'AJ board'
+             #   print self.board
+             #   print '========================='
                 anchors = self.findAnchors()
                 h = {}
                 v = {}
