@@ -61,7 +61,7 @@ def SGD(numIters, eta=1):
             increment(weights, eta*y, grad)
             print "scoreA-scoreB",scoreA-scoreB
         numIters -= 1
-        print "totA-totB",totA-totB
+        print "%s iters remaining, totA-totB: %s"%(numIters,totA-totB)
         log.append(totA-totB)
     print log
     return weights

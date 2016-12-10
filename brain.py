@@ -6,6 +6,7 @@ import copy
 import pickle
 import letterbag
 from operator import itemgetter
+from collections import defaultdict
 ##################################
 # Appel Jaconson Algorithm Bits
 ################################
@@ -116,7 +117,7 @@ class AJalgorithm:
                         self.crosschecks(c, 'r')
                 self.rack = rack
                 self.origRack = copy.deepcopy(rack)
-                #print "rac'",self.rack
+                #print "origRack",self.origRack
                 #clear legal moves
                 self.LegalMoves = set()
                 #print "LegalMoves",self.LegalMoves
@@ -158,7 +159,7 @@ class AJalgorithm:
                                 #in the anchor square
                                 self.ExtendLeft("", TopNode, lengthV,
                                                 (r+1,c), (r+1,c), 'v')
-                        #TODO: remove moves that use no letters from the rack
+                        #remove moves that use no letters from the rack
                         remove = []
                         #print "PRE",self.LegalMoves
                         for m in self.LegalMoves:
@@ -182,13 +183,13 @@ class AJalgorithm:
 	def crosschecks(self, row, orientation): 
 		validLetters = {}
 		if orientation == "h":
-			for i in range(15):
+			for i in xrange(15):
 				colString = []
 				letterList = []
 				for square in self.board.getCol(i):
 					colString.append(square[0])
 				if colString[row] == " ":
-					for c in range(26):
+					for c in xrange(26):
 						colString[row] = alphabet[c]
 						if self.isValidWordString("".join(colString)):
 							letterList.append(alphabet[c])
@@ -197,13 +198,13 @@ class AJalgorithm:
 			        self.crosscheckList[row][i] = set(self.crosscheckList[row][i]).intersection(letterList)
 
 		else:
-			for i in range(15):
+			for i in xrange(15):
 				rowString = []
 				letterList = []
 				for square in self.board.getRow(i):
 					rowString.append(square[0])
 				if rowString[row] == " ":
-					for c in range(26):
+					for c in xrange(26):
 						rowString[row] = alphabet[c]
 						if self.isValidWordString("".join(rowString)):
 							letterList.append(alphabet[c])
@@ -214,9 +215,13 @@ class AJalgorithm:
 
         def rackdiff(self):
                 used = ''
+                freq = defaultdict(int)
                 for t in self.origRack:
-                        if t not in self.rack:
-                                used += t
+                    freq[t] += 1
+                for k,v in freq.iteritems():
+                    count = self.rack.count(k)
+                    used += (v-count)*k
+                #print 'orig',self.origRack,'cur','freq',freq,self.rack,'used',used
                 return used
         
 	###################################
@@ -226,14 +231,14 @@ class AJalgorithm:
 	###################################	
 	def findAnchors(self):
 		anchorList = []; 
-		for i in range(15):
+		for i in xrange(15):
 			rowString = []
 			colString = []
 			for square in self.board.getRow(i):
 				rowString.append(square[0])
 			for square in self.board.getCol(i):
 				colString.append(square[0])
-			for j in range(14):
+			for j in xrange(14):#??
 				if (rowString[j] == " " and rowString[j+1] != " "):
 					if (i,j) not in anchorList:
 						anchorList.append((i,j, 'h'))
@@ -257,7 +262,7 @@ class AJalgorithm:
                 
                 # breaking abstraction barriers ROFL
 		squareVal = self.board.board[row][col][0]
-		#print PartialWord
+		#print "partword='",PartialWord,"', rack",self.rack
 		#print "edges", edges
 		#print square
 
@@ -279,11 +284,10 @@ class AJalgorithm:
 			for l in edges:
 				if l in self.rack:
 					if l in self.crosscheckList[row][col]:
-						self.rack.remove(l)
+						self.rack.remove(l) #new letter we're considering
 						newNode = node.children[l]
 						self.ExtendRight(PartialWord+l, newNode, nextSquare, startSquare, orientation)
-						self.rack.append(l)
-
+						self.rack.append(l)#done considering it
 		else:
 			#print "here"
 			l = squareVal

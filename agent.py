@@ -84,15 +84,17 @@ class Agent:
             
         #print "max word",word,self.board.insertWord(word, loc, orientation)
         self.board.insertWord(word, loc, orientation)
+        #print "curRack",self.tiles
         #print "usedTiles",usedTiles
         if not self.quackle:
             for t in usedTiles:
-                self.tiles.remove(t) 
-            #print self.tiles
+                self.tiles.remove(t)
+            #print "post-removal: ",self.tiles
             for t in usedTiles:
                 l = self.board.bag.getLetter()
                 if l:
                     self.tiles.append(l)
+            #print "replaced",self.tiles
         return (word, loc, orientation, usedTiles, score)
 
 if __name__ == "__main__":

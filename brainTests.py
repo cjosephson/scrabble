@@ -1,3 +1,4 @@
+import agent
 import board
 import brain
 #############################
@@ -5,14 +6,17 @@ import brain
 b =board.Board()
 alg = brain.AJalgorithm(b)
 
-b.insertWord("HELLO", (7,7), 'h')
+b.insertWord("ISOLATE", (2,10), 'v', debug=True)
+A = agent.Agent(b)
+A.tiles = ['W', 'O', 'R', 'L', 'D', 'X', 'Y']
+A.move()
 #print b.insertWord("HI", (7,7), 'v')
 print b
-rack1 = ['W', 'O', 'R', 'L', 'D', 'X', 'Y']
+#rack1 = ['W', 'O', 'R', 'L', 'D', 'X', 'Y']
 #rack2 = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
 #
 #print brain.simulation(rack1, rack2, b)
-print brain.runSimulations(rack1, "HI", (7,7), 'v', b, alg, 2)
+#print brain.runSimulations(rack1, "HI", (7,7), 'v', b, alg, 2)
 
 
 #print b.score("ORYX", (7,11), 'v')
