@@ -1,7 +1,9 @@
 import board
 import agent
 import copy
+from util import *
 from optparse import OptionParser
+
 parser = OptionParser()
 parser.add_option("-m", "--human", action="store_true", dest="human", default=True,
                   help="puts game into AI vs human mode, so you'll be told your tiles")
@@ -17,20 +19,26 @@ parser.add_option("-b", "--boss", action="store_true", dest="boss", default=Fals
 def main():
     b = board.Board()
     AI = agent.Agent(b)#montecarlo=True)
-    scoreOpp = 0
-    scoreMe = 0
+    scoreAI = 0
+    scoreHuman = 0
     tiles = [b.bag.getLetter() for i in xrange(7)]
     #print b
     turn = False
     while True:
         if turn: #AI's turn
+            if len(AI.tiles) == 0:
+                #add opponent tiles to score
+                for t in tiles:
+                    scoreAI += letterToPoints[t]
+                break
+
             print "Generating AI move..."
             move = AI.move()
             if move != None:
                 (word, pos , orientation, usedTiles, score) = move
                 if len(word) > 0:
                     row,col = pos
-                    scoreMe += score
+                    scoreAI += score
                     print "Done! AI playing %s at (%s,%s) with score %s."%(word, row, col, score)
                 else:
                     print "Done! AI exchanged tiles."
@@ -38,6 +46,11 @@ def main():
                 print "AI passing turn."
             turn = not turn
         else: #human goes
+            if len(tiles) == 0:
+                #add opponent tiles to score
+                for t in AI.tiles:
+                    scoreHuman += letterToPoints[t]
+                break
             valid = False
             while not valid:
                 print b
@@ -113,7 +126,7 @@ def main():
                                     if len(b.bag.letters) > 0:
                                         tiles.append(b.bag.getLetter())
                                     
-                            scoreOpp += score
+                            scoreHuman += score
                             valid = True
                             turn = not turn
                         elif (userInput == "N" or userInput == "n"):
@@ -124,7 +137,6 @@ def main():
                             break
                 else:
                     print "Invalid word!"
-            
-        print "AI: %s, You: %s, Remaining Tiles: %s"% (scoreMe, scoreOpp, len(b.bag.letters))
-
+        print "AI: %s, You: %s, Remaining Tiles: %s"% (scoreAI, scoreHuman, len(b.bag.letters))
+    print "Game over!"
 main()
