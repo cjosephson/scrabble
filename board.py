@@ -159,7 +159,7 @@ class Board:
         for w in wordsFormed:
             (crossword, sp, or2) = w
             val = self.rawScore(crossword, sp, or2)
-            if val == -1: print "invalid crossword",crossword;return -1
+            if val == -1: return -1
             sum += val
         return sum
 
@@ -167,7 +167,6 @@ class Board:
         #if not self.valid(word, startPoint, orientation):
         #    return -1
         if (word not in self.dictionary.keys()) and (len(word) > 1):
-            print "lol1",word
             return -1
         
         mults = {Board.NORMAL:1, Board.DOUBLELETTER:2, Board.DOUBLEWORD:3,
@@ -344,7 +343,7 @@ class Board:
     def insertWord(self, word, startPoint, orientation, debug = False):
         (ri, ci) = startPoint
         score =  self.score(word, startPoint, orientation)
-        print "insertWord",word, score, score > 0
+        #print "insertWord",word, score, score > 0
         wi = 0
         if not debug and score < 0:
             return score

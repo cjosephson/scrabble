@@ -55,7 +55,7 @@ def main():
             while not valid:
                 print b
                 if options.human: print "Your turn! Tiles:",tiles
-                userInput = raw_input("Enter \"word (row,col) 'h'||'v'\": ")
+                userInput = raw_input("Enter 'word (row,col) h||v', or 'exchange 'c', or 'pass': ")
                 inputList = userInput.split()
                 if (len(inputList) == 1 and inputList[0] == "pass"):
                     valid = True
