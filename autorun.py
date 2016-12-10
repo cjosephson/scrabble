@@ -21,8 +21,7 @@ letterMap = {'A':0, 'B':1, 'C':2, 'D':3, 'E':4, 'F':5, 'G':6, 'H':7, 'I':8, 'J':
 scores = {}
 
 # rack heuristics, no monte carlo
-weightsA = {'AA': -333, 'AAA': 264, 'BB': 15, 'DD': -29, 'WW': -195, 'EEE': 365, 'CCC': -161, 'CC': 44, 'NNN': -140, 'Z': -133, 'RR': -659, 'VVV': 40, 'LL': -164, 'UU': -240, 'TTT': -44, 'EE': -1303, 'GGG': -40, 'PPP': -379, 'LLL': 125, 'III': -253, 'RRR': -107, 'A': 1138, 'C': 19, 'B': 134, 'E': 1806, 'D': 514, 'G': 653, 'F': 347, 'I': 1037, 'H': 360, 'K': 138, 'J': 923, 'M': 482, 'vc_ratio': -4227.833333333332, 'O': 657, 'L': 286, 'II': -940, 'P': 446, 'S': 264, 'R': 109, 'raw_score': 294456, 'T': 1259, 'W': 1523, 'V': 322, 'Y': 674, 'X': 176, 'N': 1132, 'DDD': 274, 'OO': 148, 'Q': 465, 'WWW': -972, 'QU': 201, 'NN': -337, 'SS': -102, 'OOO': 259, 'YYY': 38, 'SSS': 36, 'MMM': 55, 'UUU': -335, 'KKK': 16, 'FFF': 68, 'U': 947, 'HHH': 25, 'TT': 260, 'BBB': 9}
-
+weightsA = {'GG': -4, 'AAA': 27, 'BB': -12, 'DD': 43, 'WW': 8, 'EEE': 436, 'L': -513, 'CC': -5, 'NNN': 30, 'NN': -22, 'VVV': -89, 'TT': -64, 'TTT': -168, 'AA': -7, 'EE': 81, 'GGG': -286, 'PPP': 187, 'CCC': -144, 'LLL': -147, 'III': 35, 'RRR': -52, 'A': 686, 'C': -278, 'B': 110, 'E': 842, 'D': 218, 'G': -189, 'F': 670, 'I': 264, 'H': -215, 'K': 592, 'J': -534, 'M': 529, 'vc_ratio': -225.33333333333334, 'O': 778, 'N': 410, 'Q': 326, 'P': 267, 'S': 161, 'R': -609, 'raw_score': 278471, 'T': -217, 'W': 372, 'V': -45, 'Y': -262, 'X': 144, 'Z': 91, 'DDD': 12, 'OO': -19, 'II': -63, 'WWW': -158, 'QU': -55, 'RR': -249, 'UUU': -665, 'OOO': 163, 'YYY': 61, 'SSS': 37, 'MMM': 88, 'UU': -133, 'KKK': 37, 'FFF': 16, 'U': -348, 'HHH': 62, 'BBB': 9, 'LL': -155}
 
 def main():
     #delete old game files
@@ -48,7 +47,7 @@ def main():
         me = open(options.path+"/cs221game-%i"%i,'w+')
 
         b = board.Board()
-        AI = agent.Agent(b, quackle=True, montecarlo=True)#heuristic=weightsA)
+        AI = agent.Agent(b, quackle=True, heuristic=weightsA) #montecarlo=True)
         scoreYou = 0
         scoreMe = 0
         if not options.silent: print b

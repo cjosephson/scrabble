@@ -15,7 +15,7 @@ def SGD(numIters, eta=1):
         b = board.Board()
         #TODO: random seed word?
         b.insertWord("UNIVERSITY", (7,3), 'h', debug=True)
-        A = agent.Agent(b, heuristic=weights) #souped up agent
+        A = agent.Agent(b, heuristic=weights, montecarlo=True) #souped up agent
         B = agent.Agent(b) #vanilla agent
         totA = 0
         totB = 0
@@ -38,6 +38,7 @@ def SGD(numIters, eta=1):
                 if passCount > 2:
                     break #endgame
                 passCount += 1
+            print "A mc_score = ",A.mc_score,"A score=",scoreA
             #print "B",
             rackB = B.tiles
             move = B.move()
@@ -50,7 +51,8 @@ def SGD(numIters, eta=1):
                     totB += scoreB
 
             y = scoreA-scoreB
-            phi_A = featureExtractor([t for t in rackA if t not in usedTilesA], scoreA)
+            phi_A = featureExtractor([t for t in rackA if t not in usedTilesA],
+                                     scoreA, mc_score = A.mc_score)
             phi_B = featureExtractor([t for t in rackB if t not in usedTilesB], scoreB)
             #print "phi_A",phi_A
             #print "phi_B",phi_B
@@ -66,5 +68,5 @@ def SGD(numIters, eta=1):
     print log
     return weights
 
-print SGD(numIters = 100)
+print SGD(numIters = 50)
 

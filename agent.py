@@ -21,6 +21,7 @@ class Agent:
         self.heuristic = heuristic
         self.weights = heuristic
         self.montecarlo = montecarlo
+        self.mc_score = None
         self.quackle = quackle
         self.N = N
         if not debug and len(self.board.bag.letters) > 0:
@@ -51,41 +52,48 @@ class Agent:
         moves = sorted(list(self.brain.LegalMoves), key=itemgetter(4), reverse=True)
         #print "moves",moves
         (word, loc, orientation, usedTiles, score) = moves[0] #the top scoring move
-        
+        consider = moves[0:self.N]
         #run depth 2 monte carlo on top N=3, returns score
         #difference between agent and simulated opponnent
         if self.montecarlo:
             #print "tiles ++++++++++++++++++",self.tiles
-            consider = moves[0:self.N]
             #print "consider",consider
             for i,move in enumerate(consider):
                 #print move
                 (word, loc, orientation, usedTiles, score) = move
                 rack1 = [x for x in self.tiles if x not in usedTiles]
-                scoreDiff = brain.runSimulations(rack1, word, loc, orientation, self.board, self.brain, 2)
+                scoreDiff = brain.runSimulations(rack1, word, loc, orientation, 
+                                                 self.board, self.brain, 2)
                 #print word, scoreDiff, score
                 consider[i] = (scoreDiff, move)
             #print "consider",consider
-            (word, loc, orientation, usedTiles, score) = max(consider, key=itemgetter(0))[1] #the top scoring move
+            (self.mc_score, (word, loc, orientation, usedTiles, score)) = max(consider, 
+                                                                               key=itemgetter(0))    
             #print "max",max(consider, key=itemgetter(0)) 
             #pass
             
         #run feature extrator on the racks, and also add monte carlo score diff as a feature
         #Do L2 SGD on the feature vector and then select the best one
         if self.heuristic:
-            #print "weights",weights
-            consider = moves[0:self.N]
+            print "consider_pre",consider
             for i,move in enumerate(consider):
-                (word, loc, orientation, usedTiles, score) = move
-                phi = featureExtractor([t for t in self.tiles if t not in usedTiles], score)
-                consider[i] = (dotProduct(weights, phi), move)
-            #print consider
-            (word, loc, orientation, usedTiles, score) = max(consider, key=itemgetter(0))[1] #the top scoring move
+                mc_score = None
+                if self.montecarlo:
+                    (mc_score, (word, loc, orientation, usedTiles, score)) = move
+                else:
+                    (word, loc, orientation, usedTiles, score) = move
+                phi = featureExtractor([t for t in self.tiles if t not in usedTiles], 
+                                       score, mc_score = (mc_score if self.montecarlo else None))
+                ml_score = dotProduct(weights, phi)
+                consider[i] = (ml_score, (mc_score, (word, loc, orientation, usedTiles, score)))
+            print "consider_post",consider
+            #the top scoring move
+            (self.mc_score,(word,loc,orientation,usedTiles,score)) = max(consider, 
+                                                                         key=itemgetter(0))[1]
             
         #print "max word",word,self.board.insertWord(word, loc, orientation)
         self.board.insertWord(word, loc, orientation)
-        #print "curRack",self.tiles
-        #print "usedTiles",usedTiles
+        #print "curRack",self.tiles        #print "usedTiles",usedTiles
         if not self.quackle:
             for t in usedTiles:
                 self.tiles.remove(t)
