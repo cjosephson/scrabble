@@ -1,10 +1,7 @@
 #import numpy as np
 import copy
 import letterbag
-
-letterToPoints = {'D':2, 'G':2, 'B':3, 'C':3, 'M':3, 'P':3, 'F':4, 'H':4, 'V':4, 'Y':4, 'W':4,
-                  'K':5, 'J':8, 'X':8, 'Q':10, 'Z':10,'A':1, 'E':1, 'I':1, 'O':1, 'N':1, 
-                  'R':1, 'T':1, 'L':1, 'S':1, 'U':1, }
+from util import *
 
 class Board:
     NORMAL = 'normal'
@@ -77,11 +74,11 @@ class Board:
         #print word, len(word), x, y, orientation
         #print y,x, len(word), (len(word) + x)
         if (orientation == "h") and (len(word)+x-1 > 15):
-            #print "exceeded horizontal len check"
+            print "exceeded horizontal len check"
             return -1 
         # print "pt A"
         if (orientation == "v") and (len(word)+y-1 > 15):
-            #print "exceeded vert len check"
+            print "exceeded vert len check"
             return -1
         # print "pt b"
         wordsFormed = []
@@ -160,46 +157,17 @@ class Board:
         sum = 0
         if len(word) - originalLen == 7: sum += 50
         for w in wordsFormed:
-            (wor, sp, or2) = w
-            val = self.rawScore(wor, sp, or2)
-            if val == -1: return -1
+            (crossword, sp, or2) = w
+            val = self.rawScore(crossword, sp, or2)
+            if val == -1: print "invalid crossword",crossword;return -1
             sum += val
         return sum
 
-    def oldScore(self, word, startPoint, orientation):
-        if not self.valid(word, startPoint, orientation):
-            return -1
-        if (word not in self.dictionary.keys()) and (len(word) > 1): return -1
-        
-        mults = {Board.NORMAL:1, Board.DOUBLELETTER:2, Board.DOUBLEWORD:3,
-                 Board.TRIPLELETTER:3, Board.TRIPLEWORD:3}
-        
-        s = 0
-        wordMult = 1
-        y,x = startPoint
-        for c in word:
-            if x > 14 or y > 14: return -1
-         
-            tile = self.board[y][x]
-         
-            if tile[0] == ' ':
-                if tile[1] in [Board.TRIPLEWORD, Board.DOUBLEWORD]:
-                    wordMult = mults[tile[1]]
-                    s+=letterToPoints[c]
-                else: #it's just a letter multiplier
-                    s+=letterToPoints[c]*mults[tile[1]]
-            else:
-                    s+=letterToPoints[c]
-            if orientation == 'h':
-                x += 1
-            else:
-                y += 1
-        
-        return s*wordMult
     def rawScore(self, word, startPoint, orientation):
         #if not self.valid(word, startPoint, orientation):
         #    return -1
         if (word not in self.dictionary.keys()) and (len(word) > 1):
+            print "lol1",word
             return -1
         
         mults = {Board.NORMAL:1, Board.DOUBLELETTER:2, Board.DOUBLEWORD:3,
@@ -209,7 +177,8 @@ class Board:
         wordMult = 1
         col,row = startPoint
         for c in word:
-            if row > 14 or col > 14: 
+            if row > 14 or col > 14:
+                print "lol1",word
                 return -1
             
             tile = self.board[row][col]
@@ -290,7 +259,6 @@ class Board:
                     return False
             #add row back because we're just doing a validity check
             self.board[ri] = oldrow
-
                 
         elif orientation == 'v':
             #check bounds
@@ -376,7 +344,7 @@ class Board:
     def insertWord(self, word, startPoint, orientation, debug = False):
         (ri, ci) = startPoint
         score =  self.score(word, startPoint, orientation)
-        #print score, score < 0
+        print "insertWord",word, score, score > 0
         wi = 0
         if not debug and score < 0:
             return score
@@ -397,3 +365,34 @@ class Board:
         #print "Inserted %s at %s %s-ly"%(word, startPoint, orientation) 
         return score
 
+    # def oldScore(self, word, startPoint, orientation):
+    #     if not self.valid(word, startPoint, orientation):
+    #         return -1
+    #     if (word not in self.dictionary.keys()) and (len(word) > 1):
+    #         return -1
+        
+    #     mults = {Board.NORMAL:1, Board.DOUBLELETTER:2, Board.DOUBLEWORD:3,
+    #              Board.TRIPLELETTER:3, Board.TRIPLEWORD:3}
+        
+    #     s = 0
+    #     wordMult = 1
+    #     y,x = startPoint
+    #     for c in word:
+    #         if x > 14 or y > 14: return -1
+         
+    #         tile = self.board[y][x]
+         
+    #         if tile[0] == ' ':
+    #             if tile[1] in [Board.TRIPLEWORD, Board.DOUBLEWORD]:
+    #                 wordMult = mults[tile[1]]
+    #                 s+=letterToPoints[c]
+    #             else: #it's just a letter multiplier
+    #                 s+=letterToPoints[c]*mults[tile[1]]
+    #         else:
+    #                 s+=letterToPoints[c]
+    #         if orientation == 'h':
+    #             x += 1
+    #         else:
+    #             y += 1
+        
+    #     return s*wordMult

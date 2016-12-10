@@ -9,60 +9,61 @@ boards.append(b)
 
 
 ####################################
-b.insertWord("HELD", (3,7), 'h')
-b.insertWord("EPHA", (1,7), 'v')
+b.insertWord("IMPART", (9,7), 'h')
+b.insertWord("BOWEL", (7,7), 'h')
+print b.insertWord("ANULAR", (4,11), 'v', debug=True)
+b.insertWord("METATES", (6,10), 'v')
+print b.insertWord('BUNION', (5,5), 'h')
 print b
-print b.score('GOAT', (4,5), 'h')
+# b=board.Board()
+# b.insertWord('AVOWS', (4,7), 'v')
+# b.insertWord('WAILS', (7,7), 'h')
+# b.insertWord('WAGES', (3,11), 'v')
+# print b
 
-b=board.Board()
-b.insertWord('AVOWS', (4,7), 'v')
-b.insertWord('WAILS', (7,7), 'h')
-b.insertWord('WAGES', (3,11), 'v')
-print b
+# b=board.Board()
+# b.insertWord('MURA', (11,1), 'h')
+# print b.valid('MULE', (11,1), 'v')
+# b.insertWord('MULE', (11,1), 'v')
+# print b
 
-b=board.Board()
-b.insertWord('MURA', (11,1), 'h')
-print b.valid('MULE', (11,1), 'v')
-b.insertWord('MULE', (11,1), 'v')
-print b
+# b=board.Board()
+# b.insertWord('TINE', (10,12), 'v')
+# print b.humanValid('TAM', (10,12), 'h', ['L', 'M', 'J', 'D', 'W', 'E', 'D'])
+# b.insertWord('TAM', (10,12), 'h')
+# print b 
 
-b=board.Board()
-b.insertWord('TINE', (10,12), 'v')
-print b.humanValid('TAM', (10,12), 'h', ['L', 'M', 'J', 'D', 'W', 'E', 'D'])
-b.insertWord('TAM', (10,12), 'h')
-print b 
-
-#TODO: fix
-b=board.Board()
-b.insertWord('POPE', (1,10), 'h')
-b.insertWord('TEE', (0,13), 'v')
-b.insertWord('TA', (0,13), 'h')
-print b.humanValid('POPES', (1,10), 'h', ['U', 'C', 'I', 'L', 'A', 'A', 'S'])
-b.insertWord('POPES', (1,10), 'h')
-print b
+# #TODO: fix
+# b=board.Board()
+# b.insertWord('POPE', (1,10), 'h')
+# b.insertWord('TEE', (0,13), 'v')
+# b.insertWord('TA', (0,13), 'h')
+# print b.humanValid('POPES', (1,10), 'h', ['U', 'C', 'I', 'L', 'A', 'A', 'S'])
+# b.insertWord('POPES', (1,10), 'h')
+# print b
 
 
-assert b.score("WELT", (10,10), 'h') ==  b.insertWord("WELT", (10,10), 'h')
+# assert b.score("WELT", (10,10), 'h') ==  b.insertWord("WELT", (10,10), 'h')
 
-b=board.Board()
-b.insertWord('MURA', (0,0), 'h')
-print b.valid('MULE', (0,0), 'v')
-b.insertWord('MULE', (0,0), 'v')
-print b
+# b=board.Board()
+# b.insertWord('MURA', (0,0), 'h')
+# print b.valid('MULE', (0,0), 'v')
+# b.insertWord('MULE', (0,0), 'v')
+# print b
 
-b=board.Board()
-b.insertWord('AVOW', (11,10), 'v')
-b.insertWord('WAILS', (14,10), 'h')
-b.insertWord('WAGES', (10,14), 'v')
-print b
+# b=board.Board()
+# b.insertWord('AVOW', (11,10), 'v')
+# b.insertWord('WAILS', (14,10), 'h')
+# b.insertWord('WAGES', (10,14), 'v')
+# print b
 
-b=board.Board()
-b.insertWord('AVOW', (10,10), 'v')
-b.insertWord('WAILS', (13,10), 'h')
-b.insertWord('WAGES', (9,14), 'v')
-print b.score('ET', (14,11), 'h')
-b.insertWord('ET', (14,11), 'h' )
-print b
+# b=board.Board()
+# b.insertWord('AVOW', (10,10), 'v')
+# b.insertWord('WAILS', (13,10), 'h')
+# b.insertWord('WAGES', (9,14), 'v')
+# print b.score('ET', (14,11), 'h')
+# b.insertWord('ET', (14,11), 'h' )
+# print b
 #TODO: test cases all corners of the board 
 	
 

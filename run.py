@@ -101,14 +101,14 @@ def main():
                 if options.boss or valid:
                     #make a copy of board and insert to preview move
                     b2 = copy.deepcopy(b)
-                    score = b2.insertWord(word, loc, orientation, debug = True)
+                    score = b2.insertWord(word, loc, orientation)
                     print b2
                     print "Move Score =", score
                     ok = False
                     while not ok:
                         userInput = raw_input("Is this ok? (Y/N) ")
-                        valid = b.humanValid(word, loc, orientation, tiles)
-                        if ((userInput == "Y" or userInput == "y") and valid):
+                        validMove = b.humanValid(word, loc, orientation, tiles)
+                        if ((userInput == "Y" or userInput == "y") and validMove):
                             ok=True
                             score = b.insertWord(word, loc, orientation, debug = options.boss)
                             print "move successful"
