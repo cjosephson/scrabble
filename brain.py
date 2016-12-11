@@ -29,19 +29,24 @@ def runSimulations(rack, word, loc, orientation, board, alg, depth = 2):
     simbag = letterbag.LetterBag()
    # print board
     for c in range(14):
-			col = board.getCol(c)
-			for (letter, mult) in col:
-				if letter != " ": 
-	#				print letter
-					simbag.letters.remove(letter)
+        col = board.getCol(c)
+        for (letter, mult) in col:
+            if letter != " ": 
+                #print letter
+                #a hack, this if clause shouldn't be necessary
+                #if letter in simbag.letters:
+                simbag.letters.remove(letter)
     #print 'went through board'
-    for letter in rack: simbag.letters.remove(letter)
-    print len(simbag.letters) 
+    for letter in rack: 
+        #a hack, this if clause shouldn't be necessary
+        #if letter in simbag.letters:
+        simbag.letters.remove(letter)
+    #print len(simbag.letters) 
     totalProb = 0
     for i in range(numIters):
-        print '.',
-        import sys
-        sys.stdout.flush()
+        #print '.',
+        #import sys
+        #sys.stdout.flush()
         rackProb = 1.0
         rack2 = []
         for l in range(7):
@@ -238,10 +243,10 @@ class AJalgorithm:
                 freq = defaultdict(int)
                 for t in self.origRack:
                     freq[t] += 1
+                print 'orig',self.origRack,'freq',freq,'cur',self.rack,#used',used
                 for k,v in freq.iteritems():
                     count = self.rack.count(k)
                     used += (v-count)*k
-                #print 'orig',self.origRack,'cur','freq',freq,self.rack,'used',used
                 return used
         
 	###################################

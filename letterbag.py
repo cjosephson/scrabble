@@ -1,4 +1,5 @@
 import random
+from collections import defaultdict
 class LetterBag:
     def __init__(self):
 	self.letters = []
@@ -59,12 +60,24 @@ class LetterBag:
         return len(self.letters) == 0
 	
     def putLetter(self, letter):
-		self.letters.append(letter)
+        self.letters.append(letter)
+
+    def popLetter(self, letter):
+        if letter in self.letters:
+            self.letters.remove(letter)
+
     def size(self):
         return len(self.letters)
+
     def getProb(self, letter):
 		#print self.letters
 		#print self.letters.count(letter)
 		return float(self.letters.count(letter)+1)/float(len(self.letters)+1)
+
+    def __str__(self):
+        d = {}#defaultdict(int)
+        for l in self.letters:
+            d[l] = 1 + d.get(l,0)# += 1
+        return str(d)
         
 

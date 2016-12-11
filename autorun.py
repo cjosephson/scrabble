@@ -47,7 +47,7 @@ def main():
         me = open(options.path+"/cs221game-%i"%i,'w+')
 
         b = board.Board()
-        AI = agent.Agent(b, quackle=True, heuristic=weightsA) #montecarlo=True)
+        AI = agent.Agent(b, quackle=True) #heuristic=weightsA) #montecarlo=True)
         scoreYou = 0
         scoreMe = 0
         if not options.silent: print b
