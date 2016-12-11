@@ -64,7 +64,7 @@ class Agent:
                 rack1 = [x for x in self.tiles if x not in usedTiles]
                 scoreDiff = brain.runSimulations(rack1, word, loc, orientation, 
                                                  self.board, self.brain, 2)
-                #print word, scoreDiff, score
+                print word, scoreDiff, score
                 consider[i] = (scoreDiff, move)
             #print "consider",consider
             (self.mc_score, (word, loc, orientation, usedTiles, score)) = max(consider, 

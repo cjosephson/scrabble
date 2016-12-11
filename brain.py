@@ -21,25 +21,45 @@ alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G',\
 def runSimulations(rack, word, loc, orientation, board, alg, depth = 2):
     scoreDiff = 0
     rack1 = rack
-    numIters = 10
+    numIters = 15
     tempBoard = copy.deepcopy(board)
     alg.board = tempBoard
    # alg = AJalgorithm(tempBoard)
     # start by assigning random
+    simbag = letterbag.LetterBag()
+   # print board
+    for c in range(14):
+			col = board.getCol(c)
+			for (letter, mult) in col:
+				if letter != " ": 
+	#				print letter
+					simbag.letters.remove(letter)
+    #print 'went through board'
+    for letter in rack: simbag.letters.remove(letter)
+    print len(simbag.letters) 
+    totalProb = 0
     for i in range(numIters):
         print '.',
         import sys
         sys.stdout.flush()
-        simbag = letterbag.LetterBag()
+        rackProb = 1.0
         rack2 = []
         for l in range(7):
-            rack2.append(simbag.getLetter())
+            letter = simbag.getLetter()
+            p = simbag.getProb(letter)
+            #print 'prob', letter, p, type(p) 
+            #print 'total', rackProb, type(rackProb)
+            rackProb = rackProb*p
+            rack2.append(letter)
+        totalProb = totalProb + rackProb	
         #print "Rack 1", rack1
         #print "Rack 2", rack2
-        scoreDiff += simulation(rack1, rack2, word, loc, orientation, tempBoard, depth, alg)
+        scoreDiff += rackProb*simulation(rack1, rack2, word, loc, orientation, tempBoard, depth, alg)
+        for letter in rack2:
+            simbag.putLetter(letter)
     #average/weighted average of many simulations
     alg.board = board
-    return scoreDiff/numIters
+    return scoreDiff/(numIters*totalProb)
 
 def simulation(rack1, rack2, word, loc, orientation, tempBoard, depth, alg): 
     #use a tempboard
@@ -63,7 +83,7 @@ def simulation(rack1, rack2, word, loc, orientation, tempBoard, depth, alg):
     if len(alg.LegalMoves) > 0:
         (word, loc, orientation, usedTiles, score) = max(alg.LegalMoves, key=itemgetter(4))
         score2 = tempBoard.score(word, loc, orientation)
-     #   print score2
+       # print word, score2
     #print tempBoard
     return score1-score2
 

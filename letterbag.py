@@ -57,8 +57,14 @@ class LetterBag:
     
     def empty(self):
         return len(self.letters) == 0
-
+	
+    def putLetter(self, letter):
+		self.letters.append(letter)
     def size(self):
         return len(self.letters)
+    def getProb(self, letter):
+		#print self.letters
+		#print self.letters.count(letter)
+		return float(self.letters.count(letter)+1)/float(len(self.letters)+1)
         
 
