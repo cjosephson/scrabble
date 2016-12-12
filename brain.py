@@ -243,7 +243,7 @@ class AJalgorithm:
                 freq = defaultdict(int)
                 for t in self.origRack:
                     freq[t] += 1
-                print 'orig',self.origRack,'freq',freq,'cur',self.rack,#used',used
+                print 'orig',self.origRack,'freq',freq,'cur',self.rack,"\n"#used',used
                 for k,v in freq.iteritems():
                     count = self.rack.count(k)
                     used += (v-count)*k
