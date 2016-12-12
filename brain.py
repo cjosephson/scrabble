@@ -50,12 +50,13 @@ def runSimulations(rack, word, loc, orientation, board, alg, depth = 2):
         rackProb = 1.0
         rack2 = []
         for l in range(7):
-            letter = simbag.getLetter()
-            p = simbag.getProb(letter)
+            if not simbag.empty():
+                letter = simbag.getLetter()
+                p = simbag.getProb(letter)
             #print 'prob', letter, p, type(p) 
             #print 'total', rackProb, type(rackProb)
-            rackProb = rackProb*p
-            rack2.append(letter)
+                rackProb = rackProb*p
+                rack2.append(letter)
         totalProb = totalProb + rackProb	
         #print "Rack 1", rack1
         #print "Rack 2", rack2
