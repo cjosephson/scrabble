@@ -35,13 +35,16 @@ def main(numGames = 1):
                     swapA = False
                     b.insertWord(word, pos, orientation)
                     print b
-                    print "bag",b.bag
+                    #print "bag",b.bag
                     scoreA += score
                 else:
+                    print "moveA swap"
                     swapA = True
 
             else: 
+                print "moveA pass"
                 passA = True
+            print "scoreA: %s, scoreB: %s"%(scoreA,scoreB)
             print "B",
             rackB = B.tiles
             move = B.move()
@@ -53,19 +56,22 @@ def main(numGames = 1):
                     swapB = False
                     b.insertWord(word, pos, orientation)
                     print b
-                    print "bag",b.bag
+                    #print "bag",b.bag
                     scoreB += score
                 else:
+                    print "moveB swap"
                     swapB = True
             else:
+                print "moveB pass"
                 passB = True
-                
+            
             #endgame if 2 consecutive passes or tileswaps. Ideally,
             #we'd wait 6 tileswaps but that is kinda a bitch to
             #implement.
             if (passA and passB) or (swapA and swapB):
                 break
-        print "scoreA: %s, scoreB: %s"%(scoreA,scoreB)
+            print "scoreA: %s, scoreB: %s"%(scoreA,scoreB)
+        print "GAME scoreA: %s, scoreB: %s"%(scoreA,scoreB)
         scores[i] = (scoreA, scoreB)
         print scores
     return scores

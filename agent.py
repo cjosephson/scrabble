@@ -58,6 +58,7 @@ class Agent:
         if self.montecarlo:
             #print "tiles ++++++++++++++++++",self.tiles
             #print "consider",consider
+            print "consider_pre",consider
             for i,move in enumerate(consider):
                 #print move
                 (word, loc, orientation, usedTiles, score) = move
@@ -67,6 +68,7 @@ class Agent:
                 #print word, scoreDiff, score
                 consider[i] = (scoreDiff, move)
             #print "consider",consider
+            print "consider_post",consider,"\n max",max(consider, key=itemgetter(0))[1]
             (self.mc_score, (word, loc, orientation, usedTiles, score)) = max(consider, 
                                                                                key=itemgetter(0))    
             #print "max",max(consider, key=itemgetter(0)) 
@@ -75,7 +77,7 @@ class Agent:
         #run feature extrator on the racks, and also add monte carlo score diff as a feature
         #Do L2 SGD on the feature vector and then select the best one
         if self.heuristic:
-            print "consider_pre",consider
+
             for i,move in enumerate(consider):
                 mc_score = None
                 if self.montecarlo:
@@ -86,7 +88,6 @@ class Agent:
                                        score, mc_score = (mc_score if self.montecarlo else None))
                 ml_score = dotProduct(weights, phi)
                 consider[i] = (ml_score, (mc_score, (word, loc, orientation, usedTiles, score)))
-            print "consider_post",consider
             #the top scoring move
             (self.mc_score,(word,loc,orientation,usedTiles,score)) = max(consider, 
                                                                          key=itemgetter(0))[1]

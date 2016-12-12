@@ -1,0 +1,20 @@
+VANILLA
+num games 100
+quackle avg 407.43
+cs221 avg 284.68
+avg delta 122.75
+win rate 0.11
+smashed rate 0.09
+smashing rate 0.0
+best ratio 1.35802469136
+
+RACK-H ONLY
+num games 100
+quackle avg 410.0
+cs221 avg 288.07
+avg delta 121.93
+win rate 0.13
+smashed rate 0.11
+smashing rate 0.01
+best ratio 2.13125
+

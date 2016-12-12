@@ -47,7 +47,7 @@ def main():
         me = open(options.path+"/cs221game-%i"%i,'w+')
 
         b = board.Board()
-        AI = agent.Agent(b, quackle=True) #heuristic=weightsA) #montecarlo=True)
+        AI = agent.Agent(b, quackle=True, montecarlo=True) #heuristic=weightsA) 
         scoreYou = 0
         scoreMe = 0
         if not options.silent: print b
@@ -134,7 +134,7 @@ def main():
             scores[i]=(scoreMe,scoreYou)
         else: #don't add score for terminated games
             OK = True
-        #print "scores (cs221, quackle):",scores
+        print "scores (cs221, quackle):",scores
     print "scores (cs221, quackle):",scores
     quackle.terminate()
     quackle.wait()

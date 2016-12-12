@@ -53,7 +53,9 @@ def SGD(numIters, eta=1):
             y = scoreA-scoreB
             ys.append(y)
             #if scores haven't changed for 3 rounds, game over
-            if len(log) > 3 and len(set(ys[-3:])) == 1:
+            print "ys",ys[-3:]
+            if len(ys) > 3 and len(set(ys[-3:])) == 1:
+                print "endgame"
                 break #endgame
 
             phi_A = featureExtractor([t for t in rackA if t not in usedTilesA],
