@@ -93,10 +93,10 @@ def simulation(rack1, rack2, word, loc, orientation, tempBoard, depth, alg):
     #print tempBoard
     return score1-score2
 
+trie = pickle.load(open("trie.p", "rb"))
 class AJalgorithm:
 	def __init__(self, board):
 		self.board = board
-		self.trie = pickle.load(open("trie.p", "rb"))
 		self.LegalMoves = set() #list of legal moves. gets changed every time getMove is called
 		self.rack = []
                 self.origRack = []
@@ -113,7 +113,7 @@ class AJalgorithm:
 		strList = string.split()
 		for s in strList:
 			if len(s) > 1: 
-				value = self.trie.get(s)
+				value = trie.get(s)
 				if value is None:
 					valid = False
 		return valid
@@ -147,7 +147,7 @@ class AJalgorithm:
                 #clear legal moves
                 self.LegalMoves = set()
                 #print "LegalMoves",self.LegalMoves
-                (TopNode, trace) = self.trie._get_node("")
+                (TopNode, trace) = trie._get_node("")
                 for (r,c,o) in anchors:
                         if o == 'h':
                                 #calculate blank tiles to the left:

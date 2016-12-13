@@ -251,6 +251,18 @@ that is statistically significant(Richards and Amir, 2007).
 %% The weights for these features are learned by initially setting them all to zero, and having the AI play itself, running stochastic gradient descent using the difference in score at the end of the game. 
 
 \section*{Experimental Infrastructure}
+The two primary ways to test AIs are against humans or against other
+AIs. A common benchmark is whether or not an AI can beat a human world
+champion.
+
+We did test our game against people, but collecting that data is time
+consuming and logistically challenging. To generate our data we played
+our AI against another Scrabble AI called 'Quackle' [CITE], which was
+created by MIT CSAIL researchers in 2006 and has defeated world
+champions.
+
+
+
 Quackle, quackle vs. cs221 automated gameplay, human vs. cs221 mode.
 
 \section*{Results and Analysis}
