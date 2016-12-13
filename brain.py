@@ -1,4 +1,5 @@
 #import treeBuilder
+import sys
 import board
 import pygtrie
 import pdb
@@ -44,9 +45,10 @@ def runSimulations(rack, word, loc, orientation, board, alg, depth = 2):
     #print len(simbag.letters) 
     totalProb = 0
     for i in range(numIters):
-        #print '.',
+        print '.',
         #import sys
-        #sys.stdout.flush()
+        tempBoard = copy.deepcopy(board)
+        sys.stdout.flush()
         rackProb = 1.0
         rack2 = []
         for l in range(7):
@@ -61,6 +63,8 @@ def runSimulations(rack, word, loc, orientation, board, alg, depth = 2):
         #print "Rack 1", rack1
         #print "Rack 2", rack2
         scoreDiff += rackProb*simulation(rack1, rack2, word, loc, orientation, tempBoard, depth, alg)
+  
+  #     	print 'scoreDiff', scoreDiff/totalProb
         for letter in rack2:
             simbag.putLetter(letter)
     #average/weighted average of many simulations
@@ -77,11 +81,14 @@ def simulation(rack1, rack2, word, loc, orientation, tempBoard, depth, alg):
         moveList = alg.generateMoves(rack1)
         if len(alg.LegalMoves) > 0:
             (word, loc, orientation, usedTiles, score) = max(alg.LegalMoves, key=itemgetter(4))
+     #       print tempBoard
             score1 = tempBoard.insertWord(word, loc, orientation)
-     #       print score1
+            score1 = tempBoard.score(word, loc, orientation)
+       #     print 'score1', score1
     else:
+       # print tempBoard
         score1 = tempBoard.insertWord(word, loc, orientation)
-      #  print score1
+       # print 's1', score1
 
     #print tempBoard
     #move2
@@ -89,8 +96,9 @@ def simulation(rack1, rack2, word, loc, orientation, tempBoard, depth, alg):
     if len(alg.LegalMoves) > 0:
         (word, loc, orientation, usedTiles, score) = max(alg.LegalMoves, key=itemgetter(4))
         score2 = tempBoard.score(word, loc, orientation)
-       # print word, score2
+        print word, score2
     #print tempBoard
+        print 'diff', score1-score2
     return score1-score2
 
 trie = pickle.load(open("trie.p", "rb"))
