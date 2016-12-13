@@ -254,8 +254,37 @@ that is statistically significant(Richards and Amir, 2007).
 Quackle, quackle vs. cs221 automated gameplay, human vs. cs221 mode.
 
 \section*{Results and Analysis}
+\begin{figure}[h]
+  \minipage{0.5\textwidth}
+    \centering
+  \includegraphics[scale=0.4]{../images/quacklegame_vanilla_100}
+  \caption{Quackle vs CS221 Vanilla}
+  \endminipage
+  \minipage{0.5\textwidth}
+      \centering
+  \includegraphics[scale=0.4]{../images/quacklegame_rackH_100}\\
+   \caption{Quackle vs CS221 with Rack Heuristics}
+  \endminipage{}
+\end{figure}
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}{c|l|l|l|l|l|l}
+    \textbf{} & \textbf{win rate} & \textbf{mean} & \textbf{opp mean} & \textbf{mean delta} &  \textbf{2x loss rate} & \textbf{max win ratio} \\\hline
+  \textbf{vanilla}   & 11\% & 284.68 & 407.43 & 122.75 & 13\% & 1.358\\
+  \textbf{RH}        & 13\% & 288.07 & 410.0  & 121.93 & 11\% & 2.131 \\
+  \textbf{MC}        & -    & -      & -      & -      & -    & - \\
+  \textbf{MC w/ RH}  & -    & -      & -      & -      & -    & - \\
+\end{tabular}
+  \caption{Statistics of our AI variants against Quackle's Speedy Player. \emph{Mean delta} is the average difference between opponent and our score, \emph{2x loss rate} is the rate at which the opponent scores 2x or higher, and \emph{max win ratio} is the max ratio of our score to opponent's.}
+\end{table}
+
+We win 13\% of the time against a world class AI, not bad! Rack heuristics help slightly, doesn't seem statistically significant. MC TBD :(
+
+Anecdotally, the AI does very well against average humans (the authors and their friends), but the data for this case is difficult and time consuming to collect.
 
 \section*{Conclusion}
+Concluding thoughts...
 
 \clearpage
 \begin{center}
