@@ -2,6 +2,7 @@ import board
 import agent
 import copy
 from util import *
+from random import shuffle
 from optparse import OptionParser
 
 parser = OptionParser()
@@ -18,7 +19,10 @@ parser.add_option("-b", "--boss", action="store_true", dest="boss", default=Fals
 
 def main():
     b = board.Board()
-    AI = agent.Agent(b, montecarlo=True)
+    AI = agent.Agent(b)#, montecarlo=True)
+    #uncomment to try shorter games
+    #shuffle(b.bag.letters)
+    #b.bag.letters = b.bag.letters[0:15]
     scoreAI = 0
     scoreHuman = 0
     tiles = [b.bag.getLetter() for i in xrange(7)]
@@ -77,7 +81,7 @@ def main():
                         print "Invalid tile or no tiles in bag!"
                         continue
                 elif (len(inputList) != 3):
-                    print "Invalid input format, try again!"
+                    print "****Invalid input format, try again!****"
                     continue
                 #parse stuff
                 word = inputList[0].upper()
@@ -91,6 +95,9 @@ def main():
                 if len(loc) != 2:
                     print "invalid (row,col):",loc
                     continue
+                elif loc[0]>14 or loc[1]>14 or loc[0]<0 or loc[1]<0:
+                    print "rows/cols must be between 0 and 15!"
+                    continue
                 
                 orientation = inputList[2].lower()
                 if orientation != 'v' and orientation != 'h':
@@ -102,6 +109,7 @@ def main():
                     #make a copy of board and insert to preview move
                     b2 = copy.deepcopy(b)
                     score = b2.insertWord(word, loc, orientation)
+                    b2.insertWord(word,loc,orientation,debug=True)
                     print b2
                     print "Move Score =", score
                     ok = False
@@ -133,7 +141,7 @@ def main():
                             print "Try Again"
                             break
                         else: 
-                            print "Invalid input, try again"
+                            print "****Invalid input, try again****"
                             break
                 else:
                     print "Invalid word!"
