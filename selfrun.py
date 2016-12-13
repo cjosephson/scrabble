@@ -13,8 +13,8 @@ def main(numGames = 1):
         b.insertWord(seed, (7,3), 'h', debug=True)
         for c in seed:
             b.bag.popLetter(c)
-        B = agent.Agent(b)#, montecarlo=True)#heuristic=weights,) #souped up agent
-        A = agent.Agent(b) #vanilla agent
+        A = agent.Agent(b)#, montecarlo=True)#heuristic=weights,) #souped up agent
+        B = agent.Agent(b) #vanilla agent
         scoreAs = 0
         scoreB = 0
         passA = False
