@@ -96,9 +96,9 @@ def simulation(rack1, rack2, word, loc, orientation, tempBoard, depth, alg):
     if len(alg.LegalMoves) > 0:
         (word, loc, orientation, usedTiles, score) = max(alg.LegalMoves, key=itemgetter(4))
         score2 = tempBoard.score(word, loc, orientation)
-        print word, score2
+        #print word, score2
     #print tempBoard
-        print 'diff', score1-score2
+        #print 'diff', score1-score2
     return score1-score2
 
 trie = pickle.load(open("trie.p", "rb"))
