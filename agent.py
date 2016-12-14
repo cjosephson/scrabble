@@ -58,7 +58,7 @@ class Agent:
         if self.montecarlo:
             #print "tiles ++++++++++++++++++",self.tiles
             #print "consider",consider
-            print "consider_pre",consider
+            #print "consider_pre",consider
             for i,move in enumerate(consider):
                 #print move
                 (word, loc, orientation, usedTiles, score) = move
@@ -68,7 +68,7 @@ class Agent:
                 #print word, scoreDiff, score
                 consider[i] = (scoreDiff, move)
             #print "consider",consider
-            print "consider_post",consider,"\n max",max(consider, key=itemgetter(0))[1]
+            #print "consider_post",consider,"\n max",max(consider, key=itemgetter(0))[1]
             (self.mc_score, (word, loc, orientation, usedTiles, score)) = max(consider, 
                                                                                key=itemgetter(0))    
             #print "max",max(consider, key=itemgetter(0)) 

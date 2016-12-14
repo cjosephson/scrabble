@@ -38,7 +38,7 @@ def SGD(numIters, eta=1):
                     #print "moveA",move
                     b.insertWord(word, pos, orientation)
                     totA += scoreA
-            print "A mc_score = ",A.mc_score,"A score=",scoreA
+            #print "A mc_score = ",A.mc_score,"A score=",scoreA
             #print "B",
             rackB = B.tiles
             move = B.move()
@@ -53,7 +53,7 @@ def SGD(numIters, eta=1):
             y = scoreA-scoreB
             ys.append(y)
             #if scores haven't changed for 3 rounds, game over
-            print "ys",ys[-3:]
+            #print "ys",ys[-3:]
             if len(ys) > 3 and len(set(ys[-3:])) == 1:
                 print "endgame"
                 break #endgame
@@ -71,7 +71,9 @@ def SGD(numIters, eta=1):
             print "scoreA-scoreB",scoreA-scoreB
         numIters -= 1
         print "%s iters remaining, totA-totB: %s"%(numIters,totA-totB)
+        print "weights",weights
         log.append(totA-totB)
+
     print log
     return weights
 

@@ -1,6 +1,7 @@
 import board
 import agent
 import os
+import sys
 from collections import defaultdict 
 from util import *
 
@@ -14,7 +15,7 @@ def main(numGames = 1):
         for c in seed:
             b.bag.popLetter(c)
         #souped up agent
-        A = agent.Agent(b, heuristic=weights)#, montecarlo=True)#
+        A = agent.Agent(b, montecarlo=True)# heuristic=weightsA)
         #vanilla agent
         B = agent.Agent(b) 
         scoreAs = 0
@@ -26,11 +27,11 @@ def main(numGames = 1):
         swapA = False
         swapB = False
         while True:
-            print "B",
+            print "B",;sys.stdout.flush()
             rackB = B.tiles
             move = B.move()
             if move != None:
-                print "moveB",move
+                #print "moveB",move
                 passB = False
                 (word, pos , orientation, usedTilesB, score) = move
                 if len(word) > 0:
@@ -47,11 +48,11 @@ def main(numGames = 1):
                 print "moveB pass"
                 passB = True
             print "scoreA: %s, scoreB: %s"%(scoreA,scoreB)
-            print "A",
+            print "A",;sys.stdout.flush()
             rackA = A.tiles
             move = A.move()
             if move != None:
-                print "moveA",move
+                #print "moveA",move
                 passA = False
                 (word, pos , orientation, usedTilesB, score) = move
                 if len(word) > 0:
