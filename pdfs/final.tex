@@ -257,13 +257,60 @@ champion.
 
 We did test our game against people, but collecting that data is time
 consuming and logistically challenging. To generate our data we played
-our AI against another Scrabble AI called 'Quackle' [CITE], which was
-created by MIT CSAIL researchers in 2006 and has defeated world
-champions.
+our AI against another open source Scrabble AI called 'Quackle'
+[CITE], which was created by MIT CSAIL researchers in 2006 and has
+defeated world champions.
 
+We also played variants of our AI against itself. The variants we
+created are:
+\begin{itemize}
+\item \textbf{vanilla:} selects max scoring move from Appel-Jacobsen
+  move generation algorithm
+\item \textbf{rack heuristic:} selects N moves with the top raw scores
+  and creates a feature vector from the raw score and features
+  extracted from the remaining rack, and applies a weight vector
+  learned via 100-iteration stochastic gradient run. The move with the
+  max weighted score is returned
+\item \textbf{Monte Carlo:} selects the top N scoring moves and
+  simulates M different depth D future plays, and returns the score
+  differentials for each move weighted by the probability of the
+  opponent being able to make that move. For our results, we used N=3,
+  M=15 and D=2.
+\item \textbf{Monte Carlo + rack heuristic:} includes the Monte Carlo
+  score in the feature vector and applies a different weight vector;
+  the move with the top weighted score is returned
+\end{itemize}
 
+\subsection*{Quackle vs CS221 Mode}
+Playing our AI against Quackle in an automated manner is a bit
+challenging because our code is in Python while Quackle is written in
+C++. To avoid re-implementing our AI in C++, we used a file-based
+system for interprocess communication. We modified the test system for
+Quackle in quackle/test/testharness.cpp to interface with out AI via
+reading and writing moves to files. We created one main method,
+\textbf{selfPlayCS221Game}().
 
-Quackle, quackle vs. cs221 automated gameplay, human vs. cs221 mode.
+For the Python half, we wrote 'autorun.py', which starts the Quackle
+test harness and reads and writes to the shared files until the
+specified number of games has been played. The scores are stored in a
+dictionary, which is printed out at the end so the data can be
+processed in scrabble/images/plot.py.
+
+This was the most challening part of our infractructure to set up, but
+as a result we are able to see how our AI compares to  world-class
+AI.
+
+\subsection*{Self Play Mode}
+Playing our AI against itself is significantly more simple, and also
+provides good data on how much the different variants improves
+gameplay. Self-play mode is in selfrun.py, and does not require any
+file IO.
+
+\subsection*{Human Mode}
+
+For testing various aspects of gameplay and to see how well the AI
+performed against average-ability humans, we created a human vs AI
+mode in run.py.
 
 \section*{Results and Analysis}
 \begin{figure}[h]
@@ -288,10 +335,40 @@ Quackle, quackle vs. cs221 automated gameplay, human vs. cs221 mode.
   \textbf{MC}        & -    & -      & -      & -      & -    & - \\
   \textbf{MC w/ RH}  & -    & -      & -      & -      & -    & - \\
 \end{tabular}
-  \caption{Statistics of our AI variants against Quackle's Speedy Player. \emph{Mean delta} is the average difference between opponent and our score, \emph{2x loss rate} is the rate at which the opponent scores 2x or higher, and \emph{max win ratio} is the max ratio of our score to opponent's.}
+  \caption{Statistics of our AI variants against Quackle's Speedy
+    Player. \emph{Mean delta} is the average difference between
+    opponent and our score, \emph{2x loss rate} is the rate at which
+    the opponent scores 2x or higher, and \emph{max win ratio} is the
+    max ratio of our score to opponent's.}
 \end{table}
 
-We win 13\% of the time against a world class AI, not bad! Rack heuristics help slightly, doesn't seem statistically significant. MC TBD :(
+We win 13\% of the time against a world class AI, not bad! Rack
+heuristics help slightly, doesn't seem statistically significant. MC
+TBD 
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}{c|l|l|l|l|l|l}
+    \textbf{} & \textbf{win rate} & \textbf{mean} & \textbf{opp mean} & \textbf{mean delta} &  \textbf{2x loss rate} & \textbf{max win ratio} \\\hline
+  \textbf{control}   & 47\% & 354.24 & 359.25 & -5.01  & 0\%  & 1.811\\
+  \textbf{RH}        & 48\% & 351.59 & 353.81 & -2.22  & 0\%  & 1.509\\
+  \textbf{MC}        & -    & -      & -      & -      & -    & - \\
+  \textbf{MC w/ RH}  & -    & -      & -      & -      & -    & - \\
+\end{tabular}
+  \caption{Statistics of our AI playing against itself for 300
+    games. Control is the vanilla variant playing against itself, all
+    other rows are variations playing against vanilla. For description
+    of columns, see caption for Table 1.}
+\end{table}
+
+As expected, the win rate for the control is about 50/50. The rack
+heuristics perform similarly, which is disappointing but not
+surprising. The weight vectors, which can be found at the top of
+util.py, weighs the raw score multiple orders of magnitude higher than
+any other feature. This means that the moves selected in the vanilla
+case and the rack heuristic case will not often differ.
+
+The Monte Carlo....[FINISH ME LATER]
 
 Anecdotally, the AI does very well against average humans (the authors and their friends), but the data for this case is difficult and time consuming to collect.
 
@@ -300,10 +377,16 @@ Concluding thoughts...
 
 \clearpage
 \begin{center}
-\section*{Appendix}
+ \section*{Code Appendix}
+\end{center}
+describe code tree
 
-  From Appel-Jacobsen '86\\
-  \includegraphics[scale=0.6]{../images/trie}\\
+\clearpage
+\begin{center}
+\section*{Image Appendix}
+
+From Appel-Jacobsen '86\\
+\includegraphics[scale=0.6]{../images/trie}\\
 Figure 3: An Example of a Trie \\
 \includegraphics{../images/anchorexample}\\
 Figure 4: An Example of Anchor Squares
@@ -316,5 +399,5 @@ Mark Richards and Eyal Amir. Opponent Modeling in Scrabble. IJCAI-07., 1482–14
 Stuart Russell and Peter Norvig. Artificial Intelligence: A Modern Approach. Prentice-Hall,
 Englewood Cliffs, NJ, 2nd edition edition, 2003 \\
 Brian Sheppard. World-championship caliber Scrabble. Artif. Intell., 134:241–245, 2002. \\
-
+J. Katz-Brown, J. O'Laughlin, J. Fultz, M. Liberty, A. Buddhdev, Quackle, http://people.csail.mit.edu/jasonkb/quackle/
 \end{document}
