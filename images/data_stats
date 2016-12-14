@@ -18,15 +18,19 @@ smashed rate 0.11
 smashing rate 0.01
 best ratio 2.13125
 
+QUACK MC
+
+QUACK MC+RACKH
+
 SELF VANILLA
-num games 100
-A avg 358.2
-B avg 366.04
-avg delta -7.84
-A win rate 0.56
+num games 300
+A avg 354.246666667
+B avg 359.256666667
+avg delta -5.01
+A win rate 0.47
 A smashed rate 0.0
 A smashing rate 0.0
-best ratio 1.50903614458
+best ratio 1.81147540984
 
 SELF RACKH
 num games 300
@@ -36,3 +40,8 @@ avg delta -2.22
 A win rate 0.48
 A smashed rate 0.0
 A smashing rate 0.0
+best ratio 1.50903614458
+
+SELF MC
+
+SELF MC+RACKH
