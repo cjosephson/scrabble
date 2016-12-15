@@ -20,9 +20,6 @@ letterMap = {'A':0, 'B':1, 'C':2, 'D':3, 'E':4, 'F':5, 'G':6, 'H':7, 'I':8, 'J':
              0:'A', 1:'B', 2:'C', 3:'D', 4:'E', 5:'F', 6:'G', 7:'H', 8:'I', 9:'J', 10:'K', 11:'L', 12:'M', 13:'N', 14:'O'}
 scores = {}
 
-# rack heuristics, no monte carlo
-weightsA = {'GG': -4, 'AAA': 27, 'BB': -12, 'DD': 43, 'WW': 8, 'EEE': 436, 'L': -513, 'CC': -5, 'NNN': 30, 'NN': -22, 'VVV': -89, 'TT': -64, 'TTT': -168, 'AA': -7, 'EE': 81, 'GGG': -286, 'PPP': 187, 'CCC': -144, 'LLL': -147, 'III': 35, 'RRR': -52, 'A': 686, 'C': -278, 'B': 110, 'E': 842, 'D': 218, 'G': -189, 'F': 670, 'I': 264, 'H': -215, 'K': 592, 'J': -534, 'M': 529, 'vc_ratio': -225.33333333333334, 'O': 778, 'N': 410, 'Q': 326, 'P': 267, 'S': 161, 'R': -609, 'raw_score': 278471, 'T': -217, 'W': 372, 'V': -45, 'Y': -262, 'X': 144, 'Z': 91, 'DDD': 12, 'OO': -19, 'II': -63, 'WWW': -158, 'QU': -55, 'RR': -249, 'UUU': -665, 'OOO': 163, 'YYY': 61, 'SSS': 37, 'MMM': 88, 'UU': -133, 'KKK': 37, 'FFF': 16, 'U': -348, 'HHH': 62, 'BBB': 9, 'LL': -155}
-
 def main():
     #delete old game files
     i = 0
@@ -47,7 +44,7 @@ def main():
         me = open(options.path+"/cs221game-%i"%i,'w+')
 
         b = board.Board()
-        AI = agent.Agent(b, quackle=True, montecarlo=True) #heuristic=weightsA) 
+        AI = agent.Agent(b, quackle=True, montecarlo=True, heuristic=weights_MC) 
         scoreYou = 0
         scoreMe = 0
         if not options.silent: print b

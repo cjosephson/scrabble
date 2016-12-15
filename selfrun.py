@@ -15,7 +15,7 @@ def main(numGames = 1):
         for c in seed:
             b.bag.popLetter(c)
         #souped up agent
-        A = agent.Agent(b, montecarlo=True)# heuristic=weightsA)
+        A = agent.Agent(b, montecarlo=True, heuristic=weights_MC)
         #vanilla agent
         B = agent.Agent(b) 
         scoreAs = 0

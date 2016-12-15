@@ -19,8 +19,17 @@ smashing rate 0.01
 best ratio 2.13125
 
 QUACK MC
+num games 100
+quack avg 283.3
+cs221 avg 401.95
+avg delta 118.65
+cs221 win rate 0.13
+cs221 smashed rate 0.14
+cs221 smashing rate 0.0
+best ratio 1.42731277533
 
 QUACK MC+RACKH
+
 
 SELF VANILLA
 num games 300
