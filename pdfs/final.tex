@@ -44,10 +44,11 @@ infrastructure, and an analysis of the results.\\
 
 A nontrivial number of AIs have been developed to play scrabble competitively, starting with a scrabble/crossword playing program developed by C. Sharpiro at the University of New York at Buffalo in 1982, and continuing today with Scrabble/crosswork AIs like Quackle and Elise. 
 
-One of the most important publications in the history of scrabble AIs was a paper by Andrew Appel and Guy Jacobson published in 1988 on 'The World's Fastest Scrabble Program'. It in, Appel and Jacobson describe the search algorithm that has since been used by all major scrabble AIs, a simplified version of which we use in our implimentation 
+One of the most important publications in the history of scrabble AIs was a paper by Andrew Appel and Guy Jacobson published in 1988 on 'The World's Fastest Scrabble Program'. It in, Appel and Jacobson describe the move generation algorithm that has since been used by all major scrabble AIs. They convert the lexicon into a data structure called a 'directed acyclic word-graph' or 'dawg', that greatly expediates the search for valid moves. We use a simplified version of this this algorithm, substituting dawgs for tries, which will be explained in greater detail below.  
 
+The most famous scrabble AI was a program called 'Maven' that was developed by Brian Sheppard in 2002, which was the first scrabble AI to beat human champion players.  Maven divides the game scrabble game into three subcategories-- regular game play, the pre-end game, and the end-game. The 'end game' is the period after which all letters in the bag have been used. At this point the g'end game' is the period after which all letters in the bag have been used. At this point the game becomes completely observable, and a B* search on a game tree can be used to optimize agent game play. We based a lot of our implimentation on the regular game play strategies used by Maven, but ignored the pre-end game and end-game aspects of the game, as we were limited on time, and found the problem a less interesting pursuit. Maven is the AI currently used in official Hasbro scrabble games.  
 
-Appel and Jacobsen, Maven, Quackle
+The current champion of the scrabble AIs is quackle, developed by 5 researchers at MIT. Quackle uses a strategy that is very similiar to Maven's. Quackle is the current measuring stick against which all other scrabble AIs are compared, and we analyze our AI's performance against Quackle later in the paper. 
 
 \section*{Approach}
 Extensive vocabulary alone is not sufficient for a competitive
@@ -100,10 +101,19 @@ backbone of most competitive Scrabble AIs today. Appel and
 Jacobson propose restructuring the Scrabble lexicon from a list of
 words into a trie or prefix tree, where each node is a partial word,
 the children of a node are words or partial words that can be created
-using that node (see Fig. 3). All terminal leaves of the trie are
+using that node (see Fig. 1). All terminal leaves of the trie are
 words, as are some interim nodes (e.g 'dog' vs. 'dogs'), and the value
 of a node is a boolean indicating whether the sting is a full word in
 the dictionary.
+
+
+\begin{center}
+
+From Appel-Jacobsen '86\\
+\includegraphics[scale=0.6]{../images/trie}\\
+Figure 1: An Example of a Trie \\
+\end{center}
+
 %% We found the pytrie library rather helpful for implimenting this
 %% algorithm, as it's CharTrie object was designed for implimentations
 %% such as this, where the children of a node are held in a dictionary
@@ -117,10 +127,15 @@ the dictionary.
 To search for moves on the board, the algorithm examines all
 \emph{anchors}, where an anchor is the space to the left (or above) an
 existing letter (for horizontal plays), or the space above an existing
-letter (see Fig. 4). Since a move in Scrabble must attach to an
+letter (see Fig. 2). Since a move in Scrabble must attach to an
 existing word (excepting the first move), this greatly reduces the
 15x15 search space. After each new move on the board, the AI should
 update its list of anchor squares.
+
+\begin{center}
+\includegraphics{../images/anchorexample}\\
+Figure 2: An Example of Anchor Squares
+\end{center}
 
 Before a potential move is added to the list of generated moves, it
 needs to be \emph{crosschecked} to ensure that new strings formed in
@@ -278,7 +293,7 @@ created are:
   extracted from the remaining rack, and applies a weight vector
   learned via 100-iteration stochastic gradient run. The move with the
   max weighted score is returned
-\item \textbf{Monte Carlo:} selects the top N scoring moves and
+\item \textbf{Monte Carlo:} selects the top N scoring mopermalinkembedves and
   simulates M different depth D future plays, and returns the score
   differentials for each move weighted by the probability of the
   opponent being able to make that move. For our results, we used N=3,
@@ -289,8 +304,9 @@ created are:
 \end{itemize}
 
 \subsection*{Quackle vs CS221 Mode}
-Playing our AI against Quackle in an automated manner is a bit
-challenging because our code is in Python while Quackle is written in
+To test the performanc of our AI, we had it play games against the aformentioned Quackle. 
+Doing this in an automated manner proved to be a reasonably challenging task,
+as our code is in Python while Quackle was written in
 C++. To avoid re-implementing our AI in C++, we used a file-based
 system for interprocess communication. We modified the test system for
 Quackle in quackle/test/testharness.cpp to interface with out AI via
@@ -317,9 +333,21 @@ file IO.
 
 For testing various aspects of gameplay and to see how well the AI
 performed against average-ability humans, we created a human vs AI
-mode in run.py.
+mode in run.py. As the objective of our project was to create a scrabble-playing AI, it would hardly be useful if it cold only run against other computers. However, as data is time-consuming to collect, and we don't have access to any self-reporting 'decent' scrabble players, this wasn't used as a significant source of data. 
 
 \section*{Results and Analysis}
+\begin{figure}[ht]
+  \minipage{0.5\textwidth}
+    \centering
+  \includegraphics[scale=0.4]{../images/quacklegame_MC_100}
+  \caption{Quackle vs CS221 With Monte Carlo}
+  \endminipage
+  \minipage{0.5\textwidth}
+      \centering
+  \includegraphics[scale=0.4]{../images/quacklegame_rackH_100}\\
+   \caption{This will be a game w/ montecarlo rH? }
+  \endminipage{}
+\end{figure}
 \begin{figure}[h]
   \minipage{0.5\textwidth}
     \centering
@@ -332,6 +360,7 @@ mode in run.py.
    \caption{Quackle vs CS221 with Rack Heuristics}
   \endminipage{}
 \end{figure}
+
 
 \begin{table}[h]
   \centering
@@ -352,6 +381,31 @@ mode in run.py.
 We win 13\% of the time against a world class AI, not bad! Rack
 heuristics help slightly, doesn't seem statistically significant. MC
 TBD 
+\begin{figure}[h]
+  \minipage{0.5\textwidth}
+    \centering
+  \includegraphics[scale=0.4]{../images/quacklegame_vanilla_111}
+  \caption{CS221 Vanilla vs CS221 Vanilla}
+  \endminipage
+  \minipage{0.5\textwidth}
+      \centering
+  \includegraphics[scale=0.4]{../images/quacklegame_rackH_111}\\
+   \caption{CS221 Vanilla vs CS221 with Rack Heuristics}
+  \endminipage{}
+\end{figure}
+
+\begin{figure}[h]
+  \minipage{0.5\textwidth}
+    \centering
+  \includegraphics[scale=0.4]{../images/quacklegame_vanilla_111}
+  \caption{Will be CS221 Vanilla vs CS221 with Monte Carlo}
+  \endminipage
+  \minipage{0.5\textwidth}
+      \centering
+  \includegraphics[scale=0.4]{../images/quacklegame_rackH_111}\\
+   \caption{Will be CS221 Vanilla vs CS221 with Monte Carlo and rack heuristics}
+  \endminipage{}
+\end{figure}
 
 \begin{table}[h]
   \centering
@@ -386,21 +440,16 @@ Considering that we are both new to AI and had only 6 weeks to work on this proj
 \begin{center}
  \section*{Code Appendix}
 \end{center}
-describe code tree
 
-\clearpage
-\begin{center}
-\section*{Image Appendix}
 
-From Appel-Jacobsen '86\\
-\includegraphics[scale=0.6]{../images/trie}\\
-Figure 3: An Example of a Trie \\
-\includegraphics{../images/anchorexample}\\
-Figure 4: An Example of Anchor Squares
+
+
 
 \vspace{ 8cm }
-{\Large References} 
-\end{center}
+\clearpage
+\begin{center}
+{\Large References}
+\end{center} 
 A.W. Appel, G.J. Jacobson, The world’s fastest Scrabble program, Comm. ACM 31 (5) (1988) 572–578, 585. \\
 Mark Richards and Eyal Amir. Opponent Modeling in Scrabble. IJCAI-07., 1482–1487, 2007. \\
 Stuart Russell and Peter Norvig. Artificial Intelligence: A Modern Approach. Prentice-Hall,
