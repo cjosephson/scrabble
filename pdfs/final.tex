@@ -264,8 +264,7 @@ each of the top raw-scoring moves, the AI runs a number of Monte Carlo
 simulations playing against itself with probable opponent racks. Since
 the turnover rate of racks is so high, and the computation required
 per move is rather extensive, most competitive AIs run their models
-with a search depth $\geq 3$. Our preliminary algorithm does not
-implement this, but we would like to add it for the final product.
+with a search depth $\leq 3$. We use a depth-2 monte carlo simulation, essentially comparing the difference in score after both players make a move. 
 
 Many Scrabble AIs don't try to make any assumptions about the opposing
 player's rack, and just assign the opponent random unseen letters when
@@ -283,7 +282,7 @@ which is a higher scoring word. More formally $P(leave | play) =
 probability that certain tiles were left on the rack. When an AI's
 Monte Carlo simulations draw from this probability space rather a
 random assignment, the algorithm has better performance on a level
-that is statistically significant(Richards and Amir, 2007).
+that is statistically significant(Richards and Amir, 2007). We didn't have time to successfully impliment the bayesian network to solve this final problem, and instead drew simulation racks at random from the list of unseen tiles, but we weighted the resulting score by the probability of that rack occuring. 
 
 	
 Now that the scores have been computed by simulation, they are weighed
