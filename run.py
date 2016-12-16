@@ -6,15 +6,8 @@ from random import shuffle
 from optparse import OptionParser
 
 parser = OptionParser()
-parser.add_option("-m", "--human", action="store_true", dest="human", default=True,
-                  help="puts game into AI vs human mode, so you'll be told your tiles")
-
-parser.add_option("-s", "--specify", action="store_true", dest="specify", default=False,
-                  help="Specify tiles for the AI")
-
 parser.add_option("-b", "--boss", action="store_true", dest="boss", default=False,
                   help="Boss mode, doesn't check for valid words")
- 
 (options, args) = parser.parse_args()
 
 def main():
@@ -58,7 +51,7 @@ def main():
             valid = False
             while not valid:
                 print b
-                if options.human: print "Your turn! Tiles:",tiles
+                print "Your turn! Tiles:",tiles
                 userInput = raw_input("Enter 'word (row,col) h||v', or 'exchange 'c', or 'pass': ")
                 inputList = userInput.split()
                 if (len(inputList) == 1 and inputList[0] == "pass"):
@@ -120,19 +113,14 @@ def main():
                             ok=True
                             score = b.insertWord(word, loc, orientation, debug = options.boss)
                             print "move successful"
-                            #TODO: fix this?
-                            #does not account for the case where a letter on
-                            #the board also appears in the tile
-                            #set... eit. We'll mostly be doing AI vs AI anyway
-                            if options.human:
-                                r = 0
-                                for l in word:
-                                    if l in tiles:
-                                        tiles.remove(l)
-                                        r += 1
-                                for i in xrange(r):
-                                    if len(b.bag.letters) > 0:
-                                        tiles.append(b.bag.getLetter())
+                            r = 0
+                            for l in word:
+                                if l in tiles:
+                                    tiles.remove(l)
+                                    r += 1
+                            for i in xrange(r):
+                                if len(b.bag.letters) > 0:
+                                    tiles.append(b.bag.getLetter())
                                     
                             scoreHuman += score
                             valid = True

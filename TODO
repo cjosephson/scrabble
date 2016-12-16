@@ -1,4 +1,0 @@
--Integrate our AI with quackle to auto-play
---Note: new quackle repo @ https://github.com/cjosephson/quackle.git because corn.stanford.edu couldn't do git pulls when quackle was nested
---planning to join via the quackle/test directory (qmake quackle && make; ./test), since it has a way to get quackle to spit out the opimal move for a given board.
---should be do-able to have each AI write moves to a game.log folder, update their local state, and then find the next move
