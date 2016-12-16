@@ -358,8 +358,8 @@ heuristics help slightly, doesn't seem statistically significant. MC
   \minipage{0.5\textwidth}
       \centering
   \includegraphics[scale=0.39]{../images/quacklegame_MC-RH_35}\\
-   \caption{\footnoetesize{Quackle vs CS221 with Monte Carlo and Rack
-       Heuristics*}}
+   \caption{\footnotesize{Quackle vs CS221 with Monte Carlo and Rack
+       Heuristics}}
   \endminipage{}
 \end{figure}
 
@@ -378,9 +378,10 @@ heuristics help slightly, doesn't seem statistically significant. MC
     opponent and our score, \emph{2x loss rate} is the rate at which
     the opponent scores 2x or higher, and \emph{max win ratio} is the
     max ratio of our score to opponent's.}
-\end{table}\footnote[]{*These were shorter runs due to time constraints. Table 1's MC+RH was 35 runs, and Table 2's MC and MC+RH were 80 and 53 runs respectively. Furthermore, the MC+RC weight vector was only run for 50 iterations instead of 100.}
+\end{table}
+\footnote[1]{*These were shorter runs due to time constraints. Table 1's MC+RH was 35 runs, and Table 2's MC and MC+RH were 80 and 53 runs respectively. Furthermore, the MC+RC weight vector was only run for 50 iterations instead of 100.}
 
-Talk about quackle stats table here.
+The 'vanilla' version of our code wins only 11% of the time, with an average score differential of 407 points, in Quackle's favor. It performs slightly better with rack heuristics, although the difference is barely statistically significant.  The smae is true for a monte carlo-enabled AI, although the change in mean score delta is more notably improved. We didn't have enough time to iterate through an extensive training set for our monte carlo + rack heuristic weight vector, so it is not terrible surprising that this performed poorly. In general this data indicates that some of the features we decided not to impliment were more important than we had anticipated (end game analysis and managment of wild squares, decided when to exchange tiles, etc). 
 
 \begin{table}[h!]
   \centering
@@ -389,7 +390,7 @@ Talk about quackle stats table here.
   \textbf{control}   & 47\% & 354.24 & 359.25 & -5.01  & 0\%  & 1.811\\
   \textbf{RH}        & 48\% & 351.59 & 353.81 & -2.22  & 0\%  & 1.509\\
   \textbf{MC*}       & 62\% & 361.55 & 340.56 & 20.98  & 0\%  & 1.41 \\
-  \textbf{MC w/ RH*} & 53\% & 364.62 & 347.07 & 17.54  & 0\%  & 1.33 \\
+  \textbf{MC w/ RH*} & 53\% & 364.62 & 347.07 & 17.54  & 0\%  & 1.33 \\a 
 \end{tabular}
   \caption{Statistics of our AI playing against itself for 300
     games. Control is the vanilla variant playing against itself, all
@@ -402,14 +403,12 @@ heuristics perform similarly, which is disappointing but not
 surprising. The weight vectors, which can be found at the top of
 util.py, weighs the raw score multiple orders of magnitude higher than
 any other feature. This means that the moves selected in the vanilla
-case and the rack heuristic case will not often differ.
-
-The Monte Carlo....[FINISH ME LATER]
+case and the rack heuristic case will not often differ. The AIs with monte carlo enabled performed significantly better than the vanilla and rack-heuristic only AIs, with an higher win rate, but most notably a dramaticaly increased mean delta. 
 
 Anecdotally, the AI does very well against average humans (the authors and their friends), but the data for this case is difficult and time consuming to collect.
 
 \section*{Conclusion}
-Considering that we are both new to AI and had only 6 weeks to work on this project aprt-time, we are pretty happy that we managed to beat the research-grade Quackle AI 17\% of the time.
+Considering that we are both new to AI and had only 6 weeks to work on this project part-time, we are pretty happy that we managed to beat the research-grade Quackle AI 17\% of the time.
 
 \clearpage
 \begin{center}
