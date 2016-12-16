@@ -23,7 +23,7 @@ word, with multipliers depending on location on the board. There are a
 fixed set of tiles in the game, and at any point in the game, each
 player has access to at most 7 letter of these in their 'rack'.  When
 tiles are placed on the board they are replaced with ones drawn at
-random from a bag. If the players uses all 7 tiles this is called a
+random from a bag. If the player uses all 7 tiles this is called a
 'bingo' and the move receives a 50pt bonus, which can be about 1/8 of
 the total points in a tournament game.
 
@@ -264,7 +264,9 @@ each of the top raw-scoring moves, the AI runs a number of Monte Carlo
 simulations playing against itself with probable opponent racks. Since
 the turnover rate of racks is so high, and the computation required
 per move is rather extensive, most competitive AIs run their models
-with a search depth $\leq 3$. We use a depth-2 monte carlo simulation, essentially comparing the difference in score after both players make a move. 
+with a search depth $\leq 3$. We use a depth-2 Monte Carlo simulation,
+essentially comparing the difference in score after both players make
+a move.
 
 Many Scrabble AIs don't try to make any assumptions about the opposing
 player's rack, and just assign the opponent random unseen letters when
@@ -282,7 +284,11 @@ which is a higher scoring word. More formally $P(leave | play) =
 probability that certain tiles were left on the rack. When an AI's
 Monte Carlo simulations draw from this probability space rather a
 random assignment, the algorithm has better performance on a level
-that is statistically significant(Richards and Amir, 2007). We didn't have time to successfully impliment the bayesian network to solve this final problem, and instead drew simulation racks at random from the list of unseen tiles, but we weighted the resulting score by the probability of that rack occuring. 
+that is statistically significant(Richards and Amir, 2007). We didn't
+have time to successfully implement the Bayesian network to solve this
+final problem, and instead drew simulation racks at random from the
+list of unseen tiles, but we weighted the resulting score by the
+probability of that rack occurring.
 
 	
 Now that the scores have been computed by simulation, they are weighed
@@ -442,7 +448,7 @@ Monte Carlo score is only one order of magnitude smaller than the raw
 score, which means that the Monte Carlo score non-trivially impacts
 which move is ultimately selected. This is evidenced by the increased
 win rate of 53\%. Unfortunately the weight vector used on this dataset
-had a limited SGD run (50 iterations instead of 100). Also, since
+had a limited SGA run (50 iterations instead of 100). Also, since
 Monte Carlo games take 10x longer to play, we needed to terminate the
 data collection before it reached 100 games. We suspect that if we had
 more time the results would be even better.
@@ -465,7 +471,7 @@ more time the results would be even better.
 
 One particular challenge to improving our performance was the long
 development cycle. For example, after adding or removing features to
-the feature extractor we need to re-run SGD and then re-run all
+the feature extractor we need to re-run SGA and then re-run all
 datasets that depend on a weight vector. This is very time consuming,
 especially when we include Monte Carlo simulation, so we could only do
 a limited amount of algorithmic experimentation.
@@ -495,7 +501,7 @@ Neither of the authors will be playing Scrabble again anytime soon.
 \begin{center}
  \section*{Code Appendix}
 \end{center}
-Contents of scrabble folder:
+Contents of Scrabble folder:
 \begin{itemize}
 \setlength\itemsep{-0.22em}
 \item agent.py: AI to choose an optimal move
@@ -512,10 +518,10 @@ Contents of scrabble folder:
 \item pygtrie: the Google trie implementation we use for move generation
 \item results/: raw results, plots and statistics. Raw data stored and processed in plot.py
 \item run.py: human vs AI mode
-\item scrabblewords.txt: our Scrabble dictionary
+\item Scrabblewords.txt: our Scrabble dictionary
 \item selfrun.py: selfplay mode
 \item sga.py: implements stochastic gradient ascent
-\item treeBuilder.py: builds the trie from scrabblewords.txt
+\item treeBuilder.py: builds the trie from Scrabblewords.txt
 \item trie.p: trie pickle
 \item util.py: utility functions and variables
 \end{itemize}
@@ -534,7 +540,7 @@ This tells the quackle test harness to run N games in cs221 mode with
 the cs221 lexicon. The code for cs221 mode is mainly defined in the
 function selfPlayCS221Game() inside test/testharness.cpp.
 
-The Python half is in scrabble/autorun.py. It interfaces with the
+The Python half is in Scrabble/autorun.py. It interfaces with the
 quackle AI via text files in quackle/test. Quackle's data is written
 to quackle/test/quacklegame-n.gcg, which autorun.py reads and
 parses. After parsing and committing the quackle move, our AI
