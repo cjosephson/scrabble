@@ -29,7 +29,13 @@ cs221 smashing rate 0.0
 best ratio 1.42731277533
 
 QUACK MC+RACKH
-
+num games 35
+quack avg 412.222222222
+cs221 avg 285.388888889
+avg delta 126.833333333
+cs221 win rate 0.0555555555556
+cs221 smashed rate 0.138888888889
+cs221 smashing rate 0.0277777777778
 
 SELF VANILLA
 num games 300
@@ -51,6 +57,32 @@ A smashed rate 0.0
 A smashing rate 0.0
 best ratio 1.50903614458
 
-SELF MC
+SELF RACKH
+num games 300
+A avg 351.59
+B avg 353.81
+avg delta -2.22
+A win rate 0.48
+A smashed rate 0.0
+A smashing rate 0.0
+best ratio 1.50903614458
 
-SELF MC+RACKH
+SELF MC
+num games 80
+A avg 361.55
+B avg 340.5625
+avg delta 20.9875
+A win rate 0.625
+A smashed rate 0.0
+A smashing rate 0.0
+best ratio 1.41800643087
+
+SELF MC RH
+num games 53
+quack avg 364.622641509
+cs221 avg 347.075471698
+avg delta 17.5471698113
+cs221 win rate 0.531698113208
+cs221 smashed rate 0.0
+cs221 smashing rate 0.0
+best ratio 1.33962264151

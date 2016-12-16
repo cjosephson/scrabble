@@ -1,7 +1,7 @@
 \documentclass[12pt]{article}
-\usepackage{fullpage,enumitem,amsmath,amssymb,graphicx,hyperref}
+\usepackage{fullpage,enumitem,amsmath,amssymb,graphicx,hyperref,footmisc}
 \usepackage[margin=1in]{geometry} 
-
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
 \begin{document}
 
 \begin{center}
@@ -336,85 +336,60 @@ performed against average-ability humans, we created a human vs AI
 mode in run.py. As the objective of our project was to create a scrabble-playing AI, it would hardly be useful if it cold only run against other computers. However, as data is time-consuming to collect, and we don't have access to any self-reporting 'decent' scrabble players, this wasn't used as a significant source of data. 
 
 \section*{Results and Analysis}
-\begin{figure}[ht]
-  \minipage{0.5\textwidth}
-    \centering
-  \includegraphics[scale=0.4]{../images/quacklegame_MC_100}
-  \caption{Quackle vs CS221 With Monte Carlo}
-  \endminipage
-  \minipage{0.5\textwidth}
-      \centering
-  \includegraphics[scale=0.4]{../images/quacklegame_rackH_100}\\
-   \caption{This will be a game w/ montecarlo rH? }
-  \endminipage{}
-\end{figure}
-\begin{figure}[h]
+We win 13\% of the time against a world class AI, not bad! Rack
+heuristics help slightly, doesn't seem statistically significant. MC
+
+\begin{figure}[h!]
   \minipage{0.5\textwidth}
     \centering
   \includegraphics[scale=0.4]{../images/quacklegame_vanilla_100}
-  \caption{Quackle vs CS221 Vanilla}
+  \caption{\footnotesize{Quackle vs CS221 Vanilla}}
   \endminipage
   \minipage{0.5\textwidth}
       \centering
   \includegraphics[scale=0.4]{../images/quacklegame_rackH_100}\\
-   \caption{Quackle vs CS221 with Rack Heuristics}
+   \caption{\footnotesize{Quackle vs CS221 w/ Rack Heuristics}}
+  \endminipage{}
+  \minipage{0.5\textwidth}
+    \centering
+  \includegraphics[scale=0.4]{../images/quacklegame_MC_100}
+  \caption{\footnotesize{Quackle vs CS221 w/ Monte Carlo}}
+  \endminipage
+  \minipage{0.5\textwidth}
+      \centering
+  \includegraphics[scale=0.39]{../images/quacklegame_MC-RH_35}\\
+   \caption{\footnoetesize{Quackle vs CS221 with Monte Carlo and Rack
+       Heuristics*}}
   \endminipage{}
 \end{figure}
 
 
-\begin{table}[h]
+\begin{table}[h!]
   \centering
   \begin{tabular}{c|l|l|l|l|l|l}
     \textbf{} & \textbf{win rate} & \textbf{mean} & \textbf{opp mean} & \textbf{mean delta} &  \textbf{2x loss rate} & \textbf{max win ratio} \\\hline
   \textbf{vanilla}   & 11\% & 284.68 & 407.43 & 122.75 & 13\% & 1.358\\
-  \textbf{RH}        & 13\% & 288.07 & 410.0  & 121.93 & 11\% & 2.131 \\
-  \textbf{MC}        & -    & -      & -      & -      & -    & - \\
-  \textbf{MC w/ RH}  & -    & -      & -      & -      & -    & - \\
+  \textbf{RH}        & 13\% & 288.07 & 410.0  & 121.93 & 11\% & 2.131\\
+  \textbf{MC}        & 13\% & 283.3  & 401.95 & 118.65 & 14\% & 1.42 \\
+  \textbf{MC w/ RH*} & 5\%  & 285.38 & 412.22 & 126.83 & 13\% & 2.34 \\
 \end{tabular}
   \caption{Statistics of our AI variants against Quackle's Speedy
     Player. \emph{Mean delta} is the average difference between
     opponent and our score, \emph{2x loss rate} is the rate at which
     the opponent scores 2x or higher, and \emph{max win ratio} is the
     max ratio of our score to opponent's.}
-\end{table}
+\end{table}\footnote[]{*These were shorter runs due to time constraints. Table 1's MC+RH was 35 runs, and Table 2's MC and MC+RH were 80 and 53 runs respectively. Furthermore, the MC+RC weight vector was only run for 50 iterations instead of 100.}
 
-We win 13\% of the time against a world class AI, not bad! Rack
-heuristics help slightly, doesn't seem statistically significant. MC
-TBD 
-\begin{figure}[h]
-  \minipage{0.5\textwidth}
-    \centering
-  \includegraphics[scale=0.4]{../images/quacklegame_vanilla_111}
-  \caption{CS221 Vanilla vs CS221 Vanilla}
-  \endminipage
-  \minipage{0.5\textwidth}
-      \centering
-  \includegraphics[scale=0.4]{../images/quacklegame_rackH_111}\\
-   \caption{CS221 Vanilla vs CS221 with Rack Heuristics}
-  \endminipage{}
-\end{figure}
+Talk about quackle stats table here.
 
-\begin{figure}[h]
-  \minipage{0.5\textwidth}
-    \centering
-  \includegraphics[scale=0.4]{../images/quacklegame_vanilla_111}
-  \caption{Will be CS221 Vanilla vs CS221 with Monte Carlo}
-  \endminipage
-  \minipage{0.5\textwidth}
-      \centering
-  \includegraphics[scale=0.4]{../images/quacklegame_rackH_111}\\
-   \caption{Will be CS221 Vanilla vs CS221 with Monte Carlo and rack heuristics}
-  \endminipage{}
-\end{figure}
-
-\begin{table}[h]
+\begin{table}[h!]
   \centering
   \begin{tabular}{c|l|l|l|l|l|l}
     \textbf{} & \textbf{win rate} & \textbf{mean} & \textbf{opp mean} & \textbf{mean delta} &  \textbf{2x loss rate} & \textbf{max win ratio} \\\hline
   \textbf{control}   & 47\% & 354.24 & 359.25 & -5.01  & 0\%  & 1.811\\
   \textbf{RH}        & 48\% & 351.59 & 353.81 & -2.22  & 0\%  & 1.509\\
-  \textbf{MC}        & -    & -      & -      & -      & -    & - \\
-  \textbf{MC w/ RH}  & -    & -      & -      & -      & -    & - \\
+  \textbf{MC*}       & 62\% & 361.55 & 340.56 & 20.98  & 0\%  & 1.41 \\
+  \textbf{MC w/ RH*} & 53\% & 364.62 & 347.07 & 17.54  & 0\%  & 1.33 \\
 \end{tabular}
   \caption{Statistics of our AI playing against itself for 300
     games. Control is the vanilla variant playing against itself, all
