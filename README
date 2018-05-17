@@ -46,4 +46,6 @@ To run quackle vs. CS221:
 
      python autorun.py -n <NUM_GAMES> -p <PATH_TO_QUACKLE_TEST>
 
-Optionally, add a -s flag to suppress ascii-board output, useful when running large batches. 
+Optionally, add a -s flag to suppress ascii-board output, useful when running large batches.
+
+Full PDF writeup: https://web.stanford.edu/class/cs221/2017/restricted/p-final/cajoseph/final.pdf
